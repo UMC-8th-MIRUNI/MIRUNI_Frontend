@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Miruni</string>
+    <string name="title_tools">Tools</string>
+    <string name="title_home">Home</string>
+    <string name="title_calender">Calender</string>
+    <string name="title_my">My</string>
+</resources>
