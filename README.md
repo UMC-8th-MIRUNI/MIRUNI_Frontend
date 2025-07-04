@@ -41,6 +41,7 @@
 </ul>
 
 ### libs.versions.toml
+```kotlin
 [versions]
 agp = "8.8.0"
 kotlin = "2.0.0"
@@ -78,6 +79,7 @@ androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview"
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+```
 
 ### 사용 라이브러리 및 기술 스택
 <ul>
