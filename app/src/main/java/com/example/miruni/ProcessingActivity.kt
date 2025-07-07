@@ -33,9 +33,9 @@ class ProcessingActivity : AppCompatActivity() {
             "CommitFragment" -> {
                 transitionFragment(CommitFragment())
             }
-//            "GrowFragment" -> {
-//                transitionFragment(GrowFragment())
-//            }
+            "GrowFragment" -> {
+                transitionFragment(GrowFragment())
+            }
         }
     }
 
