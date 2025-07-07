@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".GrowFragment">
+
+    <TextView
+        android:id="@+id/grow_logo_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        style="@style/MainTitle"
+        android:layout_marginTop="130dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/grow_grow_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/miruni_grow"
+        android:layout_marginStart="-30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/grow_grow_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="미루니 성장중!"
+        style="@style/RalewayBold700"
+        android:textSize="37sp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/grow_grow_iv"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/grow_stop_btn"
+        android:layout_width="141dp"
+        android:layout_height="50dp"
+        android:text="@string/stop"
+        android:background="@drawable/black_round15_square"
+        android:textColor="@color/white"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/grow_complete_btn"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/grow_complete_btn"
+        android:layout_width="141dp"
+        android:layout_height="50dp"
+        android:text="@string/complete"
+        android:background="@drawable/black_round15_square"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@id/grow_stop_btn"
+        app:layout_constraintBottom_toBottomOf="@id/grow_stop_btn"
+        app:layout_constraintStart_toEndOf="@id/grow_stop_btn"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
