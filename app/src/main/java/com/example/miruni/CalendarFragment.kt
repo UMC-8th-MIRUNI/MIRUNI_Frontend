@@ -74,6 +74,13 @@ class CalendarFragment : Fragment() {
                 calendarCalendar.goToPrevious()
             }
 
+            /** 시작하기 */
+            calendarStartBtn.setOnClickListener {
+                val intent = Intent(requireContext(), ProcessingActivity::class.java)
+                intent.putExtra("showFragment", "StartFragment")
+                startActivity(intent)
+            }
+
             /** 등록하기 */
             calendarCommitBtn.setOnClickListener {
                 val intent = Intent(requireContext(), ProcessingActivity::class.java)
