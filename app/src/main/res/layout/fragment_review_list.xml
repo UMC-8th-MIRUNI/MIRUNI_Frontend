@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ReviewListFragment"
+    android:background="@color/black">
+
+    <TextView
+        android:id="@+id/reviewlist_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/my_review"
+        android:fontFamily="@font/poppins_regular"
+        android:textFontWeight="600"
+        android:textSize="23sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/reviewlist_plus_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/reviewlist_plus"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="@id/reviewlist_tv"
+        app:layout_constraintBottom_toBottomOf="@id/reviewlist_tv"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 샘플 이미지 -->
+    <LinearLayout
+        android:id="@+id/reviewlist_sample1"
+        android:layout_width="370dp"
+        android:layout_height="97dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/round_square"
+        android:backgroundTint="@color/primary_night"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewlist_tv">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/writing_date_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_title_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="800"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_description_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/reviewlist_sample2"
+        android:layout_width="370dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/round_square"
+        android:backgroundTint="@color/primary_night"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewlist_sample1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/writing_date_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_title_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="800"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_description_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/reviewlist_sample3"
+        android:layout_width="370dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/round_square"
+        android:backgroundTint="@color/primary_night"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewlist_sample2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/writing_date_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_title_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="800"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_description_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/reviewlist_sample4"
+        android:layout_width="370dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/round_square"
+        android:backgroundTint="@color/primary_night"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewlist_sample3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/writing_date_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_title_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="800"
+            android:textSize="15sp"
+            android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/review_description_guide"
+            android:fontFamily="@font/manrope_regular"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+
+    <!--    <androidx.recyclerview.widget.RecyclerView-->
+    <!--        android:id="@+id/reviewlist_rv"-->
+    <!--        android:layout_width="370dp"-->
+    <!--        android:layout_height="0dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginEnd="20dp"-->
+    <!--        android:layout_marginTop="15dp"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/reviewlist_tv"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        tools:listitem="@layout/item_review_list"/>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

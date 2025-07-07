@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="82dp"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/round_square"
+    android:backgroundTint="@color/primary_night"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="15dp">
+
+    <TextView
+        android:id="@+id/reviewlist_date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/writing_date_guide"
+        android:fontFamily="@font/manrope_regular"
+        android:textFontWeight="500"
+        android:textSize="12sp"
+        android:textColor="@color/black"/>
+    <TextView
+        android:id="@+id/reviewlist_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/review_title_guide"
+        android:fontFamily="@font/manrope_regular"
+        android:textFontWeight="800"
+        android:textSize="15sp"
+        android:textColor="@color/black"/>
+    <TextView
+        android:id="@+id/reviewlist_description_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/review_description_guide"
+        android:fontFamily="@font/manrope_regular"
+        android:textFontWeight="500"
+        android:textSize="12sp"
+        android:textColor="@color/black"/>
+</LinearLayout>
