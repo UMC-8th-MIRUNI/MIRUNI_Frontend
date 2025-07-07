@@ -87,6 +87,19 @@ class CalendarFragment : Fragment() {
                 intent.putExtra("showFragment", "CommitFragment")
                 startActivity(intent)
             }
+
+            /** 나의 리포트 오픈 */
+            calendarMyReportBtn.setOnClickListener {
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, com.example.miruni.ReportFragment())
+                    .commitAllowingStateLoss()
+            }
+            /** 나의 회고 */
+            calendarMyReviewBtn.setOnClickListener {
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, ReviewListFragment())
+                    .commitAllowingStateLoss()
+            }
         }
     }
 }
