@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- CalendarView 전체 -->
+    <style name="CalendarViewCustom" parent="Theme.AppCompat">
+        <item name="android:fontFamily">@font/lato_regular</item>
+        <item name="android:textColor">#252525</item>
+    </style>
+
+    <!-- CalendarView의 헤더 -->
+    <style name="CalendarViewHeaderCustom">
+        <item name="android:textSize">28dp</item>
+    </style>
+
+    <!-- CalendarView의 요일 -->
+    <style name="CalendarViewWeekCustom" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="MainTitle">
+        <item name="android:text">@string/title</item>
+        <item name="android:fontFamily">@font/climatecrisis_regular</item>
+        <item name="android:textFontWeight" tools:targetApi="28">400</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">#2E442D</item>
+        <item name="android:shadowDy">4.0</item>
+        <item name="android:shadowRadius">4.0</item>
+        <item name="android:shadowColor">@color/black</item>
+    </style>
+
+    <style name="MainTitleReverse">
+        <item name="android:text">@string/title</item>
+        <item name="android:fontFamily">@font/climatecrisis_regular</item>
+        <item name="android:textFontWeight" tools:targetApi="28">400</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="ScheduleSemiBold">
+        <item name="fontFamily">@font/inter_18pt_semibold</item>
+        <item name="android:textFontWeight" tools:targetApi="28">600</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#242424</item>
+    </style>
+
+    <style name="ScheduleRegular">
+        <item name="fontFamily">@font/inter_18pt_regular</item>
+        <item name="android:textFontWeight" tools:targetApi="28">400</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#707070</item>
+    </style>
+
+    <style name="RalewayBold700">
+        <item name="fontFamily">@font/raleway_bold</item>
+        <item name="android:textFontWeight" tools:targetApi="28">700</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Manrope400">
+        <item name="android:fontFamily">@font/manrope_regular</item>
+        <item name="android:textFontWeight" tools:targetApi="28">400</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="Manrope600">
+        <item name="android:fontFamily">@font/manrope_regular</item>
+        <item name="android:textFontWeight" tools:targetApi="28">600</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+    <style name="Manrope700">
+        <item name="android:fontFamily">@font/manrope_regular</item>
+        <item name="android:textFontWeight" tools:targetApi="28">700</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>

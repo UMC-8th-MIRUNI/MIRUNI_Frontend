@@ -1,3 +1,84 @@
 <resources>
-    <string name="app_name">MIRUNI</string>
+    <string name="app_name">MIRUNIIII</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title">MIRUNI</string>
+
+    <string name="edit">수정하기</string>
+    <string name="start">시작하기</string>
+    <string name="commit">등록하기</string>
+    <string name="stop">중지</string>
+    <string name="complete">완료</string>
+    <string name="accept">확인</string>
+    <string name="day">일</string>
+    <string name="minute">분</string>
+
+    <style name="hour">시간</style>
+
+    <string name="no_eng">No</string>
+    <string name="yes_eng">Yes</string>
+    <string name="back_eng">Back</string>
+    <string name="next_eng">Next</string>
+
+    <string-array name="monthArr">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <string name="commit_todo">할 일 등록하기</string>
+    <string name="commit_title">Title</string>
+    <string name="commit_title_hint">1st Meeting with Andrew (Bookplus+)</string>
+    <string name="commit_date">Date</string>
+    <string name="commit_date_guide">2025.04.29 11:00 a.m.</string>
+    <string name="commit_instruction">instruction</string>
+    <string name="commit_commit">등록</string>
+    <string name="commit_split">쪼개기</string>
+
+    <string name="loading_guide1">업무를 쪼개는 중이에요..</string>
+    <string name="loading_guide2">
+        AI 자동 업무 쪼개기 기능을 활용하여
+        \n부담감을 느끼지 않을 만큼 일을
+        \n쪼개줄게요!</string>
+
+    <string name="complete_plus">+</string>
+    <string name="complete_get_point">3개의 포인트를 얻었어!</string>
+    <string name="complete_miruni_growup">
+        36분 만에
+        \n 미루니 성장
+        \n 완료!</string>
+
+    <string name="writing_title_guide">Set an Title</string>
+    <string name="writing_date_guide">July 5 2023</string>
+    <string name="writing_content_guide">
+        1. 기분 (5가지 중 택)
+        \n 2. 성취도/만족도 (100%)
+        \n 3. 2줄 정도의 기록</string>
+
+    <string name="review_blank">_____</string>
+    <string name="review_time_check">동안 할거야?</string>
+    <string name="device_lock">핸드폰 잠금</string>
+
+    <string name="schedule">스케줄표</string>
+    <string name="schedule_title_guide">UMC 기획안 만들기</string>
+    <string name="schedule_date_guide">5/27 ~ 5/30</string>
+    <string name="schedule_time_guide">19:00~20:00</string>
+
+    <string name="to_do">이제 슬슬 시작하면 좋은 일</string>
+
+    <string name="my_storage">My Storage</string>
+    <string name="report_closed">나의 리포트\n오픈까지</string>
+    <string name="my_review">나의 회고</string>
+    <string name="review_title_guide">회고 #</string>
+    <string name="review_description_guide">Here is my description in my memories #</string>
 </resources>
