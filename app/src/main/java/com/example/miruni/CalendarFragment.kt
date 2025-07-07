@@ -73,6 +73,13 @@ class CalendarFragment : Fragment() {
                 Log.d("Calendar:Previous", "YMList = ${YMList[0]}년 ${YMList[1]}월")
                 calendarCalendar.goToPrevious()
             }
+
+            /** 등록하기 */
+            calendarCommitBtn.setOnClickListener {
+                val intent = Intent(requireContext(), ProcessingActivity::class.java)
+                intent.putExtra("showFragment", "CommitFragment")
+                startActivity(intent)
+            }
         }
     }
 }

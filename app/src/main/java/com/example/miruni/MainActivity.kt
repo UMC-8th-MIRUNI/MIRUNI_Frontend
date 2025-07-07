@@ -1,13 +1,13 @@
 package com.example.miruni
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import com.example.miruni.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +18,26 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, CalendarFragment())
+            .commitAllowingStateLoss()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        intent.let {
+            when(it.getStringExtra("showFragment")) {
+                "ScheduleFragment" -> {
+                    transitionFragment(ScheduleFragment())
+                }
+                "CalendarFragment" -> {
+                    transitionFragment(CalendarFragment())
+                }
+            }
+        }
+    }
+
+    private fun transitionFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, fragment)
             .commitAllowingStateLoss()
     }
 }
