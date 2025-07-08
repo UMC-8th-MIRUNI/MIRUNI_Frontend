@@ -1,5 +1,42 @@
 <resources>
     <string name="app_name">MIRUNIIII</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <!-- tool page-->
+    <string name="tool_schedule">일정 쪼개기</string>
+    <string name="schedule_content">일을 미리 끝낼 수 있는 적절한 일정을 알려줄게요!</string>
+    <string name="tool_lock">방해요소 차단</string>
+    <string name="lock_content">집중에 방해되는 요소를 차단하고 할 일에만 몰두해봐요!</string>
+    <string name="tool_alarm">알람</string>
+    <string name="alarm_content">할 일을 까먹거나 미루고 있을 때 알람을 보내줄게요!</string>
+
+    <!-- homepage -->
+    <string name="task">오늘의 할 일은 %1$s개가 있어!</string>
+    <string name="date">%1$s.%2$s.%3$s (%4$s)</string>
+    <string name="percent">$1$s%</string>
+
+    <!-- mypage-->
+    <string name="username">%1$s</string>
+    <string name="email">%1$s</string>
+    <string name="mypage">My page</string>
+    <string name="account_settings">Account settings</string>
+    <string name="notifications_settings">Notifications settings</string>
+    <string name="general">General</string>
+
+    <!-- alarm-->
+    <string name="popupAlarm">팝업 알람</string>
+    <string name="bannerAlarm">배너 알람</string>
+
+    <!-- alarmSetting-->
+    <string name="alarmSetting">알람세팅</string>
+    <string name="oneM">1분</string>
+    <string name="fiveM">5분</string>
+    <string name="tenM">10분</string>
+    <string name="thirM">30분</string>
+    <string name="oneH">1시간</string>
+    <string name="cycle">주기</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
