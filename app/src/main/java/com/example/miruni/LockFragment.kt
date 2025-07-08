@@ -1,36 +1,32 @@
 package com.example.miruni
+
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.miruni.databinding.FragmentLockBinding
 
 class LockFragment : Fragment() {
+    val binding by lazy { FragmentLockBinding.inflate(layoutInflater) }
 
-    private lateinit var binding : FragmentLockBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLockBinding.inflate(layoutInflater, container, false)
-
-        initClickListener()
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
     }
 
-    private fun initClickListener() {
-        /** No */
-        binding.lockNoTv.setOnClickListener {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        }
-        /** Yes */
-        binding.lockYesTv.setOnClickListener {
-            (context as ProcessingActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.process_frm, GrowFragment())
-                .commitAllowingStateLoss()
+        val testTime: Long = 1 * 60 * 1000L  // 1분
+        val endTime = System.currentTimeMillis() + testTime
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val intent = Intent(requireContext(), FocusService::class.java).apply {
+                putExtra("endTime", endTime)
+            }
+            requireContext().startForegroundService(intent)
         }
     }
 }
