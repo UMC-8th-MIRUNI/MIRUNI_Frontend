@@ -1,0 +1,48 @@
+.gradle
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Android Studio
+.idea/
+*.iml
+.gradle/
+build/
+app/build/
+local.properties
+.kotlin/
+*.log
+
+# Android test files
+app/src/androidTest/
+app/src/test/
+
+# OS & Editor Files
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# Image assets (if generated)
+*.webp
+
+# Kotlin specific (if using kapt)
+*.kapt.kotlin.generated
+
+# Test output or reports
+test-output/
+
+# Gradle wrapper
+gradle/wrapper/
+gradlew
+gradlew.bat
+
+# Backup or temp folders
+backup_untracked_files/
