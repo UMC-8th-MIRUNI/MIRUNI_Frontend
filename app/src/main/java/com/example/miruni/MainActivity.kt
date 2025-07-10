@@ -2,7 +2,6 @@ package com.example.miruni
 
 import android.app.Activity
 import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -16,7 +15,6 @@ import androidx.fragment.app.Fragment
 import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.util.AlarmHelper
 import com.example.miruni.util.PopupTimeHelper
-import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     /** 변수 선언 */
@@ -79,7 +77,6 @@ class MainActivity : AppCompatActivity() {
             val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (alarmManager.canScheduleExactAlarms()) {
                 AlarmHelper.initAlarm(this, popupHour, popupMinute, PopupReceiver::class.java)
-//                scheduleDailyBanner(popupHour, popupMinute)
             }
         }
 
@@ -105,11 +102,6 @@ class MainActivity : AppCompatActivity() {
         popupMinute = 44
 
         PopupTimeHelper.savePopupTime(this, popupHour, popupMinute)
-//        val spf = getSharedPreferences("popup", MODE_PRIVATE)
-//        val editor = spf.edit()
-//        editor.putInt("popupHour", popupHour)
-//        editor.putInt("popupMinute", popupMinute)
-//        editor.apply()
     }
 
     private fun requestOverlayPermission(activity: Activity) {
@@ -130,31 +122,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         AlarmHelper.initAlarm(this, popupHour, popupMinute, PopupReceiver::class.java)
-//        scheduleDailyBanner(popupHour,popupMinute)
     }
-
-//    private fun scheduleDailyBanner(hour: Int, minute: Int) {
-//        val intent = Intent(this, PopupReceiver::class.java)
-//        val pendingIntent = PendingIntent.getBroadcast(
-//            this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-//
-//        val calendar = Calendar.getInstance().apply {
-//            set(Calendar.HOUR_OF_DAY, hour)
-//            set(Calendar.MINUTE, minute)
-//            set(Calendar.SECOND, 0)
-//            if (before(Calendar.getInstance())) {
-//                add(Calendar.DATE, 1)
-//            }
-//        }
-//
-//        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        alarmManager.setExactAndAllowWhileIdle(
-//            AlarmManager.RTC_WAKEUP,
-//            calendar.timeInMillis,
-//            pendingIntent
-//        )
-//    }
 
     private fun transitionFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
