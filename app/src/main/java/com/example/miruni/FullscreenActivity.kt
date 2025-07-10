@@ -14,7 +14,7 @@ class FullscreenActivity: AppCompatActivity() {
 
         binding.fullBack.setOnClickListener {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, LockFragment())
+                .replace(R.id.main_frm, LockFragment())
                 .addToBackStack(null)
                 .commit()
         }
