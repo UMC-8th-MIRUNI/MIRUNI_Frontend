@@ -1,18 +1,16 @@
 # Git 관리
 
 ### branch 이름 설정
-맡은 사람 이름으로 branch 이름 설정
-<ul>
-  <li>이창환 -> lee</li>
-  <li>문설빈 -> moon</li>
-  <li>사혜빈 -> sa</li>
-</ul>
+맡은 기능 별로 branch 이름 설정
+ex. 이슈 번호-추가할 기능
 
 ### Issue 설정
 주요 Issue는 다음과 같음
 <ol>
   <li>Login-Signup</li>
-  <li>CalendarView</li>
+  <li>CalendarView 커스텀</li>
+  <li>화면 잠금 구현</li>
+  <li>알림 구현</li>
 </ol>
 
 ### commit 컨벤션
@@ -34,8 +32,8 @@
 
 ### SDK 버전
 <ul>
-  <li>targetSDK = </li>
-  <li>minSDK = </li>
+  <li>targetSDK = 35</li>
+  <li>minSDK = 26</li>
 </ul>
 
 ### 사용 라이브러리 및 기술 스택
