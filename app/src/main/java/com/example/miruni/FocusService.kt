@@ -25,6 +25,7 @@ class FocusService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         endTime = intent?.getLongExtra("endTime", 0L) ?: 0L
+        startForeground(1, buildNotification())
         monitorApp()
         return START_STICKY
     }
@@ -69,7 +70,6 @@ class FocusService : Service() {
         val intent = Intent(this, FullscreenActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-
 
         val notification = Notification.Builder(this, channelId)
             .setContentTitle("앱 나가지마세요~")

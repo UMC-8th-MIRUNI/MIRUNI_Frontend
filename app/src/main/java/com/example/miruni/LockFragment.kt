@@ -3,6 +3,7 @@ package com.example.miruni
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import com.example.miruni.databinding.FragmentLockBinding
 
 class LockFragment : Fragment() {
     val binding by lazy { FragmentLockBinding.inflate(layoutInflater) }
+    val fragment = GrowFragment()
+    val bundle = Bundle()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return binding.root
@@ -19,14 +22,29 @@ class LockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val testTime: Long = 1 * 60 * 1000L  // 1분
-        val endTime = System.currentTimeMillis() + testTime
+        initClickListener()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val intent = Intent(requireContext(), FocusService::class.java).apply {
-                putExtra("endTime", endTime)
-            }
-            requireContext().startForegroundService(intent)
+    }
+    private fun initClickListener(){
+        binding.lockNoTv.setOnClickListener {
+            bundle.putBoolean("check", false)
+            moveFragment()
         }
+        binding.lockYesTv.setOnClickListener {
+            bundle.putBoolean("check", true)
+            moveFragment()
+        }
+    }
+    private fun moveFragment(){
+        // testTime 값 받아와야됨
+        val testTime = 11 * 60 * 1000L
+
+        bundle.putString("testTime", "$testTime")
+        fragment.arguments = bundle
+
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.process_frm, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
