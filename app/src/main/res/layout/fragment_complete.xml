@@ -61,27 +61,20 @@
         app:layout_constraintStart_toStartOf="@id/complete_point_layout"
         app:layout_constraintEnd_toEndOf="@id/complete_point_layout"/>
 
-    <ImageView
-        android:id="@+id/complete_miruni_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/complete_miruni"
-        android:layout_marginTop="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/complete_get_point_tv"/>
-
     <TextView
         android:id="@+id/complete_minuri_growup_tv"
+        style="@style/RalewayBold700"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/complete_miruni_growup"
-        style="@style/RalewayBold700"
-        android:textSize="50sp"
+        android:layout_marginStart="73dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="72dp"
         android:bufferType="spannable"
-        app:layout_constraintTop_toBottomOf="@id/complete_miruni_iv"
-        app:layout_constraintStart_toStartOf="@id/complete_miruni_iv"
-        app:layout_constraintEnd_toEndOf="@id/complete_miruni_iv"/>
+        android:text="@string/complete_miruni_growup"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/complete_get_point_tv" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/complete_accept_btn"
