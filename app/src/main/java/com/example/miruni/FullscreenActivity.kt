@@ -1,5 +1,6 @@
 package com.example.miruni
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.miruni.databinding.ActivityFullscreenBinding
@@ -13,10 +14,9 @@ class FullscreenActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         binding.fullBack.setOnClickListener {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, LockFragment())
-                .addToBackStack(null)
-                .commit()
+            val intent = Intent(this, ProcessingActivity::class.java)
+            intent.putExtra("showFragment", "GrowFragment")
+            startActivity(intent)
         }
     }
 }
