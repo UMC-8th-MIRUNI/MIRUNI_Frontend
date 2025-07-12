@@ -17,6 +17,7 @@ class FullscreenActivity: AppCompatActivity() {
             val intent = Intent(this, ProcessingActivity::class.java)
             intent.putExtra("showFragment", "GrowFragment")
             startActivity(intent)
+
         }
     }
 }

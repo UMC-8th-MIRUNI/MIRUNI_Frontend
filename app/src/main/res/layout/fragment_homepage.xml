@@ -235,16 +235,6 @@
         app:layout_constraintStart_toStartOf="@+id/imageView10"
         app:layout_constraintTop_toBottomOf="@+id/imageView11" />
 
-    <ImageView
-        android:id="@+id/imageView52"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:src="@drawable/test"
-        app:layout_constraintEnd_toEndOf="@+id/imageView14"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/date" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listRV"
         android:layout_width="0dp"
