@@ -1,16 +1,23 @@
 package com.example.miruni
 
+
+import android.Manifest
+import android.content.pm.PackageManager
+
 import android.app.Activity
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.util.AlarmHelper
@@ -39,6 +46,18 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    1000
+                )
+            }
+        }
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, CalendarFragment())

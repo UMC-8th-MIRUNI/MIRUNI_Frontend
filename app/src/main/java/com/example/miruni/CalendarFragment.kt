@@ -77,14 +77,19 @@ class CalendarFragment : Fragment() {
             /** 시작하기 */
             calendarStartBtn.setOnClickListener {
                 val intent = Intent(requireContext(), ProcessingActivity::class.java)
-                intent.putExtra("showFragment", "StartFragment")
+                // 임시 이동
+                intent.putExtra("showFragment", "HomepageFragment")
+
+                // 진짜 이동
+                //intent.putExtra("showFragment", "StartFragment")
                 startActivity(intent)
             }
 
             /** 등록하기 */
             calendarCommitBtn.setOnClickListener {
                 val intent = Intent(requireContext(), ProcessingActivity::class.java)
-                intent.putExtra("showFragment", "CommitFragment")
+                // 임시 이동
+                intent.putExtra("showFragment", "LockFragment")
                 startActivity(intent)
             }
 
