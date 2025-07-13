@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+android:id="@+id/root_login_layout"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_logo_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="112dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/miruni" />
@@ -20,13 +23,13 @@
         android:id="@+id/tv_email"
         android:layout_width="357dp"
         android:layout_height="64dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/round_input"
         android:gravity="center|left"
-        android:text="   이메일"
         android:textColor="#626262"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.537"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo_text" />
 
@@ -34,13 +37,13 @@
         android:id="@+id/tv_password"
         android:layout_width="357dp"
         android:layout_height="64dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/round_input"
         android:gravity="center|left"
-        android:text="      비밀번호"
         android:textColor="#626262"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.537"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
@@ -48,12 +51,12 @@
         android:id="@+id/tv_find_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:text="비밀번호 찾기"
         android:textColor="#007AFF"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.918"
+        app:layout_constraintHorizontal_bias="0.924"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_password" />
 
@@ -61,7 +64,7 @@
         android:id="@+id/tv_signup_button"
         android:layout_width="357dp"
         android:layout_height="41dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="124dp"
         android:background="@drawable/round_signup"
         android:gravity="center"
         android:text="회원가입하기"
@@ -69,6 +72,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.537"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_password" />
 
@@ -76,11 +80,11 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="188dp"
+        android:layout_marginTop="192dp"
         android:text="또는"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_password" />
 
@@ -88,8 +92,8 @@
         android:id="@+id/iv_line1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="196dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="28dp"
         app:layout_constraintEnd_toStartOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_password"
         app:srcCompat="@drawable/line" />
@@ -98,8 +102,8 @@
         android:id="@+id/iv_line2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="196dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="200dp"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_password"
         app:srcCompat="@drawable/line" />
@@ -108,8 +112,9 @@
         android:id="@+id/iv_google_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:srcCompat="@drawable/google_login" />
@@ -118,8 +123,9 @@
         android:id="@+id/iv_kakao_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_google_button"
         app:srcCompat="@drawable/kakao_login" />
@@ -128,8 +134,8 @@
         android:id="@+id/tv_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="12dp"
         android:text="구글로 계속하기"
         android:textColor="#000000"
         android:textSize="13sp"
@@ -140,10 +146,54 @@
         android:id="@+id/iv_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.642"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_find_password"
         app:srcCompat="@drawable/login" />
 
+    <EditText
+        android:id="@+id/loginEmailEt"
+        android:layout_width="350dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="8dp"
+        android:background="@null"
+        android:ems="10"
+        android:hint="이메일"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_email" />
+
+    <EditText
+        android:id="@+id/loginPasswordEt"
+        android:layout_width="350dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="8dp"
+        android:background="@null"
+        android:ems="10"
+        android:hint="비밀번호"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_password" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/login_fragment_container"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
