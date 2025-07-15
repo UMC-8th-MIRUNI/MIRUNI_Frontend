@@ -93,16 +93,6 @@
         app:srcCompat="@drawable/signup1" />
 
     <ImageView
-        android:id="@+id/iv_content"
-        android:layout_width="315dp"
-        android:layout_height="93dp"
-        android:layout_marginTop="580dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/content" />
-
-    <ImageView
         android:id="@+id/iv_checkbox"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -116,11 +106,11 @@
         android:id="@+id/iv_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.521"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
         app:srcCompat="@drawable/button" />
 
     <TextView
@@ -135,6 +125,16 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="미루니은(는) 회원가입 및 맞춤형 서비스 제공을 위해 이름, 이\n
+            메일, 기기 정보 등을 수집합니다.\n수집된 정보는 서비스 제공 외의 용도로 사용되지 않으며, 관련/n
+            법령에 따라 안전하게 보호됩니다.\n자세한 내용은 [개인정보 처리방침]을 참고해 주세요."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
