@@ -46,8 +46,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="March"
-                        android:fontFamily="@font/lato_regular"
-                        android:textFontWeight="900"
+                        android:fontFamily="@font/lato_bold"
                         android:textSize="28sp"
                         android:textColor="#252525"
                         android:layout_marginStart="12dp"
@@ -60,8 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2021"
-                        android:fontFamily="@font/lato_regular"
-                        android:textFontWeight="300"
+                        android:fontFamily="@font/lato_light"
                         android:textSize="28sp"
                         android:textColor="#252525"
                         android:layout_marginStart="12dp"
@@ -89,37 +87,15 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </FrameLayout>
 
-
-            <!--            <androidx.cardview.widget.CardView-->
-            <!--                android:id="@+id/calendar_calendar_cv"-->
-            <!--                android:layout_width="358dp"-->
-            <!--                android:layout_height="437dp"-->
-            <!--                app:cardCornerRadius="20dp"-->
-            <!--                android:layout_marginTop="10dp"-->
-            <!--                app:layout_constraintTop_toTopOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent">-->
-
-            <!--                <com.prolificinteractive.materialcalendarview.MaterialCalendarView-->
-            <!--                    android:id="@+id/calendar_calendar"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    app:mcv_selectionMode="single"-->
-            <!--                    app:mcv_firstDayOfWeek="sunday"-->
-            <!--                    app:mcv_showOtherDates="all"-->
-            <!--                    app:mcv_headerTextAppearance="@style/CalendarViewHeaderCustom"-->
-            <!--                    app:mcv_weekDayTextAppearance="@style/CalendarViewWeekCustom"/>-->
-            <!--            </androidx.cardview.widget.CardView>-->
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/calendar_start_btn"
                 android:layout_width="164dp"
                 android:layout_height="52dp"
                 android:background="@drawable/black_round8_square"
                 android:text="@string/start"
+                android:fontFamily="@font/inter_bold"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textFontWeight="700"
                 android:layout_marginTop="15dp"
                 app:layout_constraintTop_toBottomOf="@id/calendar_calendar_cv"
                 app:layout_constraintStart_toStartOf="@id/calendar_calendar_cv"
@@ -131,9 +107,9 @@
                 android:layout_height="52dp"
                 android:background="@drawable/black_round8_square"
                 android:text="@string/commit"
+                android:fontFamily="@font/inter_bold"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textFontWeight="700"
                 android:layout_marginTop="15dp"
                 app:layout_constraintTop_toBottomOf="@id/calendar_calendar_cv"
                 app:layout_constraintStart_toEndOf="@id/calendar_start_btn"
@@ -157,7 +133,6 @@
                 android:text="@string/to_do"
                 android:fontFamily="@font/poppins_regular"
                 android:textSize="18sp"
-                android:textFontWeight="600"
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="@id/calendar_calendar_cv"
                 app:layout_constraintTop_toBottomOf="@id/calendar_line1_view"/>
@@ -194,8 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/my_storage"
-                android:fontFamily="@font/poppins_regular"
-                android:textFontWeight="600"
+                android:fontFamily="@font/poppins_semibold"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/calendar_line2_view"
                 app:layout_constraintStart_toStartOf="@id/calendar_line2_view"/>
@@ -206,8 +180,7 @@
                 android:layout_height="147dp"
                 android:background="@drawable/calendar_report_slot"
                 android:text="@string/report_closed"
-                android:fontFamily="@font/poppins_regular"
-                android:textFontWeight="500"
+                android:fontFamily="@font/poppins_medium"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:gravity="center_vertical"
@@ -233,11 +206,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/my_review"
-                    android:fontFamily="@font/poppins_regular"
-                    android:textFontWeight="600"
-                    android:textSize="17dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginStart="17dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="17sp"
+                    android:layout_marginTop="14sp"
+                    android:layout_marginStart="17sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 

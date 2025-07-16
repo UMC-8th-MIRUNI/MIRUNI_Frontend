@@ -42,14 +42,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_blank"
-            style="@style/RalewayBold700"
+            android:fontFamily="@font/raleway_bold"
             android:textSize="30sp"/>
         <TextView
             android:id="@+id/start_time_check_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_time_check"
-            style="@style/RalewayBold700"
+            android:fontFamily="@font/raleway_bold"
             android:textSize="30sp"/>
     </LinearLayout>
 
@@ -60,7 +60,7 @@
         android:text="@string/next_eng"
         android:background="@drawable/black_round15_square"
         android:textColor="@color/white"
-        style="@style/RalewayBold700"
+        android:fontFamily="@font/raleway_bold"
         android:textSize="20sp"
         android:gravity="center"
         android:layout_marginBottom="20dp"

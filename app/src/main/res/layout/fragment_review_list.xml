@@ -12,8 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/my_review"
-        android:fontFamily="@font/poppins_regular"
-        android:textFontWeight="600"
+        android:fontFamily="@font/poppins_semibold"
         android:textSize="23sp"
         android:textColor="@color/white"
         android:layout_marginTop="10dp"
@@ -50,24 +49,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/writing_date_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_title_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="800"
+            android:fontFamily="@font/manrope_extrabold"
             android:textSize="15sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_description_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
     </LinearLayout>
@@ -89,24 +85,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/writing_date_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_title_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="800"
+            android:fontFamily="@font/manrope_extrabold"
             android:textSize="15sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_description_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
     </LinearLayout>
@@ -128,24 +121,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/writing_date_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_title_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="800"
+            android:fontFamily="@font/manrope_extrabold"
             android:textSize="15sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_description_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
     </LinearLayout>
@@ -167,24 +157,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/writing_date_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_title_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="800"
+            android:fontFamily="@font/manrope_extrabold"
             android:textSize="15sp"
             android:textColor="@color/black"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/review_description_guide"
-            android:fontFamily="@font/manrope_regular"
-            android:textFontWeight="500"
+            android:fontFamily="@font/manrope_medium"
             android:textSize="12sp"
             android:textColor="@color/black"/>
     </LinearLayout>

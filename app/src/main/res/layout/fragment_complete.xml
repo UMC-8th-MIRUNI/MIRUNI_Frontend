@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/title"
         style="@style/MainTitle"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="36sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -21,7 +21,7 @@
         android:id="@+id/complete_point_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="52sp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/complete_logo_tv"
@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/complete_plus"
-            style="@style/RalewayBold700"
+            android:fontFamily="@font/raleway_bold"
             android:textSize="50sp"
             android:layout_marginEnd="10dp"/>
         <!-- 동적으로 ImageView 추가, 삭제할 수 있도록 하기 -->
@@ -55,7 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/complete_get_point"
-        style="@style/RalewayBold700"
+        android:fontFamily="@font/raleway_bold"
+        android:textSize="20sp"
         android:textColor="#696868"
         app:layout_constraintTop_toBottomOf="@id/complete_point_layout"
         app:layout_constraintStart_toStartOf="@id/complete_point_layout"
@@ -63,7 +64,7 @@
 
     <TextView
         android:id="@+id/complete_minuri_growup_tv"
-        style="@style/RalewayBold700"
+        android:fontFamily="@font/raleway_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="73dp"
@@ -81,8 +82,9 @@
         android:layout_width="345dp"
         android:layout_height="50dp"
         android:text="@string/accept"
+        android:fontFamily="@font/raleway_bold"
+        android:textSize="20sp"
         android:textColor="@color/white"
-        style="@style/RalewayBold700"
         android:background="@drawable/black_round15_square"
         app:layout_constraintTop_toBottomOf="@id/complete_minuri_growup_tv"
         app:layout_constraintStart_toStartOf="@id/complete_minuri_growup_tv"
