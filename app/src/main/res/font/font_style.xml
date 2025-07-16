@@ -165,4 +165,16 @@
         android:font="@font/lato_black"
         android:fontStyle="normal"
         android:fontWeight="900"/>
+
+    <!-- NotoSansSymbols -->
+    <font
+        android:font="@font/notosanssymbols_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700"/>
+
+    <!-- Roboto -->
+    <font
+        android:font="@font/roboto_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400"/>
 </font-family>
