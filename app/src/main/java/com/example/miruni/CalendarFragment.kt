@@ -7,12 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ReportFragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.databinding.FragmentCalendarBinding
 
 class CalendarFragment : Fragment() {
     private lateinit var binding : FragmentCalendarBinding
     private var YMList = arrayOf(0, 0)
+    private var pinnedList = ArrayList<Schedule>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,10 +24,41 @@ class CalendarFragment : Fragment() {
 
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
 
+        // 더미 데이터
+        initDummyData()
+
+        initPinned()
         initCalendar()
+        initDecorator()
         initClickListener()
 
         return binding.root
+    }
+
+    private fun initDummyData() {
+        pinnedList.add(
+            Schedule(
+                "토익 LC 공부하기",
+                " ",
+                "2025.07.04"
+            )
+        )
+        pinnedList.add(
+            Schedule(
+                "토익 RC 공부하기",
+                " ",
+                "2025.07.04"
+            )
+        )
+    }
+
+    private fun initPinned() {
+        binding.calendarToDoRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val pinnedRVAdapter = PinnedRVAdapter()
+        binding.calendarToDoRv.adapter = pinnedRVAdapter
+
+        pinnedRVAdapter.addSchedule(pinnedList)
     }
 
     private fun initCalendar() {
@@ -36,8 +70,18 @@ class CalendarFragment : Fragment() {
 
         val monthArray = resources.getStringArray(R.array.monthArr)
         binding.apply {
-            calendarYearTv.text = YMList[0].toString()
+            calendarYearTv.text = String.format(YMList[0].toString()+"년")
             calendarMonthTv.text = monthArray[YMList[1] - 1]
+        }
+    }
+
+    private fun initDecorator() {
+        val selectedDecorator = selectDecorator(requireContext(),null)
+        binding.calendarCalendar.addDecorator(selectedDecorator)
+
+        binding.calendarCalendar.setOnDateChangedListener { widget, date, selected ->
+            selectedDecorator.setDate(date)
+            binding.calendarCalendar.invalidateDecorators()
         }
     }
 
@@ -45,65 +89,8 @@ class CalendarFragment : Fragment() {
         val monthArray = resources.getStringArray(R.array.monthArr)
 
         binding.apply {
-            calendarForwardIv.setOnClickListener {
-                if (YMList[1] == 12) {
-                    YMList[0]++
-                    YMList[1] = 1
-                    Log.d("Calendar", "다음 년도로 넘어감")
-                } else {
-                    YMList[1]++
-                    Log.d("Calendar", "다음 달로 넘어감")
-                }
-                calendarYearTv.text = YMList[0].toString()
-                calendarMonthTv.text = monthArray[YMList[1] - 1]
-                Log.d("Calendar:Next", "YMList = ${YMList[0]}년 ${YMList[1]}월")
-                calendarCalendar.goToNext()
-            }
-            calendarBackIv.setOnClickListener {
-                if (YMList[1] == 1) {
-                    YMList[0]--
-                    YMList[1] = 12
-                    Log.d("Calendar", "전 연도로 넘어감")
-                } else {
-                    YMList[1]--
-                    Log.d("Calendar", "전 달로 넘어감")
-                }
-                calendarYearTv.text = YMList[0].toString()
-                calendarMonthTv.text = monthArray[YMList[1] - 1]
-                Log.d("Calendar:Previous", "YMList = ${YMList[0]}년 ${YMList[1]}월")
-                calendarCalendar.goToPrevious()
-            }
-
-            /** 시작하기 */
-            calendarStartBtn.setOnClickListener {
-                val intent = Intent(requireContext(), ProcessingActivity::class.java)
-                // 임시 이동
-                intent.putExtra("showFragment", "HomepageFragment")
-
-                // 진짜 이동
-                //intent.putExtra("showFragment", "StartFragment")
-                startActivity(intent)
-            }
-
-            /** 등록하기 */
-            calendarCommitBtn.setOnClickListener {
-                val intent = Intent(requireContext(), ProcessingActivity::class.java)
-                // 임시 이동
-                intent.putExtra("showFragment", "LockFragment")
-                startActivity(intent)
-            }
-
-            /** 나의 리포트 오픈 */
-            calendarMyReportBtn.setOnClickListener {
-                (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, com.example.miruni.ReportFragment())
-                    .commitAllowingStateLoss()
-            }
-            /** 나의 회고 */
-            calendarMyReviewBtn.setOnClickListener {
-                (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ReviewListFragment())
-                    .commitAllowingStateLoss()
+            calendarDownIv.setOnClickListener {
+                Toast.makeText(context as MainActivity, "날짜 선택 드롭다운", Toast.LENGTH_SHORT).show()
             }
         }
     }
