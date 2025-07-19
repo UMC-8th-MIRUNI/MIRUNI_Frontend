@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MIRUNIIII</string>
+    <string name="app_name">MIRUNI</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <!-- tool page-->
@@ -59,18 +59,18 @@
     <string name="next_eng">Next</string>
 
     <string-array name="monthArr">
-        <item>January</item>
-        <item>February</item>
-        <item>March</item>
-        <item>April</item>
-        <item>May</item>
-        <item>June</item>
-        <item>July</item>
-        <item>August</item>
-        <item>September</item>
-        <item>October</item>
-        <item>November</item>
-        <item>December</item>
+        <item>1월</item>
+        <item>2월</item>
+        <item>3월</item>
+        <item>4월</item>
+        <item>5월</item>
+        <item>6월</item>
+        <item>7월</item>
+        <item>8월</item>
+        <item>9월</item>
+        <item>10월</item>
+        <item>11월</item>
+        <item>12월</item>
     </string-array>
 
     <string name="commit_todo">할 일 등록하기</string>
@@ -111,7 +111,7 @@
     <string name="schedule_date_guide">5/27 ~ 5/30</string>
     <string name="schedule_time_guide">19:00~20:00</string>
 
-    <string name="to_do">이제 슬슬 시작하면 좋은 일</string>
+    <string name="to_do">슬슬 시작하면 좋은 일</string>
 
     <string name="my_storage">My Storage</string>
     <string name="report_closed">나의 리포트\n오픈까지</string>

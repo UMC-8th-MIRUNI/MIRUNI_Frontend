@@ -1,6 +1,5 @@
 package com.example.miruni
 
-
 import android.Manifest
 import android.content.pm.PackageManager
 
