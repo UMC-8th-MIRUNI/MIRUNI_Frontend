@@ -5,25 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.miruni.databinding.ListItemBinding
 
-class ListAdapter(private val items: List<Map<String, String>>) :
-    RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListVPAdapter(private val pagedItems: List<List<Map<String, String>>>) :
+    RecyclerView.Adapter<ListVPAdapter.PageViewHolder>() {
 
-    inner class ViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Map<String, String>) {
-            binding.startTime.text = item["start"]
-            binding.endTIme.text = item["end"]
-            binding.task.text = item["task"]
+    inner class PageViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(items: List<Map<String, String>>) {
+            val innerAdapter = InnerListAdapter(items)
+            binding.innerRecyclerView.adapter = innerAdapter
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
         val binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return PageViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+    override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
+        holder.bind(pagedItems[position])
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = pagedItems.size
 }
