@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="미루니 성장중!"
-        style="@style/RalewayBold700"
+        android:fontFamily="@font/raleway_bold"
         android:textSize="37sp"
         android:layout_marginTop="35dp"
         app:layout_constraintStart_toStartOf="parent"
