@@ -3,69 +3,87 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="300dp">
 
     <ImageView
-        android:id="@+id/taskNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/imageView10"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/list_number" />
+        app:srcCompat="@drawable/list_back" />
 
     <TextView
-        android:id="@+id/startTime"
+        android:id="@+id/time_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:text="12:00"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/taskNumber"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="5dp"
-        android:text=" - "
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/startTime"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/endTIme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="5dp"
-        android:text="14:00"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/line"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/dmsans_regular"
+        android:text="시작 시간:"
+        android:textColor="#6B7280"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+        app:layout_constraintStart_toEndOf="@+id/homepage_task_status" />
 
     <TextView
         android:id="@+id/task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="[회계원리] 레포트 과제 (1)"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/taskNumber"
-        app:layout_constraintTop_toBottomOf="@+id/startTime" />
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/dmsans_bold"
+        android:text="과제 제출하기"
+        android:textSize="13sp"
+        app:layout_constraintStart_toEndOf="@+id/homepage_task_status"
+        app:layout_constraintTop_toTopOf="@+id/imageView10" />
 
     <ImageView
         android:id="@+id/playBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/list_play" />
+        app:srcCompat="@drawable/homepage_next_play" />
+
+    <ImageView
+        android:id="@+id/text_accent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/task"
+        app:layout_constraintEnd_toEndOf="@+id/task"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/task"
+        app:layout_constraintTop_toBottomOf="@+id/task"
+        app:srcCompat="@drawable/goal_stress" />
+
+    <TextView
+        android:id="@+id/goal_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/dmsans_regular"
+        android:text="오후 5:00"
+        android:textColor="#6B7280"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+        app:layout_constraintStart_toEndOf="@+id/time_status" />
+
+    <ImageView
+        android:id="@+id/homepage_task_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+        app:layout_constraintStart_toStartOf="@+id/imageView10"
+        app:layout_constraintTop_toTopOf="@+id/imageView10"
+        app:srcCompat="@drawable/homepage_complete_status_iv" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

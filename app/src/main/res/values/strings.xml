@@ -11,10 +11,13 @@
     <string name="alarm_content">할 일을 까먹거나 미루고 있을 때 알람을 보내줄게요!</string>
 
     <!-- homepage -->
-    <string name="task">오늘의 할 일은 %1$s개가 있어!</string>
-    <string name="date">%1$s.%2$s.%3$s (%4$s)</string>
+    <string name="task_text1">오늘의 할 일은</string>
+    <string name="task_text2">가 있어!</string>
+    <string name="process_text">오늘 목표의 %1$s를 달성했어요!</string>
     <string name="percent">$1$s%</string>
-
+    <string name="nextSchedule">다가오는 다음 일정</string>
+    <string name="today_schedule">오늘의 일정</string>
+    
     <!-- mypage-->
     <string name="username">%1$s</string>
     <string name="email">%1$s</string>
