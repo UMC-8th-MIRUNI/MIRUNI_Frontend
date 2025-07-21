@@ -75,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+
 //
 //    override fun onLoginFailure(message : String) {
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

@@ -78,6 +78,7 @@ class SignupFragment1 : Fragment() {
             viewModel.isAgree = isAgree  // ViewModel에 동의 여부 전달
 
 
+
         }
 
         binding.ivSignupBack.setOnClickListener {
