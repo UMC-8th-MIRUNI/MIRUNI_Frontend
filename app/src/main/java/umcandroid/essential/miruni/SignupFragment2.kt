@@ -32,7 +32,6 @@ class SignupFragment2 : Fragment() {
 
             findNavController().navigate(R.id.action_signupFragment2_to_signupFragment3)
 
-
         }
 
         binding.ivNicknameBack.setOnClickListener {
