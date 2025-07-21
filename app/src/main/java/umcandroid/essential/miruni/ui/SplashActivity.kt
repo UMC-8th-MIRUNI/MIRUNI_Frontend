@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import com.example.miruni.databinding.ActivitySplashBinding
 import umcandroid.essential.miruni.LoginActivity
-import umcandroid.essential.miruni.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
 

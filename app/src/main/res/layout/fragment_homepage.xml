@@ -121,7 +121,7 @@
                 android:layout_marginTop="60dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/bell2" />
+                app:srcCompat="@drawable/main_bell" />
 
             <ImageView
                 android:id="@+id/imageView7"

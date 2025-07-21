@@ -7,8 +7,8 @@ import android.app.Activity
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
-
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.util.AlarmHelper
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     /** 변수 선언 */
     // 뷰 바인딩
     private lateinit var binding : ActivityMainBinding
+    private var pageState = "home"
     // 배너 알람
     private var isReturningFromPermissionGrant = false
     private val overlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -38,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     }
     private var popupHour = 0
     private var popupMinute = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,10 +59,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, CalendarFragment())
-            .commitAllowingStateLoss()
-
         /** 배너 알람 설정 */
         initPopupTime()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -72,6 +69,8 @@ class MainActivity : AppCompatActivity() {
                 checkScheduleExactAlarmPermission()
             }
         }
+
+        initBottomNavigation()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -113,6 +112,120 @@ class MainActivity : AppCompatActivity() {
             isReturningFromPermissionGrant = false // 다시 초기화
             return
         }
+    }
+
+    private fun initBottomNavigation() {
+
+        val displayMetrics = Resources.getSystem().displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+        val targetHeight = (screenHeight * 0.075).toInt()
+        binding.mainNav.layoutParams = binding.mainNav.layoutParams.apply {
+            height = targetHeight
+        }
+
+        // 랜딩 페이지: 홈
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_frm, HomepageFragment())
+            .commitAllowingStateLoss()
+
+        // 네비게이션
+        binding.navToolIv.setOnClickListener {
+            trasitionScreen("tool")
+            setIconColor()
+        }
+        binding.navCalendarIv.setOnClickListener {
+            trasitionScreen("calendar")
+            setIconColor()
+        }
+        binding.navHomeIv.setOnClickListener {
+            trasitionScreen("home")
+            setIconColor()
+        }
+        binding.navLockerIv.setOnClickListener {
+            trasitionScreen("locker")
+            setIconColor()
+        }
+        binding.navMypageIv.setOnClickListener {
+            trasitionScreen("mypage")
+            setIconColor()
+        }
+    }
+
+    private fun trasitionScreen(pageState: String) {
+        this.pageState = pageState
+        when(pageState) {
+            "tool" -> {
+                transitionFragment(ToolFragment())
+            }
+            "calendar" -> {
+                transitionFragment(CalendarFragment())
+            }
+            "home" -> {
+                transitionFragment(HomepageFragment())
+            }
+            "locker" -> {
+                transitionFragment(LockerFragment())
+            }
+            "mypage" -> {
+//                supportFragmentManager.beginTransaction()
+//                    .replace(R.id.main_frm, MyPageFragment())
+//                    .commitAllowingStateLoss()
+                val intent = Intent(this, MyPageActivity::class.java)
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun setIconColor() {
+        initIconColor()
+
+        when (pageState) {
+            "tool" -> {
+                binding.apply {
+                    navToolIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    navToolTv.setTextColor("#1AE019".toColorInt())
+                }
+            }
+            "calendar" -> {
+                binding.apply {
+                    navCalendarIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    navCalendarTv.setTextColor("#1AE019".toColorInt())
+                }
+            }
+            "home" -> {
+                binding.apply {
+                    navHomeTv.setTextColor("#1AE019".toColorInt())
+                }
+            }
+            "locker" -> {
+                binding.apply {
+                    navLockerIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    navLockerTv.setTextColor("#1AE019".toColorInt())
+                }
+            }
+            "mypage" -> {
+                binding.apply {
+                    navMypageIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    navMypageTv.setTextColor("#1AE019".toColorInt())
+                }
+            }
+        }
+    }
+
+    private fun initIconColor() {
+        binding.navToolIv.setColorFilter(resources.getColor(R.color.unselectColor))
+        binding.navToolTv.setTextColor("#484C52".toColorInt())
+
+        binding.navCalendarIv.setColorFilter(resources.getColor(R.color.unselectColor))
+        binding.navCalendarTv.setTextColor("#484C52".toColorInt())
+
+        binding.navHomeTv.setTextColor("#484C52".toColorInt())
+
+        binding.navLockerIv.setColorFilter(resources.getColor(R.color.unselectColor))
+        binding.navLockerTv.setTextColor("#484C52".toColorInt())
+
+        binding.navMypageIv.setColorFilter(resources.getColor(R.color.unselectColor))
+        binding.navMypageTv.setTextColor("#484C52".toColorInt())
     }
 
     private fun initPopupTime() {

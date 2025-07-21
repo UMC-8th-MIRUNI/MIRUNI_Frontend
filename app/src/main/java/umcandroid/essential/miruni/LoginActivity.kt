@@ -4,7 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import umcandroid.essential.miruni.databinding.ActivityLoginBinding
+import com.example.miruni.MainActivity
+import com.example.miruni.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
