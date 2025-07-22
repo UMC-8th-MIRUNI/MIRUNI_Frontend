@@ -1,9 +1,11 @@
 package umcandroid.essential.miruni.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import umcandroid.essential.miruni.LoginActivity
 import umcandroid.essential.miruni.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
@@ -18,9 +20,9 @@ class SplashActivity : AppCompatActivity() {
 
         val handler = Handler(Looper.getMainLooper())
 
-//        handler.postDelayed({
-//            startActivity(Intent(this, ))
-//        })
+        handler.postDelayed({
+            startActivity(Intent(this, LoginActivity::class.java))
+        }, 1500)
 
     }
 }

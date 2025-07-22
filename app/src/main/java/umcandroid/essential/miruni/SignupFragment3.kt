@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import umcandroid.essential.miruni.databinding.FragmentSignup3Binding
 
 class SignupFragment3 : Fragment() {
@@ -30,9 +31,10 @@ class SignupFragment3 : Fragment() {
         binding.ivCompleteButton.setOnClickListener {
 //            viewModel.signup()
             //예비
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+//            val intent = Intent(requireContext(), LoginActivity::class.java)
+//            startActivity(intent)
+//            requireActivity().finish()
+            findNavController().navigate(R.id.action_signupFragment3_to_signupFragment4)
         }
 
         // LiveData 관찰: 성공 여부에 따라 로그인 화면 이동

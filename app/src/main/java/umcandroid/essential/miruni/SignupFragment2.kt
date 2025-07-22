@@ -30,7 +30,7 @@ class SignupFragment2 : Fragment() {
                 return@setOnClickListener
             }
 
-            findNavController().navigate(R.id.action_signupFragment2_to_signupFragment3)
+            findNavController().navigate(R.id.action_signupFragment2_to_opening1Fragment)
 
         }
 
