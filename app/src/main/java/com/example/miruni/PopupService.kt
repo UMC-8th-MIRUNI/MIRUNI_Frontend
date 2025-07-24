@@ -63,7 +63,7 @@ class PopupService : Service() {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        popupView = inflater.inflate(R.layout.popup_layout, null)
+        popupView = inflater.inflate(R.layout.layout_popup, null)
 
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,

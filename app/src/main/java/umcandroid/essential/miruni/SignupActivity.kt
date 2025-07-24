@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.miruni.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
-    val viewModel: SignupViewModel by viewModels()
+//    val viewModel: SignupViewModel by viewModels()
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
