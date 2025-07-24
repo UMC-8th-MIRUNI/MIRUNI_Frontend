@@ -8,14 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
+//import androidx.fragment.app.activityViewModels
+//import androidx.navigation.fragment.findNavController
 import com.example.miruni.R
 import com.example.miruni.databinding.FragmentSignup1Binding
 
 class SignupFragment1 : Fragment() {
 
-    private val viewModel: SignupViewModel by activityViewModels()
+//    private val viewModel: SignupViewModel by activityViewModels()
     private var isAgree = false // 체크 상태 저장
 
     override fun onCreateView(
@@ -70,13 +70,13 @@ class SignupFragment1 : Fragment() {
 //            }
 
             // 이동
-            findNavController().navigate(R.id.action_signupFragment1_to_signupFragment2)
-
-            viewModel.name = name
-            viewModel.email = email
-            viewModel.password = password
-            viewModel.password_check = password_check
-            viewModel.isAgree = isAgree  // ViewModel에 동의 여부 전달
+//            findNavController().navigate(R.id.action_signupFragment1_to_signupFragment2)
+//
+//            viewModel.name = name
+//            viewModel.email = email
+//            viewModel.password = password
+//            viewModel.password_check = password_check
+//            viewModel.isAgree = isAgree  // ViewModel에 동의 여부 전달
 
 
         }

@@ -21,13 +21,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/calendar_calendar_bottom_line">
 
-<!--        <androidx.constraintlayout.widget.Guideline-->
-<!--            android:id="@+id/calendar_header_bottom_line"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:orientation="horizontal"-->
-<!--            app:layout_constraintGuide_percent="0.1"/>-->
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/calendar_header_bottom_line"
             android:layout_width="0dp"
@@ -58,7 +51,7 @@
                 android:id="@+id/calendar_year_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2022"
+                android:text="2022년"
                 android:fontFamily="@font/pretendard_medium"
                 android:textSize="18sp"
                 android:textColor="#313131"
@@ -80,7 +73,7 @@
                 app:layout_constraintStart_toEndOf="@id/calendar_year_tv"/>
 
             <ImageView
-                android:id="@+id/calendar_down_iv"
+                android:id="@+id/calendar_dropdown_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/calendar_down_btn"
@@ -147,7 +140,7 @@
         android:id="@+id/calendar_pin_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="고정 일정"
+        android:text="미룬 일정"
         android:fontFamily="@font/poppins_semibold"
         android:textSize="18sp"
         android:textColor="#4A4C54"
