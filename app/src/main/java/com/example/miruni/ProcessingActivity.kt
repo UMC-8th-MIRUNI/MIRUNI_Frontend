@@ -43,6 +43,9 @@ class ProcessingActivity : AppCompatActivity() {
             "HomepageFragment" ->{
                 transitionFragment(HomepageFragment())
             }
+            "MemoirAddFragment" -> {
+                transitionFragment(MemoirAddFragment())
+            }
         }
     }
 

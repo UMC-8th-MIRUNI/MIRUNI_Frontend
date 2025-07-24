@@ -2,6 +2,16 @@
     <string name="app_name">MIRUNI</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- memoir fragment-->
+    <string name="memoir_write">회고록 작성하기</string>
+    <string name="memoir_emotionTag">1. 감정태그</string>
+    <string name="memoir_emotionTag_add">일정을 마친 뒤, 감정이 어떠한가요?</string>
+    <string name="memoir_archivement">2. 성취도(만족도)</string>
+    <string name="memoir_archivement_add">내가 수행한 정도에 얼마나 만족해요?</string>
+    <string name="memoir_record">3. 한 줄 기록</string>
+    <string name="memoir_complete">회고록</string>
+    
     <!-- tool page-->
     <string name="tool_schedule">일정 쪼개기</string>
     <string name="schedule_content">일을 미리 끝낼 수 있는 적절한 일정을 알려줄게요!</string>
