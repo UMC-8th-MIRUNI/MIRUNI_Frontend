@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signupFragment1">
+
+    <fragment
+        android:id="@+id/signupFragment1"
+        android:name="umcandroid.essential.miruni.SignupFragment1">
+        <action
+            android:id="@+id/action_signupFragment1_to_signupFragment2"
+            app:destination="@id/signupFragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupFragment2"
+        android:name="umcandroid.essential.miruni.SignupFragment2">
+        <action
+            android:id="@+id/action_signupFragment2_to_opening1Fragment"
+            app:destination="@id/opening1Fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/opening1Fragment"
+        android:name="umcandroid.essential.miruni.Opening1Fragment" >
+        <action
+            android:id="@+id/action_opening1Fragment_to_signupFragment3"
+            app:destination="@id/signupFragment3" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupFragment3"
+        android:name="umcandroid.essential.miruni.SignupFragment3" >
+        <action
+            android:id="@+id/action_signupFragment3_to_signupFragment4"
+            app:destination="@id/signupFragment4" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupFragment4"
+        android:name="umcandroid.essential.miruni.SignupFragment4" >
+        <action
+            android:id="@+id/action_signupFragment4_to_signupFragment5"
+            app:destination="@id/signupFragment5" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupFragment5"
+        android:name="umcandroid.essential.miruni.SignupFragment5" >
+        <action
+            android:id="@+id/action_signupFragment5_to_opening2Fragment"
+            app:destination="@id/opening2Fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/opening2Fragment"
+        android:name="umcandroid.essential.miruni.Opening2Fragment" />
+</navigation>

@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="188dp"
-        android:text="해당되는 항목을 모두 선택해주세요!"
+        android:text="5점 만점, 숫자를 하나만 선택해주세요!"
         android:textColor="#000000"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="📱 휴대폰을 사용할 때(SNS, 유튜브 등)"
+                android:text="① 전혀 미루지 않는다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -76,7 +76,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="📺 넷플릭스, 드라마, 유튜브 등 영상 시청"
+                android:text="② 가끔 미룬다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -100,7 +100,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="🧹 청소, 정리정돈 등 딴 일 하다가"
+                android:text="③ 보통이다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -124,7 +124,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="😫 일이 너무 많아서"
+                android:text="④ 자주 미룬다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -148,40 +148,12 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="🛏️ 너무 피곤해서"
+                android:text="⑤ 항상 미룬다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
             <CheckBox
                 android:id="@+id/checkbox_option5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/custom_checkbox_selector"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="374dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@drawable/round_signup3"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@null"
-                android:ems="10"
-                android:text=""
-                android:hint="기타(직접 입력)"
-                android:inputType="text"
-                android:textColor="#1F1F1F"
-                android:textSize="15dp" />
-
-            <CheckBox
-                android:id="@+id/checkbox_option6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -210,7 +182,7 @@
         android:layout_marginTop="90dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/signup3_title" />
+        app:srcCompat="@drawable/signup4_title" />
 
     <TextView
         android:id="@+id/textView2"

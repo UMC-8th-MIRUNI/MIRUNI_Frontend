@@ -39,14 +39,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MIRUNI">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".AlarmSettingActivity"></activity>
         <activity android:name=".MyPageActivity"></activity>
@@ -67,6 +61,17 @@
             android:name=".FocusService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <activity
+            android:name=".ui.SplashActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 
