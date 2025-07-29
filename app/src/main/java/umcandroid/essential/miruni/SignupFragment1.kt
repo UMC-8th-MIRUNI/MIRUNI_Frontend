@@ -10,7 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+//import com.example.miruni.R
+//import com.example.miruni.databinding.FragmentSignup1Binding
 import umcandroid.essential.miruni.databinding.FragmentSignup1Binding
+
+//import umcandroid.essential.miruni.databinding.FragmentSignup1Binding
 
 class SignupFragment1 : Fragment() {
 

@@ -9,7 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+//import com.example.miruni.databinding.FragmentOpening2Binding
 import umcandroid.essential.miruni.databinding.FragmentOpening2Binding
+
+//import umcandroid.essential.miruni.databinding.FragmentOpening2Binding
 
 class Opening2Fragment : Fragment() {
 
@@ -34,7 +37,7 @@ class Opening2Fragment : Fragment() {
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
-//            findNavController().navigate(R.id.action_signupFragment3_to_signupFragment4)
+            findNavController().navigate(R.id.action_signupFragment3_to_signupFragment4)
         }
 
         // LiveData 관찰: 성공 여부에 따라 로그인 화면 이동

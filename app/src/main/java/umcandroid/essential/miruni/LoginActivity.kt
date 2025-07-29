@@ -6,6 +6,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import umcandroid.essential.miruni.databinding.ActivityLoginBinding
 
+//import com.example.miruni.databinding.ActivityLoginBinding
+
+//import umcandroid.essential.miruni.databinding.ActivityLoginBinding
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -30,8 +34,8 @@ class LoginActivity : AppCompatActivity() {
 //
 //            authService.login(LoginRequest(email, pwd))
 
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
         }
 
     }
@@ -62,10 +66,10 @@ class LoginActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    private fun startMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
+//    private fun startMainActivity() {
+//        val intent = Intent(this, MainActivity::class.java)
+//        startActivity(intent)
+//    }
 
 //    override fun onLoginSuccess(code: String, result: Result) {
 //        when(code){

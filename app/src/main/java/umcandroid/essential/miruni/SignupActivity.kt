@@ -3,7 +3,10 @@ package umcandroid.essential.miruni
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+//import com.example.miruni.databinding.ActivitySignupBinding
 import umcandroid.essential.miruni.databinding.ActivitySignupBinding
+
+//import umcandroid.essential.miruni.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
     val viewModel: SignupViewModel by viewModels()

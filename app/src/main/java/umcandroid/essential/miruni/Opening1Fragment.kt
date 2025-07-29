@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+//import com.example.miruni.R
+//import com.example.miruni.databinding.FragmentOpening1Binding
 import umcandroid.essential.miruni.databinding.FragmentOpening1Binding
 
 class Opening1Fragment : Fragment() {
