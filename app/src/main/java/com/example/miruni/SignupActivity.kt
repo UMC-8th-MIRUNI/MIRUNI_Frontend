@@ -1,13 +1,10 @@
-package umcandroid.essential.miruni
+package com.example.miruni
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-//import com.example.miruni.databinding.ActivitySignupBinding
-import umcandroid.essential.miruni.databinding.ActivitySignupBinding
+import com.example.miruni.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
-//    val viewModel: SignupViewModel by viewModels()
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
