@@ -1,13 +1,12 @@
-package umcandroid.essential.miruni.ui
+package com.example.miruni.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-//import com.example.miruni.databinding.ActivitySplashBinding
-import umcandroid.essential.miruni.LoginActivity
-import umcandroid.essential.miruni.databinding.ActivitySplashBinding
+import com.example.miruni.LoginActivity
+import com.example.miruni.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package umcandroid.essential.miruni
+package com.example.miruni
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import umcandroid.essential.miruni.databinding.FragmentOpening1Binding
+import com.example.miruni.databinding.FragmentOpening1Binding
 
 class Opening1Fragment : Fragment() {
 

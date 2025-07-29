@@ -43,6 +43,8 @@
             android:theme="@style/Theme.MIRUNI">
         </activity>
         <activity android:name=".AlarmSettingActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".SignupActivity"></activity>
         <activity android:name=".MyPageActivity"></activity>
         <activity android:name=".AlarmActivity"></activity>
         <activity android:name=".ProcessingActivity"
