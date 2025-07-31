@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dropdown_priorityList"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--Noto Sans regular(400)-->
+    <TextView
+        android:id="@+id/dropdown_priority_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="상"
+        android:padding="16sp"
+        android:background="@drawable/bg_cccccc_square"
+        android:fontFamily="@font/notosanssymbols_bold"
+        android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/dropdown_priority_mid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="중"
+        android:padding="16sp"
+        android:background="@drawable/bg_cccccc_square"
+        android:fontFamily="@font/notosanssymbols_bold"
+        android:textSize="16sp"/>
+    <TextView
+        android:id="@+id/dropdown_priority_btm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="하"
+        android:padding="16sp"
+        android:background="@drawable/bg_cccccc_square_bottom8"
+        android:fontFamily="@font/notosanssymbols_bold"
+        android:textSize="16sp"/>
+</LinearLayout>
