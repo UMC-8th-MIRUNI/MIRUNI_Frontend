@@ -101,8 +101,13 @@ class CalendarFragment : Fragment() {
     }
 
     private fun initClickListener() {
-        val monthArray = resources.getStringArray(R.array.monthArr)
+        binding.calendarRegisterFrm.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, RegistrationScheduleFragment())
+                .commitAllowingStateLoss()
+        }
     }
+
 
     private fun showDateSelectDropdown(anchor: View) {
         selectedYearOnDropdown = null

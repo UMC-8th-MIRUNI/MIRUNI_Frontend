@@ -56,9 +56,9 @@ class GrowFragment : Fragment() {
         }
 
         binding.growCompleteBtn.setOnClickListener {
-            (context as ProcessingActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.process_frm, CompleteFragment())
-                .commitAllowingStateLoss()
+//            (context as ProcessingActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.process_frm, CompleteFragment())
+//                .commitAllowingStateLoss()
         }
     }
     private fun timer(time: Long){

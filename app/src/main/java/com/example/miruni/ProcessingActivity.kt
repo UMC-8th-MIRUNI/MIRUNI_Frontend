@@ -31,9 +31,6 @@ class ProcessingActivity : AppCompatActivity() {
             "StartFragment" -> {
                 transitionFragment(StartFragment())
             }
-            "CommitFragment" -> {
-                transitionFragment(CommitFragment())
-            }
             "GrowFragment" -> {
                 transitionFragment(GrowFragment())
             }
