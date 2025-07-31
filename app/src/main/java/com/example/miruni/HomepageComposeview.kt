@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.foundation.lazy.items
+import com.example.miruni.data.Task
 
 @Preview
 @Composable
@@ -220,14 +221,14 @@ fun HomepageNextBox(modifier: Modifier = Modifier){
 @Composable
 fun PrevtodayTaskRV(modifier: Modifier = Modifier){
     val dummyList = listOf(
-        Task("umc", "14:00", "[회계원리] 레포트 과제 (1)", "expected"),
-        Task("umc", "15:30", "[자료구조] 강의 정리", "fail"),
-        Task("umc", "17:00", "[UI/UX] 와이어프레임 작성", "complete"),
-        Task("umc", "15:30", "[회계원리] 레포트 과제 (1)", "expected"),
-        Task("umc", "14:00", "[UI/UX] 와이어프레임 작성", "delay"),
-        Task("umc", "14:00", "[자료구조] 강의 정리", "expected"),
-        Task("umc", "14:00", "[회계원리] 레포트 과제 (1)", "complete"),
-        Task("umc", "14:00", "[회계원리] 레포트 과제 (1)", "fail")
+        Task(1, "umc", "14:00", "[회계원리] 레포트 과제 (1)", "expected"),
+        Task(2, "umc", "15:30", "[자료구조] 강의 정리", "fail"),
+        Task(3, "umc", "17:00", "[UI/UX] 와이어프레임 작성", "complete"),
+        Task(4, "umc", "15:30", "[회계원리] 레포트 과제 (1)", "expected"),
+        Task(5, "umc", "14:00", "[UI/UX] 와이어프레임 작성", "delay"),
+        Task(6, "umc", "14:00", "[자료구조] 강의 정리", "expected"),
+        Task(7, "umc", "14:00", "[회계원리] 레포트 과제 (1)", "complete"),
+        Task(8, "umc", "14:00", "[회계원리] 레포트 과제 (1)", "fail")
     )
     todayTaskRV(datas = dummyList)
 }
@@ -290,7 +291,7 @@ fun TaskList(data: Task){
                 }
         )
         Text(
-            text = data.content ?: "",
+            text = data.title ?: "",
             fontSize = 11.5.sp,
             fontFamily = FontFamily(Font(R.font.dmsans_bold)),
             modifier = Modifier
@@ -300,7 +301,7 @@ fun TaskList(data: Task){
                 }
         )
         Text(
-            text = data.date,
+            text = data.startTime,
             fontSize = 10.sp,
             fontFamily = FontFamily(Font(R.font.poppins_regular)),
             color = Color(0xff6B7280),

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10sp"
+    android:paddingBottom="3sp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/item_task_clock_end_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.06"/>
+    <ImageView
+        android:id="@+id/item_task_clock_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/task_on_date_clock"
+        android:layout_marginStart="3sp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/item_task_clock_end_line"/>
+<!--Poppins SemiBold-->
+    <TextView
+        android:id="@+id/item_task_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9:00 - 12:00"
+        android:textSize="12sp"
+        android:textColor="#1AE019"
+        android:layout_marginStart="4sp"
+        app:layout_constraintStart_toStartOf="@id/item_task_clock_end_line"
+        app:layout_constraintTop_toTopOf="@id/item_task_clock_iv"
+        app:layout_constraintBottom_toBottomOf="@id/item_task_clock_iv"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_task_item_frm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="13sp"
+        android:paddingHorizontal="17sp"
+        android:layout_marginTop="6sp"
+        android:background="@drawable/bg_eeffed_e7f5e6_square_10"
+        android:elevation="2sp"
+        app:layout_constraintTop_toBottomOf="@id/item_task_clock_iv">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/item_task_item_end_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.07"/>
+        <ImageView
+            android:id="@+id/item_task_item_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/task_on_date_bag"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/item_task_item_end_line"
+            app:layout_constraintTop_toTopOf="parent"/>
+<!--        Poppins SemiBold-->
+        <TextView
+            android:id="@+id/item_schedule_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="클라이언트 미팅"
+            android:textSize="14sp"
+            android:layout_marginStart="6sp"
+            app:layout_constraintTop_toTopOf="@id/item_task_item_iv"
+            app:layout_constraintBottom_toBottomOf="@id/item_task_item_iv"
+            app:layout_constraintStart_toEndOf="@id/item_task_item_iv"/>
+
+        <ImageView
+            android:id="@+id/item_task_check_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/task_on_date_check"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_marginStart="8sp"
+            app:layout_constraintTop_toBottomOf="@id/item_task_item_iv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/item_task_item_end_line"/>
+<!--        DM Sans Medium-->
+        <TextView
+            android:id="@+id/item_task_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="경쟁사 분석 및 PT자료 준비"
+            android:textSize="12sp"
+            android:textColor="#767E75"
+            app:layout_constraintTop_toTopOf="@id/item_task_check_iv"
+            app:layout_constraintBottom_toBottomOf="@id/item_task_check_iv"
+            app:layout_constraintStart_toEndOf="@id/item_task_check_iv"/>
+
+<!--        DM Sans Medium-->
+        <TextView
+            android:id="@+id/item_schedule_priority_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="상"
+            android:textSize="11sp"
+            android:textColor="#A4C8AE"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/item_task_title_tv"
+            app:layout_constraintBottom_toBottomOf="@id/item_task_title_tv"/>
+        <ImageView
+            android:id="@+id/item_task_priority_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/task_on_date_priority"
+            android:padding="2sp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="@id/item_schedule_priority_tv"
+            app:layout_constraintBottom_toBottomOf="@id/item_schedule_priority_tv"
+            app:layout_constraintEnd_toStartOf="@id/item_schedule_priority_tv"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
