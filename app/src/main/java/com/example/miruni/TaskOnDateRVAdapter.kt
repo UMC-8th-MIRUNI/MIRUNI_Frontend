@@ -1,14 +1,11 @@
-package com.example.calendartest
+package com.example.miruni
 
 import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.miruni.MainActivity
 import com.example.miruni.data.Schedule
-import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ItemTaskBinding
 
@@ -41,15 +38,19 @@ class TaskOnDateRVAdapter : RecyclerView.Adapter<TaskOnDateRVAdapter.ViewHolder>
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun deleteAllTasks() {
+        this.taskItems.clear()
+
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(private val binding: ItemTaskBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(taskItem: Pair<Schedule, Task>) {
             binding.itemScheduleTitleTv.text = taskItem.first.title
             binding.itemTaskTitleTv.text = taskItem.second.title
             binding.itemSchedulePriorityTv.text = taskItem.first.priority
-            binding.itemTaskTimeTv.text = buildString {
-                append(taskItem.second.startTime)
-                append(taskItem.second.endTime)
-            }
+            binding.itemTaskTimeTv.text = String.format("${taskItem.second.startTime} - ${taskItem.second.endTime}")
         }
     }
 }

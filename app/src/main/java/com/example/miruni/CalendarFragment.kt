@@ -1,6 +1,7 @@
 package com.example.miruni
 
 import android.graphics.Color
+import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,7 +19,6 @@ import com.example.miruni.databinding.FragmentCalendarBinding
 import androidx.core.graphics.toColorInt
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import androidx.core.graphics.drawable.toDrawable
-import com.example.calendartest.TaskOnDateRVAdapter
 import com.example.miruni.data.Schedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
@@ -29,6 +29,7 @@ class CalendarFragment : Fragment() {
     private var YMList = arrayOf(0, 0)
     private var taskOnDateList = ArrayList<Pair<Schedule, Task>>()
     private lateinit var scheduleDB: ScheduleDatabase
+    private lateinit var taskOnDateRVAdapter: TaskOnDateRVAdapter
 
     private lateinit var dropdownPopup: PopupWindow
     private var selectedYearOnDropdown: Int? = null
@@ -38,7 +39,7 @@ class CalendarFragment : Fragment() {
 
     private var selectedDate = ""
     private var dateSelectState = "unselected"
-    val dayOfWeekList = listOf("수", "목", "금", "토", "일", "월", "화")
+    val dayOfWeekList = listOf("일", "월", "화", "수", "목", "금", "토")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,14 +54,75 @@ class CalendarFragment : Fragment() {
 
         initBottomNavigation()
         initCalendar()
+        initTaskOnDateRVAdapter()
         initClickListener()
         initDelayedRV()
-        initTaskOnDateRV()
 
         return binding.root
     }
 
     private fun initDummyData() {
+        val tasks = scheduleDB.taskDao().getTasks()
+
+        scheduleDB.taskDao().getTasks().forEach { task ->
+            Log.d("initDummy/tasks", "id = ${task.id}, title = ${task.title}, scheduleId = ${task.scheduleId}, startTime = ${task.startTime}, EndTime = ${task.endTime}")
+        }
+
+        scheduleDB.scheduleDao().getSchedules().forEach { schedule ->
+            Log.d("initDummy/schedules", "id = ${schedule.id}, title = ${schedule.title}, date = ${schedule.date}, comment = ${schedule.comment}, priority = ${schedule.priority}")
+        }
+
+
+        if (tasks.isNotEmpty()) return
+
+        scheduleDB.taskDao().insert(
+            Task(
+                1,
+                "title1",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                1,
+                "title2",
+                "15:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                1,
+                "title3",
+                "16:00",
+                "17:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                2,
+                "titleA",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                2,
+                "titleB",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+
+        val schedules = scheduleDB.scheduleDao().getSchedules()
+        if (schedules.isNotEmpty()) return
         scheduleDB.scheduleDao().insert(
             Schedule(
                 "토익 LC 공부하기",
@@ -73,54 +135,8 @@ class CalendarFragment : Fragment() {
             Schedule(
                 "토익 RC 공부하기",
                 " ",
-                "2025-07-04",
+                "2025-07-05",
                 "상"
-            )
-        )
-
-        scheduleDB.taskDao().insert(
-            Task(
-                0,
-                "title1",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                0,
-                "title2",
-                "15:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                0,
-                "title3",
-                "16:00",
-                "17:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                1,
-                "titleA",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                1,
-                "titleB",
-                "14:00",
-                "16:00",
-                "예정"
             )
         )
     }
@@ -154,6 +170,12 @@ class CalendarFragment : Fragment() {
         }
     }
 
+    private fun initTaskOnDateRVAdapter() {
+        taskOnDateRVAdapter = TaskOnDateRVAdapter()
+        binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.adapter = taskOnDateRVAdapter
+    }
+
     /**
      * 클릭 리스너
      */
@@ -176,7 +198,10 @@ class CalendarFragment : Fragment() {
                 calendarCalendar.removeDecorators()
                 calendarCalendar.addDecorator(SelectionDecorator(requireContext(), date))
 
-                // 화면 이동
+                calendarYearTv.text = String.format("${date.year}년")
+                calendarMonthTv.text = String.format("${date.month}월")
+
+                // 날짜 별 일정 소개 페이지로 이동
                 if (dateSelectState == "selected" && selectedDate == date.toString()) {
                     val activity = requireActivity() as MainActivity
                     val navigationBar = activity.findViewById<ConstraintLayout>(R.id.main_nav)
@@ -190,8 +215,10 @@ class CalendarFragment : Fragment() {
                     val dayOfWeek = checkDayOfWeek(date.year, date.month, date.day)
 
                     binding.calendarIncludeTaskOnDate.taskOnDateDateTv.text = String.format("${date.year}년 ${date.month}월 ${date.day}일 (${dayOfWeek})")
+
+                    // 날짜에 맞는 일정 갯수
+                    initTaskOnDateRV(date)
                 } else {
-                    // 처음 날짜 선택 시 & 다른 날짜 선택 시
                     dateSelectState = "selected"
                     selectedDate = date.toString()
                 }
@@ -213,12 +240,11 @@ class CalendarFragment : Fragment() {
      */
     private fun checkDayOfWeek(year: Int, month: Int, day: Int): String {
         val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
-        Log.d("checkDayOfWeek", "calendar: ${calendar} / year: ${year} / month: ${month} / day: ${day}")
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        Log.d("checkDayOfWeek", "dayOfWeek: ${dayOfWeek}")
+        calendar.set(year, month-1, day)
 
-        return dayOfWeekList[dayOfWeek]
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
+        return dayOfWeekList[dayOfWeek-1]
     }
 
     /**
@@ -237,20 +263,21 @@ class CalendarFragment : Fragment() {
     /**
      * Task_On_Date RV 초기화
      */
-    private fun initTaskOnDateRV() {
+    private fun initTaskOnDateRV(date: CalendarDay) {
+        val taskDate = String.format("${date.year}-${DecimalFormat("00").format(date.month)}-${DecimalFormat("00").format(date.day)}")
+        taskOnDateList.clear()
+
         binding.calendarIncludeTaskOnDate.apply {
-            taskOnDateTaskRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            taskOnDateRVAdapter.deleteAllTasks()
 
-            val taskOnDateRVAdapter = TaskOnDateRVAdapter()
-            taskOnDateTaskRv.adapter = taskOnDateRVAdapter
-
-            scheduleDB.scheduleDao().getSchedules().forEach { schedule ->
+            scheduleDB.scheduleDao().getScheduleByDate(taskDate).forEach { schedule ->
                 scheduleDB.taskDao().getTasksByScheduleId(schedule.id).forEach { task ->
                     val taskOnDate = Pair(schedule, task)
                     taskOnDateList.add(taskOnDate)
                 }
             }
 
+            taskOnDateCountTv.text = String.format("일정 갯수 : ${taskOnDateList.size}개")
             taskOnDateRVAdapter.addTask(taskOnDateList)
         }
     }

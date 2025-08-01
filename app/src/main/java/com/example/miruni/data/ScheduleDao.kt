@@ -29,4 +29,10 @@ interface ScheduleDao {
      */
     @Query("SELECT id, title, comment, date, priority FROM ScheduleTable")
     fun getSchedules(): List<Schedule>
+
+    /**
+     * 날짜별 Schedule 정리
+     */
+    @Query("SELECT id, title, comment, date, priority FROM ScheduleTable WHERE date = :date")
+    fun getScheduleByDate(date: String): List<Schedule>
 }

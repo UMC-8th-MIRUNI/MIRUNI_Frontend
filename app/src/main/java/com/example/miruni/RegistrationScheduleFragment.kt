@@ -43,8 +43,6 @@ class RegistrationScheduleFragment : Fragment() {
     ): View? {
         binding = FragmentRegistrationScheduleBinding.inflate(layoutInflater, container, false)
 
-        Log.d("Register/Date", System.currentTimeMillis().toString())
-
         hideNavigationBar()
         initClickListener()
 
@@ -102,7 +100,6 @@ class RegistrationScheduleFragment : Fragment() {
             /** 등록하기 */
             scheduleRegistrationContentBtnRegister.setOnClickListener {
                 val scheduleToRegister = setRequestSchedule()
-                Log.d("scheduleToRegister", scheduleToRegister.toString())
 
                 if (scheduleToRegister == null) return@setOnClickListener
 
