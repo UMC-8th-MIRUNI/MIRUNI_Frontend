@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/schedule_registration_content_btn_register"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="등록"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"
+        android:paddingVertical="10sp"
+        android:background="@drawable/bg_07d500_square_10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/schedule_registration_content_btn_split"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/schedule_registration_content_btn_split"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="쪼개기"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"
+        android:paddingVertical="10sp"
+        android:background="@drawable/bg_07d500_square_10"
+        android:layout_marginStart="8sp"
+        app:layout_constraintStart_toEndOf="@id/schedule_registration_content_btn_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

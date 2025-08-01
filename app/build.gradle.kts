@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
 
     alias(libs.plugins.compose.compiler)
-
     id("kotlin-kapt")
 }
 
@@ -61,6 +60,8 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.7.0")
     implementation("androidx.compose.compiler:compiler:1.5.11")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 

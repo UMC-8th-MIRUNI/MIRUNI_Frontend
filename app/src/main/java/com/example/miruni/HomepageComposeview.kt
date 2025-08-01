@@ -40,6 +40,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.example.miruni.data.Task
 
 @Preview
 @Composable
@@ -336,7 +337,7 @@ fun TaskList(data: Task, click: Boolean, isChecked: Boolean = false, onCheckedCh
 
         }
         Text(
-            text = data.content ?: "",
+            text = data.title ?: "",
             fontSize = 11.5.sp,
             fontFamily = FontFamily(Font(R.font.dmsans_bold)),
             modifier = Modifier

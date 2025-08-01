@@ -1,6 +1,7 @@
 package com.example.miruni
 
 import androidx.room.PrimaryKey
+import com.example.miruni.data.Task
 
 data class HomepageResponse(
     var errorCode: String?,     // 성공이면 null 반환

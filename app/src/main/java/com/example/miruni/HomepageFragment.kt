@@ -14,6 +14,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Dao
+import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentHomepageBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +27,7 @@ class HomepageFragment: Fragment() {
     }
 
     private var taskDatas = ArrayList<Task>()
-    private lateinit var taskDB: TaskDatabase
+    private lateinit var taskDB: ScheduleDatabase
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -34,14 +36,14 @@ class HomepageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            taskDB = TaskDatabase.getInstance(requireContext())
+            taskDB = ScheduleDatabase.getInstance(requireContext())!!
             if(taskDB.taskDao().getTask().isEmpty()) {
-                taskDB.taskDao().insertTask(Task(cheduleId = 0,startTime = "12:00", endTime ="14:00",content =  "[회계원리] 레포트 과제 (1)", status ="expected"))
-                taskDB.taskDao().insertTask(Task(cheduleId =0,startTime ="11:00", endTime ="15:30", content ="[자료구조] 강의 정리",  status ="fail"))
-                taskDB.taskDao().insertTask(Task(cheduleId =0,startTime ="12:00", endTime ="17:00", content ="[UI/UX] 와이어프레임 작성", status = "complete"))
-                taskDB.taskDao().insertTask(Task(cheduleId =0,startTime ="12:00", endTime ="15:30", content ="[회계원리] 레포트 과제 (1)", status = "expected"))
-                taskDB.taskDao().insertTask(Task(cheduleId =0,startTime ="12:00", endTime ="14:00", content ="[UI/UX] 와이어프레임 작성", status = "complete"))
-                taskDB.taskDao().insertTask(Task(cheduleId =0,startTime ="12:00", endTime ="14:00", content ="[자료구조] 강의 정리",  status ="expected"))
+                taskDB.taskDao().insert(Task(scheduleId = 0,startTime = "12:00", endTime ="14:00",title =  "[회계원리] 레포트 과제 (1)", status ="expected"))
+                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="11:00", endTime ="15:30", title ="[자료구조] 강의 정리",  status ="fail"))
+                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="17:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
+                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="15:30", title ="[회계원리] 레포트 과제 (1)", status = "expected"))
+                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="14:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
+                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="14:00", title ="[자료구조] 강의 정리",  status ="expected"))
             }
             withContext(Dispatchers.Main) {
                 taskDatas.addAll(taskDB.taskDao().getTask())

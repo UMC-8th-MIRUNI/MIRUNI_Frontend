@@ -167,9 +167,9 @@ class MainActivity : AppCompatActivity() {
                 transitionFragment(LockerFragment())
 
                 // 확인용 코드
-                /*val intent = Intent(this, ProcessingActivity::class.java)
+                val intent = Intent(this, ProcessingActivity::class.java)
                 intent.putExtra("showFragment", "MemoirAddFragment")
-                startActivity(intent)*/
+                startActivity(intent)
 
             }
             "mypage" -> {

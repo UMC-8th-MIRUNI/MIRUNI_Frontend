@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentMemoirAddBinding
 import kotlinx.coroutines.launch
 
@@ -14,7 +16,7 @@ class MemoirAddFragment: Fragment() {
     val binding by lazy {
         FragmentMemoirAddBinding.inflate(layoutInflater)
     }
-    private lateinit var taskDB : TaskDatabase
+    private lateinit var taskDB : ScheduleDatabase
     private lateinit var taskDatas : List<Task>
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,13 +30,13 @@ class MemoirAddFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            taskDB = TaskDatabase.getInstance(requireContext())
+            taskDB = ScheduleDatabase.getInstance(requireContext())!!
             taskDatas = taskDB.taskDao().getTask()
         }
 
         val dapter = MemoirAddRVAdapter(taskDatas) { clickedTask ->
             val bundle = Bundle().apply {
-                putString("content", clickedTask.content)
+                putString("content", clickedTask.title)
                 putString("date", clickedTask.startTime)
             }
             val transaction = parentFragmentManager.beginTransaction()

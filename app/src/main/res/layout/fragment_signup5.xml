@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_select_back"
+        android:layout_width="57dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back" />
+
+    <TextView
+        android:id="@+id/tv_select_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="188dp"
+        android:text="해당되는 항목을 모두 선택해주세요!"
+        android:textColor="#000000"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/checkbox_group_custom"
+        android:layout_width="374dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="236dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="😮‍ 귀찮아서"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="😓 일이 너무 커 보일 때"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="🤷‍♂️ 무엇부터 해야 할지 몰라서"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="😔 실패할까봐 걱정돼서"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="😵 집중이 안 돼서"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="🙄 재미없거나 하기 싫어서"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/editTextCustom"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@null"
+                android:ems="10"
+                android:text=""
+                android:hint="기타(직접 입력)"
+                android:inputType="text"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_complete_button"
+        android:layout_width="400dp"
+        android:layout_height="59dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/signup_btn" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="393dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/signup5_title" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="184dp"
+        android:layout_marginTop="13dp"
+        android:text="완료"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/iv_complete_button"
+        app:layout_constraintTop_toTopOf="@+id/iv_complete_button" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

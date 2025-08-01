@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginStart="10sp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/schedule_registration_content_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="제목"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18sp"
+            android:textColor="#1E1E1E" />
+        <EditText
+            android:id="@+id/schedule_registration_content_title_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="11sp"
+            android:paddingVertical="13sp"
+            android:background="@drawable/bg_ababab_square_10"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/schedule_registration_content_deadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(마감)기한"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18sp"
+            android:textColor="#1E1E1E"
+            android:layout_marginTop="17sp"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/schedule_registration_content_deadline_frm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="11sp"
+            android:paddingVertical="13sp"
+            android:background="@drawable/bg_ababab_square_10">
+
+            <TextView
+                android:id="@+id/schedule_registration_content_deadline_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2025.07.31."
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="18sp"
+                android:textColor="#1E1E1E"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <ImageView
+                android:id="@+id/schedule_registration_content_deadline_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/schedule_registration_calendar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/schedule_registration_content_deadline_tv"
+                app:layout_constraintBottom_toBottomOf="@id/schedule_registration_content_deadline_tv"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/schedule_registration_content_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일정 수행 날짜"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18sp"
+            android:textColor="#1E1E1E"
+            android:layout_marginTop="17sp"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/schedule_registration_content_date_frm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="11sp"
+            android:paddingVertical="13sp"
+            android:background="@drawable/bg_ababab_square_10">
+
+            <TextView
+                android:id="@+id/schedule_registration_content_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2025.07.31."
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="18sp"
+                android:textColor="#1E1E1E"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+            <ImageView
+                android:id="@+id/schedule_registration_content_date_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/schedule_registration_calendar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/schedule_registration_content_date_tv"
+                app:layout_constraintBottom_toBottomOf="@id/schedule_registration_content_date_tv"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/schedule_registration_content_priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="우선 순위"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18sp"
+            android:textColor="#1E1E1E"
+            android:layout_marginTop="17sp"/>
+        <TextView
+            android:id="@+id/schedule_registration_content_priority_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="11sp"
+            android:paddingVertical="13sp"
+            android:background="@drawable/bg_ababab_square_10"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="14sp"/>
+        <!--        <Spinner-->
+        <!--            android:id="@+id/schedule_registration_content_priority_dropdown"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:paddingHorizontal="11sp"-->
+        <!--            android:paddingVertical="13sp"-->
+        <!--            android:background="@drawable/bg_ababab_square_10"-->
+        <!--            android:dropDownWidth="match_parent"-->
+        <!--            android:dropDownSelector="@drawable/bg_1ae019_square_13"-->
+        <!--            android:popupBackground="@drawable/bg_cccccc_square_bottom8"/>-->
+
+
+        <TextView
+            android:id="@+id/schedule_registration_content_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="한 줄 설명"
+            android:fontFamily="@font/poppins_bold"
+            android:textSize="18sp"
+            android:textColor="#1E1E1E"
+            android:layout_marginTop="17sp" />
+        <EditText
+            android:id="@+id/schedule_registration_content_comment_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="11sp"
+            android:paddingVertical="13sp"
+            android:background="@drawable/bg_ababab_square_10"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="14sp"/>
+    </LinearLayout>
+</ScrollView>

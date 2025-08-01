@@ -10,32 +10,22 @@
         android:id="@+id/iv_select_back"
         android:layout_width="57dp"
         android:layout_height="51dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
-
-    <ImageView
-        android:id="@+id/iv_nickname"
-        android:layout_width="189dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="124dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/signup3" />
 
     <TextView
         android:id="@+id/tv_select_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
-        android:text="미루니에게 어떤 도움을 받고 싶어요?"
+        android:layout_marginTop="188dp"
+        android:text="해당되는 항목을 모두 선택해주세요!"
         android:textColor="#000000"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.141"
+        app:layout_constraintHorizontal_bias="0.101"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +51,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="      미리미리 일정짜기"
+                android:text="📱 휴대폰을 사용할 때(SNS, 유튜브 등)"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -86,7 +76,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="      미루고 있을 때 알림받기"
+                android:text="📺 넷플릭스, 드라마, 유튜브 등 영상 시청"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -110,7 +100,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="      까먹지 않게 리마인드해주기"
+                android:text="🧹 청소, 정리정돈 등 딴 일 하다가"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -134,7 +124,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text=""
+                android:text="😫 일이 너무 많아서"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -146,19 +136,95 @@
                 android:button="@drawable/custom_checkbox_selector"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="🛏️ 너무 피곤해서"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="374dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@drawable/round_signup3"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/editTextCustom"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="@null"
+                android:ems="10"
+                android:text=""
+                android:hint="기타(직접 입력)"
+                android:inputType="text"
+                android:textColor="#1F1F1F"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkbox_option6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:button="@drawable/custom_checkbox_selector"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 
     <ImageView
         android:id="@+id/iv_complete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="59dp"
         android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/button_signup3" />
+        app:srcCompat="@drawable/signup_btn" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="393dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/signup3_title" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="184dp"
+        android:layout_marginTop="13dp"
+        android:text="다음"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/iv_complete_button"
+        app:layout_constraintTop_toTopOf="@+id/iv_complete_button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

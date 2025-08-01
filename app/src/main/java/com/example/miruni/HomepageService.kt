@@ -22,7 +22,7 @@ class HomepageService(private val context: Context) {
         }
         return try{
             val bearerToken = "Bearer $token"
-            RetrofitInstance.api.getHomepage(bearerToken)
+            RetrofitInstance.authService.getHomepage(bearerToken)
         }catch (e: Exception){
             Log.e("HomepageService", "홈페이지 전체 정보 조회 api 연동 실패: ${e.message}")
             null
