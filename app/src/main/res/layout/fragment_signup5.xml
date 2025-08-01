@@ -193,14 +193,15 @@
             android:layout_marginTop="8dp">
 
             <EditText
+                android:id="@+id/editTextCustom"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:background="@null"
                 android:ems="10"
-                android:text=""
                 android:hint="기타(직접 입력)"
                 android:inputType="text"
+                android:padding="8dp"
+                android:text=""
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
