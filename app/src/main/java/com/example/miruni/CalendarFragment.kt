@@ -36,7 +36,7 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
 
         // 더미 데이터
-        initDummyData()
+        //initDummyData()
 
         initPinned()
         initCalendar()
@@ -46,7 +46,7 @@ class CalendarFragment : Fragment() {
         return binding.root
     }
 
-    private fun initDummyData() {
+    /*private fun initDummyData() {
         pinnedList.add(
             Schedule(
                 "토익 LC 공부하기",
@@ -61,7 +61,7 @@ class CalendarFragment : Fragment() {
                 "2025.07.04"
             )
         )
-    }
+    }*/
 
     private fun initPinned() {
         binding.calendarToDoRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
