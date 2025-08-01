@@ -39,6 +39,7 @@ class SignupFragment1 : Fragment() {
             val email = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
             val password_check = binding.etPasswordCheck.text.toString()
+            val phoneNumber = binding.etPhone.text.toString()
 
             if (name.isEmpty()) {
                 Toast.makeText(requireContext(), "이름을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -70,13 +71,10 @@ class SignupFragment1 : Fragment() {
             // 이동
             findNavController().navigate(R.id.action_signupFragment1_to_signupFragment2)
 
-            viewModel.name = name
-            viewModel.email = email
-            viewModel.password = password
-            viewModel.password_check = password_check
-            viewModel.isAgree = isAgree  // ViewModel에 동의 여부 전달
-
-
+            viewModel.name.value = name
+            viewModel.email.value = email
+            viewModel.password.value = password
+            viewModel.phoneNumber.value = phoneNumber
         }
 
         binding.ivSignupBack.setOnClickListener {

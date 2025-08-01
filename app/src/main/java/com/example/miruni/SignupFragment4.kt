@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.miruni.databinding.FragmentSignup4Binding
+import androidx.fragment.app.activityViewModels
 
 class SignupFragment4 : Fragment() {
+
+    private val viewModel: SignupViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -18,6 +21,16 @@ class SignupFragment4 : Fragment() {
         val binding = FragmentSignup4Binding.inflate(inflater, container, false)
 
         binding.ivCompleteButton.setOnClickListener {
+            val selected = mutableListOf<String>()
+            // 체크박스 체크 확인 (예시)
+            if (binding.checkboxOption1.isChecked) selected.add("FTYPE")
+            if (binding.checkboxOption2.isChecked) selected.add("GTYPE")
+            if (binding.checkboxOption3.isChecked) selected.add("HTYPE")
+            if (binding.checkboxOption4.isChecked) selected.add("ITYPE")
+            if (binding.checkboxOption5.isChecked) selected.add("JTYPE")
+
+            viewModel.addPreferences(selected)
+
             findNavController().navigate(R.id.action_signupFragment4_to_signupFragment5)
         }
 
