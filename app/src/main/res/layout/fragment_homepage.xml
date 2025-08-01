@@ -56,6 +56,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/homepage_next_schedule"
                 app:srcCompat="@drawable/homepage_li" />
 
+            <ImageView
+                android:id="@+id/task_delete_complete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                app:srcCompat="@drawable/task_delete_complete_btn" />
+
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/homepage_next_schedule"
                 android:layout_width="0dp"
@@ -73,7 +84,7 @@
                 android:layout_width="170dp"
                 android:layout_height="208dp"
                 android:layout_marginTop="30dp"
-                android:src="@drawable/homepage_img"
+                android:src="@drawable/miruni_logo_big"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/textView3" />
 
@@ -82,56 +93,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@{username}"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="55dp"
                 android:fontFamily="@font/dmsans_bold"
                 android:text='@{task_count + "개"}'
                 android:textColor="#1AE019"
                 android:textSize="15sp"
                 app:layout_constraintStart_toEndOf="@+id/textView35"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/logo" />
-
-            <ImageView
-                android:id="@+id/homepage_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="60dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/main_bell" />
-
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/peanut_background" />
+                app:layout_constraintTop_toTopOf="@+id/textView35" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
@@ -178,22 +158,12 @@
             </androidx.compose.ui.platform.ComposeView>
 
             <ImageView
-                android:id="@+id/homepage_peanuts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-                app:layout_constraintStart_toStartOf="@+id/imageView7"
-                app:layout_constraintTop_toTopOf="@+id/imageView7"
-                app:srcCompat="@drawable/peanuts" />
-
-            <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="40dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/homepage_profile" />
 
             <ImageView
@@ -220,7 +190,7 @@
                 android:id="@+id/homepage_fail_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toEndOf="@+id/homepage_expected_btn"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
@@ -239,47 +209,32 @@
                 android:id="@+id/homepage_complete_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toEndOf="@+id/homepage_fail_btn"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
                 app:srcCompat="@drawable/homepage_complete_btn_" />
 
             <TextView
-                android:id="@+id/peanuts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="11"
-                android:textColor="#29AD25"
-                android:textSize="11sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-                app:layout_constraintEnd_toEndOf="@+id/imageView7"
-                app:layout_constraintStart_toEndOf="@+id/homepage_peanuts"
-                app:layout_constraintTop_toTopOf="@+id/imageView7" />
-
-            <TextView
                 android:id="@+id/textView35"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="55dp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="@string/task_text1"
                 app:layout_constraintStart_toEndOf="@+id/imageView6"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+                app:layout_constraintTop_toBottomOf="@+id/homepage_user" />
 
             <TextView
                 android:id="@+id/textView36"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="55dp"
                 android:fontFamily="@font/dmsans_medium"
                 android:text="@string/task_text2"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+                app:layout_constraintTop_toTopOf="@+id/textView35" />
 
-            <androidx.viewpager2.widget.ViewPager2
+            <!--<androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/hello_viewpager"
                 android:layout_width="100dp"
                 android:layout_height="0dp"
@@ -289,9 +244,9 @@
                 app:layout_constraintBottom_toBottomOf="@+id/imageView3"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/imageView3"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0" />-->
 
-            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            <!--<com.tbuonomo.viewpagerdotsindicator.DotsIndicator
                 android:id="@+id/dotsIndicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -301,16 +256,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/hello_viewpager"
                 app:layout_constraintEnd_toEndOf="@+id/hello_viewpager"
                 app:layout_constraintStart_toStartOf="@+id/hello_viewpager"
-                app:selectedDotColor="#8FBF8F" />
-
-            <ImageView
-                android:id="@+id/homepage_delay_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                app:layout_constraintStart_toEndOf="@+id/homepage_complete_btn"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:srcCompat="@drawable/homepage_delay_btn_" />
+                app:selectedDotColor="#8FBF8F" />-->
 
             <ImageView
                 android:id="@+id/imageView14"
@@ -329,6 +275,27 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/homepage_expected_btn"
                 app:srcCompat="@drawable/homepage_list_back2" />
+
+            <TextView
+                android:id="@+id/motivationTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+            <ImageView
+                android:id="@+id/task_delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                app:srcCompat="@drawable/task_delete_btn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

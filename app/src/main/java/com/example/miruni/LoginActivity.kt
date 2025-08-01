@@ -31,6 +31,9 @@ class LoginActivity : AppCompatActivity() {
             }
 
             viewModel.login(email, pwd)
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
         // Activity에서는 observe(this)

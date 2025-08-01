@@ -34,4 +34,10 @@ interface TaskDao {
             "FROM TaskTable " +
             "WHERE scheduleId = :scheduleId")
     fun getTasksByScheduleId(scheduleId: Int): List<Task>
+
+    @Query("SELECT * FROM TaskTable")
+    suspend fun getTask(): List<Task>
+
+    @Query("DELETE FROM TaskTable WHERE id = :taskid")
+    suspend fun deleteTaskById(taskid: Int)
 }
