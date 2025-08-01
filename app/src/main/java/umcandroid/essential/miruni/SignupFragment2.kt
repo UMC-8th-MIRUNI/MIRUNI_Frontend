@@ -1,3 +1,4 @@
+/*
 package umcandroid.essential.miruni
 
 import android.os.Bundle
@@ -42,4 +43,4 @@ class SignupFragment2 : Fragment() {
     }
 
 
-}
+}*/

@@ -1,3 +1,4 @@
+/*
 package umcandroid.essential.miruni.ui
 
 import android.content.Intent
@@ -26,4 +27,4 @@ class SplashActivity : AppCompatActivity() {
         }, 1000)
 
     }
-}
+}*/

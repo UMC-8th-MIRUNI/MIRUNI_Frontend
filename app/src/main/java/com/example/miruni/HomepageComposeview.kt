@@ -1,5 +1,6 @@
 package com.example.miruni
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,6 +33,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Checkbox
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
 @Preview
 @Composable
@@ -135,7 +143,7 @@ fun ProgressBox(progress: Int, modifier: Modifier = Modifier) {
         ){
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(progress/100f)
+                    .fillMaxWidth(progress / 100f)
                     .fillMaxHeight()
                     .background(
                         brush = Brush.linearGradient(
@@ -219,19 +227,43 @@ fun HomepageNextBox(modifier: Modifier = Modifier){
 @Preview
 @Composable
 fun PrevtodayTaskRV(modifier: Modifier = Modifier){
-    val dummyList = listOf(
-        Task("umc", "14:00", "[회계원리] 레포트 과제 (1)", "expected"),
-        Task("umc", "15:30", "[자료구조] 강의 정리", "fail"),
-        Task("umc", "17:00", "[UI/UX] 와이어프레임 작성", "complete"),
-        Task("umc", "15:30", "[회계원리] 레포트 과제 (1)", "expected"),
-        Task("umc", "14:00", "[UI/UX] 와이어프레임 작성", "delay"),
-        Task("umc", "14:00", "[자료구조] 강의 정리", "expected"),
-        Task("umc", "14:00", "[회계원리] 레포트 과제 (1)", "complete"),
-        Task("umc", "14:00", "[회계원리] 레포트 과제 (1)", "fail")
-    )
-    todayTaskRV(datas = dummyList)
-}
 
+    //todayTaskRV(datas = dummyList)
+    //deleteTask(datas = dummyList)
+}
+@Composable
+fun deleteTask(datas: List<Task>, checkedTask: MutableList<Int>){
+    val chunks = datas.chunked(5)
+    //val checkedTask = remember { mutableStateListOf<Int>() }
+    LazyRow(
+        modifier = Modifier
+            //.fillMaxWidth()
+            //.width(300.dp)
+            .height(300.dp)
+            .padding(8.dp)
+    ) {
+        items(chunks){ chunk->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    //.width(300.dp)
+                        .height(300.dp)
+                ) {
+                    chunk.forEach { data ->
+                        TaskList(data = data,
+                            true,
+                            isChecked = checkedTask.contains(data.id),
+                            onCheckedChange = { checked ->
+                                if(checked) checkedTask.add(data.id)
+                            }
+
+                        )
+                    }
+                Log.d("DeleteListCheck","checkedTask확인: ${checkedTask}")
+                }
+            }
+        }
+    }
 @Composable
 fun todayTaskRV(datas: List<Task>){
     val chunks = datas.chunked(5)
@@ -250,14 +282,14 @@ fun todayTaskRV(datas: List<Task>){
                     .height(300.dp)
             ) {
                 chunk.forEach { data ->
-                    TaskList(data = data)
+                    TaskList(data = data, click = false )
                 }
             }
         }
     }
 }
 @Composable
-fun TaskList(data: Task){
+fun TaskList(data: Task, click: Boolean, isChecked: Boolean = false, onCheckedChange: (Boolean) -> Unit = {}) {
 
     ConstraintLayout(
         modifier = Modifier
@@ -271,24 +303,38 @@ fun TaskList(data: Task){
             )
     ) {
         val(staus, task, time, play) = createRefs()
-        Image(
-            painter = painterResource(
-                when(data.status){
-                    "expected" -> R.drawable.homepage_expected_staus_iv
-                    "fail" -> R.drawable.homepage_fail_status_iv
-                    "delay" -> R.drawable.homepage_dealy_staus_iv
-                    "complete" -> R.drawable.homepage_complete_status_iv
-                    else -> R.drawable.mypage_face
-                }
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .constrainAs(staus){
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start, 10.dp)
-                }
-        )
+        if(!click) {
+            Image(
+                painter = painterResource(
+                    when (data.status) {
+                        "expected" -> R.drawable.homepage_expected_staus_iv
+                        "fail" -> R.drawable.homepage_fail_status_iv
+                        "delay" -> R.drawable.homepage_dealy_staus_iv
+                        "complete" -> R.drawable.homepage_complete_status_iv
+                        else -> R.drawable.mypage_face
+                    }
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .constrainAs(staus) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start, 10.dp)
+                    }
+            )
+        }else{
+            Checkbox(
+                checked = isChecked,
+                onCheckedChange = onCheckedChange,
+                modifier = Modifier
+                    .constrainAs(staus) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start, 10.dp)
+                    }
+            )
+
+        }
         Text(
             text = data.content ?: "",
             fontSize = 11.5.sp,
@@ -300,7 +346,7 @@ fun TaskList(data: Task){
                 }
         )
         Text(
-            text = data.date,
+            text = data.startTime,
             fontSize = 10.sp,
             fontFamily = FontFamily(Font(R.font.poppins_regular)),
             color = Color(0xff6B7280),

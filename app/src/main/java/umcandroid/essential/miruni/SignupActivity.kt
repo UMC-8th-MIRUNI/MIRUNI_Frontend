@@ -1,4 +1,4 @@
-package umcandroid.essential.miruni
+/*package umcandroid.essential.miruni
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -15,4 +15,4 @@ class SignupActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-}
+}*/

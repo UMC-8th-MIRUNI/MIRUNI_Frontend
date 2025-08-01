@@ -23,7 +23,7 @@ class MemoirAddRVAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         holder.binding.memeoirAddTitle.text = item.content
-        holder.binding.meoireItemDate.text = item.date
+        holder.binding.meoireItemDate.text = item.startTime
 
         holder.binding.memoirMenuBtn.setOnClickListener {
             showMenu(it)
