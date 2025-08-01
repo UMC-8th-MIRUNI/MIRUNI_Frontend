@@ -11,25 +11,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/item_todo_text_baseline"
+        android:id="@+id/item_delayed_text_baseline"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.45"/>
 
     <ImageView
-        android:id="@+id/item_todo_calendar_iv"
+        android:id="@+id/item_delayed_calendar_iv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_green_calendar"
         app:layout_constraintDimensionRatio="1:1"
         android:layout_marginStart="9sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/item_todo_date_tv"
-        app:layout_constraintBottom_toBottomOf="@id/item_todo_title_tv"/>
+        app:layout_constraintTop_toTopOf="@id/item_delayed_date_tv"
+        app:layout_constraintBottom_toBottomOf="@id/item_delayed_title_tv"/>
 
     <TextView
-        android:id="@+id/item_todo_date_tv"
+        android:id="@+id/item_delayed_date_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2025.07.04"
@@ -37,10 +37,10 @@
         android:textSize="9sp"
         android:textColor="#6E6A7C"
         android:layout_marginStart="9sp"
-        app:layout_constraintStart_toEndOf="@id/item_todo_calendar_iv"
-        app:layout_constraintBottom_toTopOf="@id/item_todo_text_baseline"/>
+        app:layout_constraintStart_toEndOf="@id/item_delayed_calendar_iv"
+        app:layout_constraintBottom_toTopOf="@id/item_delayed_text_baseline"/>
     <TextView
-        android:id="@+id/item_todo_title_tv"
+        android:id="@+id/item_delayed_title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="토익 LC 공부하기"
@@ -50,18 +50,18 @@
         android:layout_marginEnd="16sp"
         android:maxLines="1"
         android:ellipsize="end"
-        app:layout_constraintStart_toStartOf="@id/item_todo_date_tv"
-        app:layout_constraintEnd_toStartOf="@id/item_todo_more_btn"
-        app:layout_constraintTop_toBottomOf="@id/item_todo_text_baseline" />
+        app:layout_constraintStart_toStartOf="@id/item_delayed_date_tv"
+        app:layout_constraintEnd_toStartOf="@id/item_delayed_more_btn"
+        app:layout_constraintTop_toBottomOf="@id/item_delayed_text_baseline" />
 
     <ImageView
-        android:id="@+id/item_todo_more_btn"
+        android:id="@+id/item_delayed_more_btn"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/todo_more_btn"
         app:layout_constraintDimensionRatio="1:1"
         android:layout_marginEnd="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/item_todo_calendar_iv"
-        app:layout_constraintBottom_toBottomOf="@id/item_todo_calendar_iv"/>
+        app:layout_constraintTop_toTopOf="@id/item_delayed_calendar_iv"
+        app:layout_constraintBottom_toBottomOf="@id/item_delayed_calendar_iv"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

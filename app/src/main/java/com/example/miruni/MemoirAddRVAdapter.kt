@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.example.miruni.data.Task
 import com.example.miruni.databinding.ItemMemoirBinding
 
 class MemoirAddRVAdapter(
@@ -22,8 +23,8 @@ class MemoirAddRVAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.binding.memeoirAddTitle.text = item.content
-        holder.binding.meoireItemDate.text = item.date
+        holder.binding.memeoirAddTitle.text = item.title
+        holder.binding.meoireItemDate.text = item.startTime
 
         holder.binding.memoirMenuBtn.setOnClickListener {
             showMenu(it)

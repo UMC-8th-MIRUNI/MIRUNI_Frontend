@@ -43,8 +43,6 @@ class RegistrationScheduleFragment : Fragment() {
     ): View? {
         binding = FragmentRegistrationScheduleBinding.inflate(layoutInflater, container, false)
 
-        Log.d("Register/Date", System.currentTimeMillis().toString())
-
         hideNavigationBar()
         initClickListener()
 
@@ -68,24 +66,40 @@ class RegistrationScheduleFragment : Fragment() {
      * 클릭 이벤트
      */
     private fun initClickListener() {
+        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeTopbar.apply {
+            /** 뒤로 가기 */
+            scheduleRegistrationTopbarBackIv.setOnClickListener {
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, CalendarFragment())
+                    .commitAllowingStateLoss()
+            }
+            /** x 버튼 */
+            scheduleRegistrationTopbarCancelIv.setOnClickListener {
+
+            }
+        }
+
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.apply {
+            /** 마감기한 설정 */
             scheduleRegistrationContentDeadlineIv.setOnClickListener {
                 showDatePickerDialog(scheduleRegistrationContentDeadlineTv, 0)
                 isSelectedExctDate = 0
             }
+            /** 일정 수행 날짜 설정 */
             scheduleRegistrationContentDateIv.setOnClickListener {
                 showDatePickerDialog(scheduleRegistrationContentDateTv, 1)
                 isSelectedExctDate = 1
             }
+            /** 우선 순위 설정 */
             scheduleRegistrationContentPriorityTv.setOnClickListener {
                 showPriorityDropdown(scheduleRegistrationContentPriorityTv)
             }
         }
+
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeBtn.apply {
             /** 등록하기 */
             scheduleRegistrationContentBtnRegister.setOnClickListener {
                 val scheduleToRegister = setRequestSchedule()
-                Log.d("scheduleToRegister", scheduleToRegister.toString())
 
                 if (scheduleToRegister == null) return@setOnClickListener
 
