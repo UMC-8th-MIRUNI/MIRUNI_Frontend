@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true" />
-    <!--    <domain-config cleartextTrafficPermitted="true">-->
-    <!--        <domain includeSubdomains="true">api.xxx.com</domain>-->
-    <!--    </domain-config>-->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">43.200.133.8</domain>
+    </domain-config>
 </network-security-config>
