@@ -3,6 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
 
+    <!-- layout checkpopup-->
+    <string name="delete_check">일정을 삭제하시겠어요?</string>
+
     <!-- memoir fragment-->
     <string name="memoir_write">회고록 작성하기</string>
     <string name="memoir_emotionTag">1. 감정태그</string>

@@ -1,5 +1,7 @@
 package com.example.miruni
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +19,7 @@ import androidx.room.Dao
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentHomepageBinding
+import com.example.miruni.databinding.LayoutCheckpopupBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -109,23 +112,53 @@ class HomepageFragment: Fragment() {
                 deleteTask(datas = taskDatas, checkedTask = deletedList)
             }
             binding.taskDeleteCompleteBtn.setOnClickListener {
-                lifecycleScope.launch(Dispatchers.IO) {
+
+
+                val popupBinding = LayoutCheckpopupBinding.inflate(LayoutInflater.from(context))
+                // popup View로 재확인
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(popupBinding.root)
+                dialog.show()
+
+
+
+                var name = ""
+                lifecycleScope.launch {
                     deletedList.forEach { id ->
-                        taskDB.taskDao().deleteTaskById(id)
+                        name += "'${taskDB.taskDao().getTitleFromId(id)}', "
                     }
-                    taskDatas = taskDB.taskDao().getTask() as ArrayList<Task>
-                    deletedList.clear()
-                }
+                    popupBinding.taskName.text = name
+                    popupBinding.deleteYes.setOnClickListener {
+                        lifecycleScope.launch {
+                            deletedList.forEach { id ->
+                                taskDB.taskDao().deleteTaskById(id)
+                            }
+                            taskDatas = taskDB.taskDao().getTask() as ArrayList<Task>
+                            deletedList.clear()
 
-                lifecycleScope.launch(Dispatchers.Main) {
-                    binding.homepageTodayTask.setContent {
-                        todayTaskRV(datas = taskDatas)
+                            withContext(Dispatchers.Main) {
+                                binding.homepageTodayTask.setContent {
+                                    todayTaskRV(datas = taskDatas)
+                                }
+                                dialog.dismiss()
+                            }
+                        }
+
                     }
-                }
+                    popupBinding.deleteNo.setOnClickListener {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            binding.homepageTodayTask.setContent {
+                                todayTaskRV(datas = taskDatas)
+                            }
+                            dialog.dismiss()
+                        }
+                    }
 
+                }
                 binding.taskDeleteBtn.visibility = VISIBLE
                 binding.taskDeleteCompleteBtn.visibility = INVISIBLE
             }
+
         }
     }
     // composeView 연결
