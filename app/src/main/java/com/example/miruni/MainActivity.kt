@@ -276,8 +276,8 @@ class MainActivity : AppCompatActivity() {
      * Task의 시간 값을 "00:00" -> 0000으로 변환
      */
     private fun timeStringToIntConverter(time: String): Int {
-        val HM = time.split(":")
-        return String.format("${HM[0]}+${HM[1]}").toInt()
+        val hm = time.split(":")
+        return String.format("${hm[0]}${hm[1]}").toInt()
     }
 
     /**
