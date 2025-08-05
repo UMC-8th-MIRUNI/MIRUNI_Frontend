@@ -1,4 +1,4 @@
-package com.example.miruni
+package com.example.miruni.ui.calendar
 
 import android.graphics.Color
 import android.icu.text.DecimalFormat
@@ -19,6 +19,9 @@ import com.example.miruni.databinding.FragmentCalendarBinding
 import androidx.core.graphics.toColorInt
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import androidx.core.graphics.drawable.toDrawable
+import com.example.miruni.MainActivity
+import com.example.miruni.R
+import com.example.miruni.RegistrationScheduleFragment
 import com.example.miruni.data.Schedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
@@ -49,9 +52,6 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
         scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
 
-        // 더미 데이터
-        initDummyData()
-
         initBottomNavigation()
         initCalendar()
         initTaskOnDateRVAdapter()
@@ -59,86 +59,6 @@ class CalendarFragment : Fragment() {
         initDelayedRV()
 
         return binding.root
-    }
-
-    private fun initDummyData() {
-        val tasks = scheduleDB.taskDao().getTasks()
-
-        scheduleDB.taskDao().getTasks().forEach { task ->
-            Log.d("initDummy/tasks", "id = ${task.id}, title = ${task.title}, scheduleId = ${task.scheduleId}, startTime = ${task.startTime}, EndTime = ${task.endTime}")
-        }
-
-        scheduleDB.scheduleDao().getSchedules().forEach { schedule ->
-            Log.d("initDummy/schedules", "id = ${schedule.id}, title = ${schedule.title}, date = ${schedule.date}, comment = ${schedule.comment}, priority = ${schedule.priority}")
-        }
-
-
-        if (tasks.isNotEmpty()) return
-
-        scheduleDB.taskDao().insert(
-            Task(
-                1,
-                "title1",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                1,
-                "title2",
-                "15:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                1,
-                "title3",
-                "16:00",
-                "17:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                2,
-                "titleA",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                2,
-                "titleB",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-
-        val schedules = scheduleDB.scheduleDao().getSchedules()
-        if (schedules.isNotEmpty()) return
-        scheduleDB.scheduleDao().insert(
-            Schedule(
-                "토익 LC 공부하기",
-                " ",
-                "2025-07-04",
-                "상"
-            )
-        )
-        scheduleDB.scheduleDao().insert(
-            Schedule(
-                "토익 RC 공부하기",
-                " ",
-                "2025-07-05",
-                "상"
-            )
-        )
     }
 
     /**
@@ -311,7 +231,9 @@ class CalendarFragment : Fragment() {
                     text = if(list == yearForSelectList) "${item}년" else "${item}월"
                     setPadding(24, 16, 24 ,16)
                     textSize = 12f
-                    setTypeface(ResourcesCompat.getFont(context as MainActivity, R.font.poppins_semibold))
+                    setTypeface(ResourcesCompat.getFont(context as MainActivity,
+                        R.font.poppins_semibold
+                    ))
                     setBackgroundColor(if (isSelected) "#F1F5F9".toColorInt() else Color.TRANSPARENT)
                     setOnClickListener {
                         onClick(item)
