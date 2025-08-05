@@ -22,6 +22,7 @@ import com.example.miruni.api.ScheduleToRegister
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.databinding.FragmentRegistrationScheduleBinding
 import com.example.miruni.databinding.LayoutDropdownPriorityBinding
+import com.example.miruni.ui.calendar.CalendarFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

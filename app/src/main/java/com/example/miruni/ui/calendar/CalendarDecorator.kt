@@ -1,12 +1,11 @@
-package com.example.miruni
+package com.example.miruni.ui.calendar
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.miruni.R
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
-import com.prolificinteractive.materialcalendarview.spans.DotSpan
 
 //class eventDecorator(private val context: Context, scheduleList: List<Schedule>): DayViewDecorator {
 //class eventDecorator(private val context: Context, scheduleList: List<String>): DayViewDecorator {

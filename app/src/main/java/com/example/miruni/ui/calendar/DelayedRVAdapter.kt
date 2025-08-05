@@ -1,4 +1,4 @@
-package com.example.miruni
+package com.example.miruni.ui.calendar
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -12,12 +12,12 @@ class DelayedRVAdapter: RecyclerView.Adapter<DelayedRVAdapter.ViewHolder>() {
     private val delayedItems = ArrayList<Schedule>()
     lateinit var binding: ItemDelayedBinding
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): DelayedRVAdapter.ViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemDelayedBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DelayedRVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(delayedItems[position])
 
         holder.apply {
