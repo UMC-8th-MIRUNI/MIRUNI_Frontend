@@ -23,6 +23,7 @@ class PopupService : Service() {
     override fun onCreate() {
         super.onCreate()
 
+        setNotification()
         if (Settings.canDrawOverlays(this)) {
             showPopup()
         } else {
@@ -91,6 +92,17 @@ class PopupService : Service() {
             windowManager.removeView(popupView)
         }
         stopSelf()
+    }
+
+    /**
+     * 팝업을 foreground service로 호출할 때 반드시 notification이 필요함
+     */
+    private fun setNotification() {
+        val notification = NotificationHelper.notificationForPopup(
+            this,
+            CHANNEL_ID
+        )
+        startForeground(NOTIFICATION_ID, notification)
     }
 
     companion object {
