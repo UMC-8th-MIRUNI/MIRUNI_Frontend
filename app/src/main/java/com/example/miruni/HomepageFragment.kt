@@ -41,12 +41,12 @@ class HomepageFragment: Fragment() {
         lifecycleScope.launch {
             taskDB = ScheduleDatabase.getInstance(requireContext())!!
             if(taskDB.taskDao().getTask().isEmpty()) {
-                taskDB.taskDao().insert(Task(scheduleId = 0,startTime = "12:00", endTime ="14:00",title =  "[회계원리] 레포트 과제 (1)", status ="expected"))
-                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="11:00", endTime ="15:30", title ="[자료구조] 강의 정리",  status ="fail"))
-                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="17:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
-                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="15:30", title ="[회계원리] 레포트 과제 (1)", status = "expected"))
-                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="14:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
-                taskDB.taskDao().insert(Task(scheduleId =0,startTime ="12:00", endTime ="14:00", title ="[자료구조] 강의 정리",  status ="expected"))
+                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime = "12:00", endTime ="14:00",title =  "[회계원리] 레포트 과제 (1)", status ="expected"))
+                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="11:00", endTime ="15:30", title ="[자료구조] 강의 정리",  status ="fail"))
+                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="17:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
+                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="15:30", title ="[회계원리] 레포트 과제 (1)", status = "expected"))
+                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="14:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
+                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="14:00", title ="[자료구조] 강의 정리",  status ="expected"))
             }
             withContext(Dispatchers.Main) {
                 taskDatas.addAll(taskDB.taskDao().getTask())

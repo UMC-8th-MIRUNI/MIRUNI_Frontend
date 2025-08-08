@@ -4,21 +4,24 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.miruni.data.Schedule
+import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ItemTaskBinding
 
 class TaskOnDateRVAdapter : RecyclerView.Adapter<TaskOnDateRVAdapter.ViewHolder>() {
-    private val taskItems = ArrayList<Pair<Schedule,Task>>()
+    private val tasks = ArrayList<Task>()
     lateinit var binding: ItemTaskBinding
+    private lateinit var scheduleDB: ScheduleDatabase
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         binding = ItemTaskBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false)
+        scheduleDB = ScheduleDatabase.getInstance(viewGroup.context)!!
+
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(taskItems[position])
+        holder.bind(tasks[position])
 
         holder.apply {
             binding.itemTaskItemFrm.setOnClickListener{
@@ -27,29 +30,30 @@ class TaskOnDateRVAdapter : RecyclerView.Adapter<TaskOnDateRVAdapter.ViewHolder>
         }
     }
 
-    override fun getItemCount(): Int = taskItems.size
+    override fun getItemCount(): Int = tasks.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addTask(taskItems: ArrayList<Pair<Schedule, Task>>) {
-        this.taskItems.clear()
-        this.taskItems.addAll(taskItems)
+    fun addTask(tasks: ArrayList<Task>) {
+        this.tasks.clear()
+        this.tasks.addAll(tasks)
 
         notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun deleteAllTasks() {
-        this.taskItems.clear()
+        this.tasks.clear()
 
         notifyDataSetChanged()
     }
 
     inner class ViewHolder(private val binding: ItemTaskBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(taskItem: Pair<Schedule, Task>) {
-            binding.itemScheduleTitleTv.text = taskItem.first.title
-            binding.itemTaskTitleTv.text = taskItem.second.title
-            binding.itemSchedulePriorityTv.text = taskItem.first.priority
-            binding.itemTaskTimeTv.text = String.format("${taskItem.second.startTime} - ${taskItem.second.endTime}")
+        fun bind(task: Task) {
+            val schedule = scheduleDB.scheduleDao().getSchedule(task.scheduleId)
+            binding.itemScheduleTitleTv.text = schedule.title
+            binding.itemTaskTitleTv.text = task.title
+            binding.itemSchedulePriorityTv.text = schedule.priority
+            binding.itemTaskTimeTv.text = String.format("${task.startTime} - ${task.endTime}")
         }
     }
 }

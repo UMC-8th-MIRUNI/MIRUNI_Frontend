@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.miruni.data.Schedule
 import com.example.miruni.databinding.ItemDelayedBinding
 
+/**
+ * 미룬 일정 RVAdapter
+ */
 class DelayedRVAdapter: RecyclerView.Adapter<DelayedRVAdapter.ViewHolder>() {
     private val delayedItems = ArrayList<Schedule>()
     lateinit var binding: ItemDelayedBinding
@@ -41,7 +44,7 @@ class DelayedRVAdapter: RecyclerView.Adapter<DelayedRVAdapter.ViewHolder>() {
 
         fun bind(schedule: Schedule) {
             binding.itemDelayedTitleTv.text = schedule.title
-            binding.itemDelayedDateTv.text = schedule.date
+            binding.itemDelayedDateTv.text = schedule.endDate
         }
     }
 }

@@ -21,19 +21,28 @@ interface TaskDao {
     /**
      * 단일 조회
      */
-    @Query("SELECT id, scheduleId, title, startTime, endTime, status FROM TaskTable WHERE id = :id")
+    @Query("SELECT id, scheduleId, title, executeDay, startTime, endTime, status FROM TaskTable WHERE id = :id")
     fun getTask(id: Int): Task
 
     /**
      * 테이블 전체 조회
      */
-    @Query("SELECT id, scheduleId, title, startTime, endTime, status FROM TaskTable")
+    @Query("SELECT id, scheduleId, title, executeDay, startTime, endTime, status FROM TaskTable")
     fun getTasks(): List<Task>
 
-    @Query("SELECT id, scheduleId, title, startTime, endTime, status " +
+    /**
+     * Schedule Id로 Schedule을 나눈 Task 모두 조회
+     */
+    @Query("SELECT id, scheduleId, title, executeDay, startTime, endTime, status " +
             "FROM TaskTable " +
             "WHERE scheduleId = :scheduleId")
     fun getTasksByScheduleId(scheduleId: Int): List<Task>
+
+    /**
+     * Task 수행 날짜로 Task 조회
+     */
+    @Query("SELECT * FROM TaskTable WHERE executeDay = :executeDay")
+    fun getTasksByDay(executeDay: String): List<Task>
 
     @Query("SELECT * FROM TaskTable")
     suspend fun getTask(): List<Task>

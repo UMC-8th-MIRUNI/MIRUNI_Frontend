@@ -20,7 +20,7 @@ abstract class ScheduleDatabase: RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         ScheduleDatabase::class.java,
-                        "clothes-database"//다른 데이터 베이스랑 이름겹치면 꼬임
+                        "schedules-database"//다른 데이터 베이스랑 이름겹치면 꼬임
                     ).allowMainThreadQueries().build()
                 }
             }

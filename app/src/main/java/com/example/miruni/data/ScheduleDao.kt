@@ -21,18 +21,18 @@ interface ScheduleDao {
     /**
      * 단일 조회
      */
-    @Query("SELECT id, title, comment, date, priority FROM ScheduleTable WHERE id = :id")
+    @Query("SELECT id, title, comment, startDate, endDate, priority FROM ScheduleTable WHERE id = :id")
     fun getSchedule(id: Int): Schedule
 
     /**
      * 테이블 전체 조회
      */
-    @Query("SELECT id, title, comment, date, priority FROM ScheduleTable")
+    @Query("SELECT id, title, comment, startDate, endDate, priority FROM ScheduleTable")
     fun getSchedules(): List<Schedule>
 
     /**
      * 날짜별 Schedule 정리
      */
-    @Query("SELECT id, title, comment, date, priority FROM ScheduleTable WHERE date = :date")
+    @Query("SELECT id, title, comment, startDate, endDate, priority FROM ScheduleTable WHERE startDate < :date & :date < endDate")
     fun getScheduleByDate(date: String): List<Schedule>
 }
