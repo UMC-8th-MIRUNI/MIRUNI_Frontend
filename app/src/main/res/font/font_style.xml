@@ -1,5 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- DM Sans -->
+    <font
+        android:font="@font/dmsans_thin"
+        android:fontStyle="normal"
+        android:fontWeight="100"/>
+    <font
+        android:font="@font/dmsans_extralight"
+        android:fontStyle="normal"
+        android:fontWeight="200"/>
+    <font
+        android:font="@font/dmsans_light"
+        android:fontStyle="normal"
+        android:fontWeight="300"/>
+    <font
+        android:font="@font/dmsans_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400"/>
+    <font
+        android:font="@font/dmsans_medium"
+        android:fontStyle="normal"
+        android:fontWeight="500"/>
+    <font
+        android:font="@font/dmsans_semibold"
+        android:fontStyle="normal"
+        android:fontWeight="600"/>
+    <font
+        android:font="@font/dmsans_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700"/>
+    <font
+        android:font="@font/dmsans_extrabold"
+        android:fontStyle="normal"
+        android:fontWeight="800"/>
+    <font
+        android:font="@font/dmsans_black"
+        android:fontStyle="normal"
+        android:fontWeight="900"/>
+
+    <!-- Noto Sans KR -->
+    <font
+        android:font="@font/notosanskr_thin"
+        android:fontStyle="normal"
+        android:fontWeight="100"/>
+    <font
+        android:font="@font/notosanskr_extralight"
+        android:fontStyle="normal"
+        android:fontWeight="200"/>
+    <font
+        android:font="@font/notosanskr_light"
+        android:fontStyle="normal"
+        android:fontWeight="300"/>
+    <font
+        android:font="@font/notosanskr_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400"/>
+    <font
+        android:font="@font/notosanskr_medium"
+        android:fontStyle="normal"
+        android:fontWeight="500"/>
+    <font
+        android:font="@font/notosanskr_semibold"
+        android:fontStyle="normal"
+        android:fontWeight="600"/>
+    <font
+        android:font="@font/notosanskr_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700"/>
+    <font
+        android:font="@font/notosanskr_extrabold"
+        android:fontStyle="normal"
+        android:fontWeight="800"/>
+    <font
+        android:font="@font/notosanskr_black"
+        android:fontStyle="normal"
+        android:fontWeight="900"/>
+
     <!-- poppins -->
     <font
         android:font="@font/poppins_thin"

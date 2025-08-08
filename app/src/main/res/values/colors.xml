@@ -3,8 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="main">#71FF6C</color>
-    <color name="selectColor">#1AE019</color>
+    <color name="main">#1EC718</color>
+
+    <color name="selectColor">#07D500</color>
     <color name="unselectColor">#484C52</color>
 
     <color name="primary_night">#71FF6C</color>
