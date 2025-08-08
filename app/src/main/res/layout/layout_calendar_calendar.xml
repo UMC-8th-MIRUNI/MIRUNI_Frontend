@@ -34,6 +34,7 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             app:mcv_selectionMode="single"
+            app:mcv_selectionColor="@color/white"
             app:mcv_firstDayOfWeek="sunday"
             app:mcv_showOtherDates="all"
             app:mcv_weekDayTextAppearance="@style/CalendarViewWeekCustom"/>

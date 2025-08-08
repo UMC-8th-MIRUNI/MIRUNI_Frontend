@@ -1,4 +1,4 @@
-package com.example.miruni
+package com.example.miruni.ui.calendar
 
 import android.app.DatePickerDialog
 import android.graphics.Color
@@ -16,13 +16,14 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
+import com.example.miruni.MainActivity
+import com.example.miruni.R
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.RegistrationScheduleResponse
 import com.example.miruni.api.ScheduleToRegister
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.databinding.FragmentRegistrationScheduleBinding
 import com.example.miruni.databinding.LayoutDropdownPriorityBinding
-import com.example.miruni.ui.calendar.CalendarFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

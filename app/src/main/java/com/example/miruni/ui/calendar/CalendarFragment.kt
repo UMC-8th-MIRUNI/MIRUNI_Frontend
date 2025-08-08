@@ -21,26 +21,35 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import androidx.core.graphics.drawable.toDrawable
 import com.example.miruni.MainActivity
 import com.example.miruni.R
-import com.example.miruni.RegistrationScheduleFragment
 import com.example.miruni.data.Schedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
+import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import java.util.Calendar
 
 class CalendarFragment : Fragment() {
+    /** 전역 변수 */
+    // 뷰 바인딩
     private lateinit var binding : FragmentCalendarBinding
-    private var YMList = arrayOf(0, 0)
-    private var taskOnDateList = ArrayList<Pair<Schedule, Task>>()
+
+    // 데이터 관리
     private lateinit var scheduleDB: ScheduleDatabase
+    private var taskOnDateList = ArrayList<Task>()
     private lateinit var taskOnDateRVAdapter: TaskOnDateRVAdapter
 
+    // 캘린더
+    private var YMList = arrayOf(0, 0)
+    private var currentSelectionDecorator: SelectionDecorator? = null
+
+    // 날짜 선택 드롭다운
     private lateinit var dropdownPopup: PopupWindow
     private var selectedYearOnDropdown: Int? = null
     private var selectedMonthOnDropdown: Int? = null
     private val yearsOnDropdown = (2020..2040).toList()
     private val monthsOnDropdown = (1..12).toList()
 
-    private var selectedDate = ""
+    // 날짜 선택 추적 변수
+    private var selectedDate: CalendarDay? = null
     private var dateSelectState = "unselected"
     val dayOfWeekList = listOf("일", "월", "화", "수", "목", "금", "토")
 
@@ -52,11 +61,18 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
         scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
 
+        /** 바텀 네비게이션 설정 */
         initBottomNavigation()
+
+        /** 데이터 관리 */
+//        loadTasks()
+
+        /** 캘린더 관련 설정 */
         initCalendar()
         initTaskOnDateRVAdapter()
         initClickListener()
         initDelayedRV()
+        loadDecorators()
 
         return binding.root
     }
@@ -71,6 +87,13 @@ class CalendarFragment : Fragment() {
 
         navigationBar.visibility = View.VISIBLE
         homeBtn.visibility = View.VISIBLE
+    }
+
+    /**
+     * 서버에서 Task 로드
+     */
+    private fun loadTasks() {
+        TODO()
     }
 
     /**
@@ -90,6 +113,9 @@ class CalendarFragment : Fragment() {
         }
     }
 
+    /**
+     * TaskOnDateRVAdapter 초기화
+     */
     private fun initTaskOnDateRVAdapter() {
         taskOnDateRVAdapter = TaskOnDateRVAdapter()
         binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -114,15 +140,12 @@ class CalendarFragment : Fragment() {
             }
             /** 날짜 선택 후 일정 소개 페이지로 이동 */
             calendarCalendar.setOnDateChangedListener { widget, date, selected ->
-                // 날짜 하이라이트
-                calendarCalendar.removeDecorators()
-                calendarCalendar.addDecorator(SelectionDecorator(requireContext(), date))
 
                 calendarYearTv.text = String.format("${date.year}년")
                 calendarMonthTv.text = String.format("${date.month}월")
 
                 // 날짜 별 일정 소개 페이지로 이동
-                if (dateSelectState == "selected" && selectedDate == date.toString()) {
+                if (dateSelectState == "selected" && selectedDate == date) {
                     val activity = requireActivity() as MainActivity
                     val navigationBar = activity.findViewById<ConstraintLayout>(R.id.main_nav)
                     val homeBtn = activity.findViewById<ImageView>(R.id.nav_home_iv)
@@ -139,8 +162,17 @@ class CalendarFragment : Fragment() {
                     // 날짜에 맞는 일정 갯수
                     initTaskOnDateRV(date)
                 } else {
+                    currentSelectionDecorator?.let {
+                        calendarCalendar.removeDecorator(it)
+                    }
+
+                    val newSelectionDecorator = SelectionDecorator(date)
+                    calendarCalendar.addDecorator(newSelectionDecorator)
+
+                    currentSelectionDecorator = newSelectionDecorator
+
                     dateSelectState = "selected"
-                    selectedDate = date.toString()
+                    selectedDate = date
                 }
             }
         }
@@ -154,54 +186,6 @@ class CalendarFragment : Fragment() {
             }
         }
     }
-
-    /**
-     * 해당 날짜의 요일 확인
-     */
-    private fun checkDayOfWeek(year: Int, month: Int, day: Int): String {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month-1, day)
-
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-
-        return dayOfWeekList[dayOfWeek-1]
-    }
-
-    /**
-     * 미룬 일정 RV 초기화
-     */
-    private fun initDelayedRV() {
-        binding.calendarIncludeCalendarCalendar.apply {
-            calendarToDoRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
-            val delayedRVAdapter = DelayedRVAdapter()
-            calendarToDoRv.adapter = delayedRVAdapter
-            delayedRVAdapter.addSchedule(scheduleDB.scheduleDao().getSchedules() as ArrayList<Schedule>)
-        }
-    }
-
-    /**
-     * Task_On_Date RV 초기화
-     */
-    private fun initTaskOnDateRV(date: CalendarDay) {
-        val taskDate = String.format("${date.year}-${DecimalFormat("00").format(date.month)}-${DecimalFormat("00").format(date.day)}")
-        taskOnDateList.clear()
-
-        binding.calendarIncludeTaskOnDate.apply {
-            taskOnDateRVAdapter.deleteAllTasks()
-
-            scheduleDB.scheduleDao().getScheduleByDate(taskDate).forEach { schedule ->
-                scheduleDB.taskDao().getTasksByScheduleId(schedule.id).forEach { task ->
-                    val taskOnDate = Pair(schedule, task)
-                    taskOnDateList.add(taskOnDate)
-                }
-            }
-
-            taskOnDateCountTv.text = String.format("일정 갯수 : ${taskOnDateList.size}개")
-            taskOnDateRVAdapter.addTask(taskOnDateList)
-        }
-    }
-
 
     /**
      * 날짜 선택 드롭다운 출력
@@ -276,6 +260,75 @@ class CalendarFragment : Fragment() {
                     1))
                 dropdownPopup.dismiss()
             }
+        }
+    }
+
+    /**
+     * 해당 날짜의 요일 확인
+     */
+    private fun checkDayOfWeek(year: Int, month: Int, day: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month-1, day)
+
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+
+        return dayOfWeekList[dayOfWeek-1]
+    }
+
+    /**
+     * 해당 날짜별 일정 RV 초기화: 데이터 초기화
+     */
+    private fun initTaskOnDateRV(date: CalendarDay) {
+        binding.calendarIncludeTaskOnDate.apply {
+
+            val taskDate = String.format("${date.year}-${DecimalFormat("00").format(date.month)}-${DecimalFormat("00").format(date.day)}")
+
+            taskOnDateList.clear()
+            taskOnDateRVAdapter.deleteAllTasks()
+
+            taskOnDateList.addAll(scheduleDB.taskDao().getTasksByDay(taskDate))
+            taskOnDateRVAdapter.addTask(taskOnDateList)
+            taskOnDateCountTv.text = String.format("일정 갯수 : ${taskOnDateList.size}개")
+        }
+    }
+
+    /**
+     * 미룬 일정 RV 초기화
+     */
+    private fun initDelayedRV() {
+        binding.calendarIncludeCalendarCalendar.apply {
+            calendarToDoRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+            val delayedRVAdapter = DelayedRVAdapter()
+            calendarToDoRv.adapter = delayedRVAdapter
+            delayedRVAdapter.addSchedule(scheduleDB.scheduleDao().getSchedules() as ArrayList<Schedule>)
+        }
+    }
+
+    /**
+     * 날짜별 Task 수에 따라 EventDecorator 적용
+     */
+    private fun loadDecorators() {
+        val taskList = scheduleDB.taskDao().getTasks()
+
+        val decorators = mutableListOf<DayViewDecorator>()
+
+        taskList.forEach { task ->
+            val ymd = task.executeDay.split("-")
+
+            decorators.add(
+                EventDecorator(
+                    day = CalendarDay.from(ymd[0].toInt(), ymd[1].toInt(), ymd[2].toInt()),
+                    count = scheduleDB.taskDao().getTasksByDay(task.executeDay).size,
+                    countTextSize = 26f
+                )
+            )
+        }
+
+        binding.calendarIncludeCalendarCalendar.calendarCalendar.apply {
+            removeDecorators()
+            addDecorators(decorators)
+            invalidateDecorators()
         }
     }
 }

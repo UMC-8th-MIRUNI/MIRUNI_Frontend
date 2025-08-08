@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity() {
             Task(
                 1,
                 "title1",
+                "2025-07-04",
                 "14:00",
                 "16:00",
                 "예정"
@@ -164,6 +165,7 @@ class MainActivity : AppCompatActivity() {
             Task(
                 1,
                 "title2",
+                "2025-07-04",
                 "15:00",
                 "16:00",
                 "예정"
@@ -173,6 +175,37 @@ class MainActivity : AppCompatActivity() {
             Task(
                 1,
                 "title3",
+                "2025-07-04",
+                "16:00",
+                "17:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                1,
+                "title4",
+                "2025-07-09",
+                "16:00",
+                "17:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                1,
+                "title5",
+                "2025-07-09",
+                "16:00",
+                "17:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                1,
+                "title6",
+                "2025-07-09",
                 "16:00",
                 "17:00",
                 "예정"
@@ -182,6 +215,7 @@ class MainActivity : AppCompatActivity() {
             Task(
                 2,
                 "titleA",
+                "2025-07-09",
                 "14:00",
                 "16:00",
                 "예정"
@@ -191,11 +225,133 @@ class MainActivity : AppCompatActivity() {
             Task(
                 2,
                 "titleB",
+                "2025-07-09",
                 "14:00",
                 "16:00",
                 "예정"
             )
         )
+        scheduleDB.taskDao().insert(
+            Task(
+                2,
+                "titleC",
+                "2025-07-09",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㄱ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㄴ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㄷ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㄹ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㅁ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㅂ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㅅ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㅇ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㅈ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㅊ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+        scheduleDB.taskDao().insert(
+            Task(
+                3,
+                "titleㅋ",
+                "2025-07-18",
+                "14:00",
+                "16:00",
+                "예정"
+            )
+        )
+
 
         /** schedule 테이블 초기화 */
         if (schedules.isNotEmpty()) return
@@ -204,6 +360,7 @@ class MainActivity : AppCompatActivity() {
                 "토익 LC 공부하기",
                 " ",
                 "2025-07-04",
+                "2025-07-15",
                 "상"
             )
         )
@@ -211,11 +368,20 @@ class MainActivity : AppCompatActivity() {
             Schedule(
                 "토익 RC 공부하기",
                 " ",
-                "2025-07-05",
+                "2025-07-09",
+                "2025-07-21",
                 "상"
             )
         )
-
+        scheduleDB.scheduleDao().insert(
+            Schedule(
+                "토익 공부하기",
+                " ",
+                "2025-07-18",
+                "2025-07-29",
+                "상"
+            )
+        )
     }
 
     /**
@@ -332,7 +498,7 @@ class MainActivity : AppCompatActivity() {
             if (before(Calendar.getInstance())) add(Calendar.DATE, 1)
         }
 
-        val dummyTask = Task(-1, "랜덤 팝업", "00:00", "00:00", "random")
+        val dummyTask = Task(-1, "랜덤 팝업","2025-08-08", "00:00", "00:00", "random")
         AlarmHelper.setAlarm(context, calendar.timeInMillis, dummyTask, AlarmHelper.AlarmType.POPUP)
     }
 
