@@ -17,13 +17,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="일정 등록하기"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="@font/dmsans_semibold"
         android:textSize="18sp"
-        android:textColor="#1E1E1E"
+        android:textColor="#343434"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+        android:id="@+id/schedule_split_topbar_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="일정 등록하기"
+        android:fontFamily="@font/dmsans_semibold"
+        android:textSize="18sp"
+        android:textColor="#343434"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
     <ImageView
         android:id="@+id/schedule_registration_topbar_cancel_iv"
         android:layout_width="wrap_content"

@@ -200,7 +200,7 @@ class RegistrationScheduleFragment : Fragment() {
             textView.text = text
             textView.setOnClickListener {
                 onItemSelected(text)
-                anchor.setBackgroundResource(R.drawable.bg_ababab_square_10)
+                anchor.setBackgroundResource(R.drawable.bg_ababab_square_7)
                 priorityDropdown.dismiss()
             }
 

@@ -195,7 +195,7 @@ class CalendarFragment : Fragment() {
         selectedMonthOnDropdown = null
 
         val inflater =  LayoutInflater.from(context as MainActivity)
-        val popupView = inflater.inflate(R.layout.layout_drop_down_menu, null)
+        val popupView = inflater.inflate(R.layout.layout_dropdown_menu, null)
 
         dropdownPopup = PopupWindow(
             popupView,
