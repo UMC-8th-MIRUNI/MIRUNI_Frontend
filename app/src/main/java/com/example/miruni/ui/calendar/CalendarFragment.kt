@@ -1,8 +1,11 @@
 package com.example.miruni.ui.calendar
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.icu.text.DecimalFormat
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,6 +27,7 @@ import com.example.miruni.R
 import com.example.miruni.data.Schedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
+import com.example.miruni.util.DateToStringHelper
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import java.util.Calendar
 
@@ -130,6 +134,12 @@ class CalendarFragment : Fragment() {
         binding.calendarIncludeCalendarCalendar.apply {
             /** 등록하기 */
             calendarRegisterFrm.setOnClickListener {
+                val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
+                val editor = spf.edit()
+
+                editor.putString("selectedDate", DateToStringHelper(selectedDate))
+                editor.apply()
+
                 (context as MainActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, RegistrationScheduleFragment())
                     .commitAllowingStateLoss()
@@ -195,7 +205,7 @@ class CalendarFragment : Fragment() {
         selectedMonthOnDropdown = null
 
         val inflater =  LayoutInflater.from(context as MainActivity)
-        val popupView = inflater.inflate(R.layout.layout_drop_down_menu, null)
+        val popupView = inflater.inflate(R.layout.layout_dropdown_menu, null)
 
         dropdownPopup = PopupWindow(
             popupView,
