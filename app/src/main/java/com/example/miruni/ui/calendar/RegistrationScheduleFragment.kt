@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -24,6 +25,10 @@ import com.example.miruni.api.ScheduleToRegister
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.databinding.FragmentRegistrationScheduleBinding
 import com.example.miruni.databinding.LayoutDropdownPriorityBinding
+import com.example.miruni.databinding.LayoutDropdownScheduleTypeBinding
+import com.example.miruni.databinding.LayoutPopupSplitDetailGuideBinding
+import com.example.miruni.databinding.LayoutPopupSplitGuideBinding
+import com.example.miruni.databinding.LayoutScheduleSplitBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +43,17 @@ class RegistrationScheduleFragment : Fragment() {
     private lateinit var priorityDropdown: PopupWindow
     private val priorityItems = arrayListOf("상", "중", "하")
     private var selectedPriority = ""
+    private var selectedScheduleType = -1
+
+    private val scheduleTypeList = listOf(
+        "몰입형/사고 중심 작업",
+        "창작/표현 작업",
+        "학습/정보 정리 작업",
+        "실무/행정 처리 작업",
+        "반복/루틴형 작업",
+        "협업/의사소통 작업",
+        "준비/계획형 작업"
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +62,8 @@ class RegistrationScheduleFragment : Fragment() {
         binding = FragmentRegistrationScheduleBinding.inflate(layoutInflater, container, false)
 
         hideNavigationBar()
-        initClickListener()
+        initRegistrationClickListener()
+        initSplitClickListener()
 
         return binding.root
     }
@@ -65,9 +82,9 @@ class RegistrationScheduleFragment : Fragment() {
     }
 
     /**
-     * 클릭 이벤트
+     * '일정 등록하기' 화면 클릭 이벤트
      */
-    private fun initClickListener() {
+    private fun initRegistrationClickListener() {
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeTopbar.apply {
             /** 뒤로 가기 */
             scheduleRegistrationTopbarBackIv.setOnClickListener {
@@ -77,7 +94,9 @@ class RegistrationScheduleFragment : Fragment() {
             }
             /** x 버튼 */
             scheduleRegistrationTopbarCancelIv.setOnClickListener {
-
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, CalendarFragment())
+                    .commitAllowingStateLoss()
             }
         }
 
@@ -139,6 +158,43 @@ class RegistrationScheduleFragment : Fragment() {
             }
             /** 쪼개기 */
             scheduleRegistrationContentBtnSplit.setOnClickListener {
+                binding.scheduleRegistrationInclude.root.visibility = View.GONE
+                binding.scheduleSplitInclude.root.visibility = View.VISIBLE
+                binding.scheduleSplitInclude.scheduleSplitIncludeTopbar.scheduleRegistrationTopbarTitleTv.text = "쪼개기"
+            }
+        }
+    }
+
+    /**
+     * '쪼개기' 화면 클릭 이벤트
+     */
+    private fun initSplitClickListener() {
+        binding.scheduleSplitInclude.scheduleSplitIncludeTopbar.apply {
+            /** 뒤로 가기 */
+            scheduleRegistrationTopbarBackIv.setOnClickListener {
+                binding.scheduleRegistrationInclude.root.visibility = View.VISIBLE
+                binding.scheduleSplitInclude.root.visibility = View.GONE
+                binding.scheduleSplitInclude.scheduleSplitIncludeTopbar.scheduleRegistrationTopbarTitleTv.text = "일정 등록하기"
+            }
+            /** x표시 */
+            scheduleRegistrationTopbarCancelIv.setOnClickListener {
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, CalendarFragment())
+                    .commitAllowingStateLoss()
+            }
+        }
+        binding.scheduleSplitInclude.apply {
+            /** 작업 유형 선택 드롭다운 */
+            scheduleSplitTypeFrm.setOnClickListener {
+                scheduleSplitTypeMoreIv.visibility = View.GONE
+                showScheduleTypeDropdown(it)
+            }
+            /** 쪼개기 가이드 드롭다운 */
+            scheduleSplitSplitGuideIv.setOnClickListener {
+                initSplitGuidePopup(it)
+            }
+            /** 쪼개기 */
+            scheduleSplitSplitBtn.setOnClickListener {
                 TODO()
             }
         }
@@ -217,12 +273,141 @@ class RegistrationScheduleFragment : Fragment() {
     }
 
     /**
-     * 우선 순위 드롭다운 출력
+     * 쪼개기 가이드 팝업 설명
+     */
+    private fun initSplitGuidePopup(anchor: View) {
+        val dropdownView = LayoutPopupSplitGuideBinding.inflate(layoutInflater)
+        val splitGuidePopup = PopupWindow(
+            dropdownView.root,
+            LayoutParams.WRAP_CONTENT,
+            LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        splitGuidePopup.elevation = 5f
+        splitGuidePopup.isOutsideTouchable = true
+
+        /** 상세 설명 보기 */
+        dropdownView.apply {
+            popupSplitGuideDetailTv.setOnClickListener {
+                splitGuidePopup.dismiss()
+                initSplitDetailGuidePopup(anchor)
+            }
+            popupSplitGuideCloseIv.setOnClickListener {
+                splitGuidePopup.dismiss()
+            }
+        }
+        splitGuidePopup.showAsDropDown(anchor, -10, -10)
+    }
+
+    /**
+     * 쪼개기-일정 유형 선택 상세 설명 보기
+     */
+    private fun initSplitDetailGuidePopup(anchor: View) {
+        val dropdownView = LayoutPopupSplitDetailGuideBinding.inflate(layoutInflater)
+        val splitDetailGuidePopup = PopupWindow(
+            dropdownView.root,
+            LayoutParams.WRAP_CONTENT,
+            LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        splitDetailGuidePopup.elevation = 5f
+        splitDetailGuidePopup.isOutsideTouchable = true
+
+        /** 상세 설명 보기 */
+        dropdownView.apply {
+            popupSplitDetailGuideCloseIv.setOnClickListener {
+                splitDetailGuidePopup.dismiss()
+            }
+        }
+        splitDetailGuidePopup.showAsDropDown(anchor, -10, -10)
+    }
+
+    /**
+     * 일정 유형 선택 드롭다운 설정
+     */
+    private fun initScheduleTypeDropdown(
+        anchor: View,
+        onItemSelected: (Int) -> Unit) {
+
+        anchor.setBackgroundResource(R.drawable.bg_selected_priority_dropdown)
+
+        val dropdownView = LayoutDropdownScheduleTypeBinding.inflate(layoutInflater)
+        val typeDropdown = PopupWindow(
+            dropdownView.root,
+            anchor.width,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+        typeDropdown.elevation = 5f
+        typeDropdown.setBackgroundDrawable(Color.WHITE.toDrawable())
+        typeDropdown.isOutsideTouchable = true
+
+        val typeViewList = listOf(
+            dropdownView.dropdownScheduleType1,
+            dropdownView.dropdownScheduleType2,
+            dropdownView.dropdownScheduleType3,
+            dropdownView.dropdownScheduleType4,
+            dropdownView.dropdownScheduleType5,
+            dropdownView.dropdownScheduleType6,
+            dropdownView.dropdownScheduleType7
+            )
+
+        val viewList = listOf(
+            Triple(dropdownView.dropdownScheduleType1Rank, dropdownView.dropdownScheduleType1Iv, dropdownView.dropdownScheduleType1Tv),
+            Triple(dropdownView.dropdownScheduleType2Rank, dropdownView.dropdownScheduleType2Iv, dropdownView.dropdownScheduleType2Tv),
+            Triple(dropdownView.dropdownScheduleType3Rank, dropdownView.dropdownScheduleType3Iv, dropdownView.dropdownScheduleType3Tv),
+            Triple(dropdownView.dropdownScheduleType4Rank, dropdownView.dropdownScheduleType4Iv, dropdownView.dropdownScheduleType4Tv),
+            Triple(dropdownView.dropdownScheduleType5Rank, dropdownView.dropdownScheduleType5Iv, dropdownView.dropdownScheduleType5Tv),
+            Triple(dropdownView.dropdownScheduleType6Rank, dropdownView.dropdownScheduleType6Iv, dropdownView.dropdownScheduleType6Tv),
+            Triple(dropdownView.dropdownScheduleType7Rank, dropdownView.dropdownScheduleType7Iv, dropdownView.dropdownScheduleType7Tv),
+        )
+
+        typeViewList.forEachIndexed() { index, type  ->
+            type.setOnClickListener {
+                onItemSelected(index)
+                typeDropdown.dismiss()
+                anchor.setBackgroundResource(R.drawable.bg_ababab_square_7)
+            }
+
+            if (index == selectedScheduleType) {
+                viewList[index].first.setTextColor(Color.WHITE)
+                viewList[index].second.setColorFilter(Color.WHITE)
+                viewList[index].first.setTextColor(Color.WHITE)
+
+                type.setBackgroundColor("#1AE019".toColorInt())
+            } else {
+                viewList[index].first.setTextColor("#666666".toColorInt())
+                viewList[index].second.setColorFilter("#666666".toColorInt())
+                viewList[index].first.setTextColor("#666666".toColorInt())
+                Color.TRANSPARENT
+            }
+        }
+
+        typeDropdown.showAsDropDown(anchor, 0, -5)
+
+    }
+
+
+    /**
+     * 우선 순위 드롭다운 결과 처리
      */
     private fun showPriorityDropdown(anchor: View) {
         initPriorityDropdown(anchor, priorityItems, selectedPriority) { selected ->
             selectedPriority = selected
             binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentPriorityTv.text = selected
+        }
+    }
+
+    /**
+     * 일정 유형 선택 드롭다운 결과 처리
+     */
+    private fun showScheduleTypeDropdown(anchor: View) {
+        initScheduleTypeDropdown(anchor) {selected ->
+            selectedScheduleType = selected
+            binding.scheduleSplitInclude.scheduleSplitTypeTv.text = scheduleTypeList[selected]
+            binding.scheduleSplitInclude.scheduleSplitTypeMoreIv.visibility = View.VISIBLE
         }
     }
 
@@ -262,4 +447,14 @@ class RegistrationScheduleFragment : Fragment() {
             deadline
         )
     }
+}
+
+enum class ScheduleType {
+    IMMERSIVE,
+    CREATIVE,
+    STUDY_ORGANIZATION,
+    PRACTICAL_ADMIN,
+    ROUTINE,
+    COLLAB_COMMUNICATION,
+    PREPARATION_PLANNING
 }

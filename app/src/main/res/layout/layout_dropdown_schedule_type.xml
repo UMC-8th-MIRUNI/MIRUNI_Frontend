@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dropdown_schedule_type1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16sp"
+        android:background="@drawable/bg_cccccc_square">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/dropdown_schedule_type1_start_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/dropdown_schedule_type1_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. "
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/dropdown_schedule_type1_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_brain"
+            app:tint="#666666"
+            android:layout_marginStart="5sp"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type1_rank"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type1_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type1_rank"/>
+        <TextView
+            android:id="@+id/dropdown_schedule_type1_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="몰입형/사고 중심 작업"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="15sp"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type1_start_line"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type1_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type1_rank"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dropdown_schedule_type2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16sp"
+        android:background="@drawable/bg_cccccc_square">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/dropdown_schedule_type2_start_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/dropdown_schedule_type2_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. "
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/dropdown_schedule_type2_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_brush"
+            app:tint="#666666"
+            android:layout_marginStart="5sp"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type2_rank"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type2_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type2_rank" />
+        <TextView
+            android:id="@+id/dropdown_schedule_type2_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="창작/표현 작업"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="15sp"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type2_start_line"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type2_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type2_rank"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dropdown_schedule_type3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16sp"
+        android:background="@drawable/bg_cccccc_square">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/dropdown_schedule_type3_start_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/dropdown_schedule_type3_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3. "
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/dropdown_schedule_type3_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_book"
+            app:tint="#666666"
+            android:layout_marginStart="5sp"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type3_rank"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type3_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type3_rank"/>
+        <TextView
+            android:id="@+id/dropdown_schedule_type3_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="학습/정보 정리 작업"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="15sp"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type3_start_line"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type3_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type3_rank"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dropdown_schedule_type4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16sp"
+        android:background="@drawable/bg_cccccc_square">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/dropdown_schedule_type4_start_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/dropdown_schedule_type4_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4. "
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/dropdown_schedule_type4_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_document"
+            app:tint="#666666"
+            android:layout_marginStart="5sp"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type4_rank"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type4_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type4_rank"/>
+        <TextView
+            android:id="@+id/dropdown_schedule_type4_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="실무/행정 처리 작업"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="15sp"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type4_start_line"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type4_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type4_rank"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dropdown_schedule_type5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16sp"
+        android:background="@drawable/bg_cccccc_square">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/dropdown_schedule_type5_start_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/dropdown_schedule_type5_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5. "
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/dropdown_schedule_type5_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_routine"
+            app:tint="#666666"
+            android:layout_marginStart="5sp"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type5_rank"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type5_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type5_rank"/>
+        <TextView
+            android:id="@+id/dropdown_schedule_type5_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="반복/루틴형 작업"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="15sp"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type5_start_line"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type5_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type5_rank"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dropdown_schedule_type6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16sp"
+        android:background="@drawable/bg_cccccc_square">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/dropdown_schedule_type6_start_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/dropdown_schedule_type6_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6. "
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/dropdown_schedule_type6_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_bag"
+            app:tint="#666666"
+            android:layout_marginStart="5sp"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type6_rank"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type6_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type6_rank"/>
+        <TextView
+            android:id="@+id/dropdown_schedule_type6_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="협업/의사소통 작업"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="15sp"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type6_start_line"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type6_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type6_rank"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dropdown_schedule_type7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16sp"
+        android:background="@drawable/bg_cccccc_square_bottom8">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/dropdown_schedule_type7_start_line"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13"/>
+
+        <TextView
+            android:id="@+id/dropdown_schedule_type7_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7. "
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/dropdown_schedule_type7_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_plan"
+            app:tint="#666666"
+            android:layout_marginStart="5sp"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type7_rank"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type7_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type7_rank"/>
+        <TextView
+            android:id="@+id/dropdown_schedule_type7_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="준비/계획형 작업"
+            android:fontFamily="@font/notosanskr_regular"
+            android:textSize="15sp"
+            android:lineSpacingExtra="9sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toEndOf="@id/dropdown_schedule_type7_start_line"
+            app:layout_constraintTop_toTopOf="@id/dropdown_schedule_type7_rank"
+            app:layout_constraintBottom_toBottomOf="@id/dropdown_schedule_type7_rank"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
