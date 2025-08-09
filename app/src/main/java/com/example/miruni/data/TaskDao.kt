@@ -47,9 +47,11 @@ interface TaskDao {
     @Query("SELECT * FROM TaskTable")
     suspend fun getTask(): List<Task>
 
+    // id통해서 task 삭제
     @Query("DELETE FROM TaskTable WHERE id = :taskId")
     suspend fun deleteTaskById(taskId: Int)
-
+    // id통해서 title 반환
     @Query("SELECT title FROM TaskTable WHERE id = :taskId")
     suspend fun getTitleFromId(taskId: Int) : String
+
 }

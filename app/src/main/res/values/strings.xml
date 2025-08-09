@@ -8,11 +8,12 @@
 
     <!-- memoir fragment-->
     <string name="memoir_write">회고록 작성하기</string>
-    <string name="memoir_emotionTag">1. 감정태그</string>
+    <string name="memoir_emotionTag">감정태그</string>
     <string name="memoir_emotionTag_add">일정을 마친 뒤, 감정이 어떠한가요?</string>
-    <string name="memoir_archivement">2. 성취도(만족도)</string>
-    <string name="memoir_archivement_add">내가 수행한 정도에 얼마나 만족해요?</string>
-    <string name="memoir_record">3. 한 줄 기록</string>
+    <string name="memoir_archivement">성취도(만족도)</string>
+    <string name="memoir_archivement_add">내가 수행한 정도에 얼마나 만족하나요?</string>
+    <string name="memoir_record">한 줄 기록</string>
+    <string name="memoir_record_add">느꼈던 점 등을 자유롭게 기록해보세요.</string>
     <string name="memoir_complete">회고록</string>
 
     <!-- tool page-->
@@ -28,6 +29,7 @@
     <string name="task_text2">가 있어!</string>
     <string name="process_text">오늘 목표의 %1$s를 달성했어요!</string>
     <string name="percent">$1$s%</string>
+    <string name="hompepage_process_text">진행률</string>
     <string name="nextSchedule">다가오는 다음 일정</string>
     <string name="today_schedule">오늘의 일정</string>
 

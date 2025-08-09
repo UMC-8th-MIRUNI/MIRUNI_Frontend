@@ -1,4 +1,4 @@
-package com.example.miruni
+package com.example.miruni.api
 
 import android.content.Context
 import android.util.Log
