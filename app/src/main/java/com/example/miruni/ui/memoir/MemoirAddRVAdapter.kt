@@ -1,16 +1,17 @@
-package com.example.miruni
+package com.example.miruni.ui.memoir
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.example.miruni.R
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ItemMemoirBinding
 
 class MemoirAddRVAdapter(
     private val items: List<Task>,
-    private val onItemClick: (Task) -> Unit) :
+    private val onItemClick: (Int) -> Unit) :
     RecyclerView.Adapter<MemoirAddRVAdapter.ViewHolder>() {
 
 
@@ -29,8 +30,12 @@ class MemoirAddRVAdapter(
         holder.binding.memoirMenuBtn.setOnClickListener {
             showMenu(it)
         }
-        holder.binding.memoirBack.setOnClickListener {
-            onItemClick(item)
+        // 클릭하면 MemoirCompleteFragment로 넘어감
+        holder.binding.memoirItem.setOnClickListener {
+
+            // reviewId 불러오고 콜백
+            val reviewId = 2
+            onItemClick(reviewId)
         }
     }
     inner class ViewHolder(val binding: ItemMemoirBinding) : RecyclerView.ViewHolder(binding.root)

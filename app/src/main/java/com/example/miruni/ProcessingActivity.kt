@@ -2,10 +2,11 @@ package com.example.miruni
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.miruni.databinding.ActivityProcessingBinding
+import com.example.miruni.ui.homepage.HomepageFragment
+import com.example.miruni.ui.memoir.MemoirListFragment
 
 class ProcessingActivity : AppCompatActivity() {
 
@@ -40,8 +41,8 @@ class ProcessingActivity : AppCompatActivity() {
             "HomepageFragment" ->{
                 transitionFragment(HomepageFragment())
             }
-            "MemoirAddFragment" -> {
-                transitionFragment(MemoirAddFragment())
+            "MemoirListFragment" -> {
+                transitionFragment(MemoirListFragment())
             }
         }
     }

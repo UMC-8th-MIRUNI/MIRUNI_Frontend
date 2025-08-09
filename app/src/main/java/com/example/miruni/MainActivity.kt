@@ -1,6 +1,7 @@
 package com.example.miruni
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 
 import android.app.Activity
@@ -12,7 +13,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+
 import android.util.Log
+
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,8 +30,10 @@ import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.ui.calendar.CalendarFragment
+import com.example.miruni.ui.homepage.HomepageFragment
 import com.example.miruni.util.AlarmHelper
 import java.util.Calendar
+
 
 class MainActivity : AppCompatActivity() {
     /** 변수 선언 */
@@ -539,9 +544,10 @@ class MainActivity : AppCompatActivity() {
     /**
      * 화면 전환
      */
+    @SuppressLint("SuspiciousIndentation")
     private fun trasitionScreen(pageState: String) {
         this.pageState = pageState
-        when(pageState) {
+            when(pageState) {
             "tool" -> {
                 transitionFragment(ToolFragment())
             }
@@ -552,11 +558,11 @@ class MainActivity : AppCompatActivity() {
                 transitionFragment(HomepageFragment())
             }
             "locker" -> {
-                transitionFragment(LockerFragment())
+                //transitionFragment(LockerFragment())
 
                 // 확인용 코드
                 val intent = Intent(this, ProcessingActivity::class.java)
-                intent.putExtra("showFragment", "MemoirAddFragment")
+                intent.putExtra("showFragment", "MemoirListFragment")
                 startActivity(intent)
 
             }
@@ -648,5 +654,11 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, fragment)
             .commitAllowingStateLoss()
+    }
+
+    // topbar color 변경
+    fun setTopBarColor(colorResId: Int) {
+        val topBar = findViewById<View>(R.id.main_top_bar)
+        topBar.setBackgroundColor(ContextCompat.getColor(this, colorResId))
     }
 }

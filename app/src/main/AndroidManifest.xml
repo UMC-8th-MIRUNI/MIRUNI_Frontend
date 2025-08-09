@@ -56,7 +56,7 @@
             android:turnScreenOn="true" />
 
         <service
-            android:name=".FocusService"
+            android:name=".util.FocusService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 

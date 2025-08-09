@@ -9,11 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ServiceCompat
 import com.example.miruni.databinding.FragmentGrowBinding
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.example.miruni.util.FocusService
 
 class GrowFragment : Fragment() {
 

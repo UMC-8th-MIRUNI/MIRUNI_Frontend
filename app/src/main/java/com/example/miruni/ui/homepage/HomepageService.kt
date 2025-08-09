@@ -1,16 +1,17 @@
-package com.example.miruni
+package com.example.miruni.ui.homepage
 
 import android.content.Context
 import android.util.Log
+import com.example.miruni.RetrofitInstance
+import com.example.miruni.TokenManager
 
+const val t = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaHprdGxkaEBnbWFpbC5jb20iLCJleHAiOjE3NTM5NTAzMzMsImlhdCI6MTc1Mzk0NjczM30.6O8qMjpDsn-Ibrc2B9vsg3wciPMKvaWiLqHhUFl641I"
 
 class HomepageService(private val context: Context) {
-
     suspend fun getHomepageData(): HomepageResponse?{
 
         //토큰 임시 저장
-        val t = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaHprdGxkaEBnbWFpbC5jb20iLCJleHAiOjE3NTM5NTAzMzMsImlhdCI6MTc1Mzk0NjczM30.6O8qMjpDsn-Ibrc2B9vsg3wciPMKvaWiLqHhUFl641I"
-        TokenManager.saveToken(context,t)
+        TokenManager.saveToken(context, t)
 
         val token = TokenManager.getToken(context)
 

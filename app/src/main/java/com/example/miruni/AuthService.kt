@@ -1,5 +1,6 @@
 package com.example.miruni
 
+import com.example.miruni.api.HomepageResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,6 +17,9 @@ interface AuthService {
     suspend fun login(
         @Body request: LoginRequest
     ): Response<LoginResponse>
+
     @GET("api/homePage")
     suspend fun getHomepage(@Header("Authorization") token: String) : HomepageResponse
+
+
 }
