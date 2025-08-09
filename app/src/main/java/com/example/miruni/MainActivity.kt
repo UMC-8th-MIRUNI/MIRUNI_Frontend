@@ -13,6 +13,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+
+import android.util.Log
+
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,28 +62,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    1000
-                )
-            }
-        }
-        checkAndRequestExactAlarmPermission(this)
-
-        /** 팝업 알람 설정 */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                isReturningFromPermissionGrant = true
-                requestOverlayPermission(this)
-            } else {
-                checkAndRequestExactAlarmPermission(this)
-            }
-        }
+        /** 각 권한 확인 및 권한 설정 */
+        callGetPermissionScreen()
 
         /** 데이터 초기화 */
         initTasksAndSchedule()
@@ -125,7 +108,56 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun callGetPermissionScreen() {
+        val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val isNotGrantedPostNotification = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        val isNotGrantedExactAlarmPermission = !alarmManager.canScheduleExactAlarms()
+        val isNotGrantedDrawOverlay = !Settings.canDrawOverlays(this)
+
+        if (isNotGrantedPostNotification || isNotGrantedExactAlarmPermission || isNotGrantedDrawOverlay) {
+            binding.mainIncludeMain.root.visibility = View.GONE
+            binding.mainIncludeGetPermission.root.visibility = View.VISIBLE
+
+            /** '확인' 클릭 */
+            binding.mainIncludeGetPermission.getPermissionOkTv.setOnClickListener {
+                /**
+                 * POST_NOTIFICATION 권한 설정
+                 */
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                            1000
+                        )
+                    }
+                }
+                checkAndRequestExactAlarmPermission(this)
+
+                /** 팝업 알람 설정 */
+                if (!Settings.canDrawOverlays(this)) {
+                    isReturningFromPermissionGrant = true
+                    requestOverlayPermission(this)
+                } else {
+                    checkAndRequestExactAlarmPermission(this)
+                }
+
+                binding.mainIncludeMain.root.visibility = View.VISIBLE
+                binding.mainIncludeGetPermission.root.visibility = View.GONE
+            }
+
+            /** 뒤로 가기 */
+            binding.mainIncludeGetPermission.getPermissionBackIv.setOnClickListener {
+                binding.mainIncludeMain.root.visibility = View.VISIBLE
+                binding.mainIncludeGetPermission.root.visibility = View.GONE
+            }
+        }
     }
 
     /**
@@ -135,6 +167,9 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (!alarmManager.canScheduleExactAlarms()) {
+
+                Log.d("MAIN/PERMISSION", "EXACT_ALARM_PERMISSION")
+
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
                     data = Uri.parse("package:${context.packageName}")
                 }
@@ -458,33 +493,33 @@ class MainActivity : AppCompatActivity() {
         val displayMetrics = Resources.getSystem().displayMetrics
         val screenHeight = displayMetrics.heightPixels
         val targetHeight = (screenHeight * 0.075).toInt()
-        binding.mainNav.layoutParams = binding.mainNav.layoutParams.apply {
+        binding.mainIncludeMain.mainNav.layoutParams = binding.mainIncludeMain.mainNav.layoutParams.apply {
             height = targetHeight
         }
 
         // 랜딩 페이지: 홈
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, HomepageFragment())
+            .replace(R.id.main_frm, CalendarFragment())
             .commitAllowingStateLoss()
 
         // 네비게이션
-        binding.navToolIv.setOnClickListener {
+        binding.mainIncludeMain.navToolIv.setOnClickListener {
             trasitionScreen("tool")
             setIconColor()
         }
-        binding.navCalendarIv.setOnClickListener {
+        binding.mainIncludeMain.navCalendarIv.setOnClickListener {
             trasitionScreen("calendar")
             setIconColor()
         }
-        binding.navHomeIv.setOnClickListener {
+        binding.mainIncludeMain.navHomeIv.setOnClickListener {
             trasitionScreen("home")
             setIconColor()
         }
-        binding.navLockerIv.setOnClickListener {
+        binding.mainIncludeMain.navLockerIv.setOnClickListener {
             trasitionScreen("locker")
             setIconColor()
         }
-        binding.navMypageIv.setOnClickListener {
+        binding.mainIncludeMain.navMypageIv.setOnClickListener {
             trasitionScreen("mypage")
             setIconColor()
         }
@@ -549,30 +584,30 @@ class MainActivity : AppCompatActivity() {
 
         when (pageState) {
             "tool" -> {
-                binding.apply {
+                binding.mainIncludeMain.apply {
                     navToolIv.setColorFilter(resources.getColor(R.color.selectColor))
                     navToolTv.setTextColor("#1AE019".toColorInt())
                 }
             }
             "calendar" -> {
-                binding.apply {
+                binding.mainIncludeMain.apply {
                     navCalendarIv.setColorFilter(resources.getColor(R.color.selectColor))
                     navCalendarTv.setTextColor("#1AE019".toColorInt())
                 }
             }
             "home" -> {
-                binding.apply {
+                binding.mainIncludeMain.apply {
                     navHomeTv.setTextColor("#1AE019".toColorInt())
                 }
             }
             "locker" -> {
-                binding.apply {
+                binding.mainIncludeMain.apply {
                     navLockerIv.setColorFilter(resources.getColor(R.color.selectColor))
                     navLockerTv.setTextColor("#1AE019".toColorInt())
                 }
             }
             "mypage" -> {
-                binding.apply {
+                binding.mainIncludeMain.apply {
                     navMypageIv.setColorFilter(resources.getColor(R.color.selectColor))
                     navMypageTv.setTextColor("#1AE019".toColorInt())
                 }
@@ -584,19 +619,21 @@ class MainActivity : AppCompatActivity() {
      * Bottom Navigation 버튼 색상 초기화
      */
     private fun initIconColor() {
-        binding.navToolIv.setColorFilter(resources.getColor(R.color.unselectColor))
-        binding.navToolTv.setTextColor("#484C52".toColorInt())
+        binding.mainIncludeMain.apply {
+            navToolIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            navToolTv.setTextColor("#484C52".toColorInt())
 
-        binding.navCalendarIv.setColorFilter(resources.getColor(R.color.unselectColor))
-        binding.navCalendarTv.setTextColor("#484C52".toColorInt())
+            navCalendarIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            navCalendarTv.setTextColor("#484C52".toColorInt())
 
-        binding.navHomeTv.setTextColor("#484C52".toColorInt())
+            navHomeTv.setTextColor("#484C52".toColorInt())
 
-        binding.navLockerIv.setColorFilter(resources.getColor(R.color.unselectColor))
-        binding.navLockerTv.setTextColor("#484C52".toColorInt())
+            navLockerIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            navLockerTv.setTextColor("#484C52".toColorInt())
 
-        binding.navMypageIv.setColorFilter(resources.getColor(R.color.unselectColor))
-        binding.navMypageTv.setTextColor("#484C52".toColorInt())
+            navMypageIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            navMypageTv.setTextColor("#484C52".toColorInt())
+        }
     }
 
     /**
