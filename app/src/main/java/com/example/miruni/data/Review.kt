@@ -15,3 +15,4 @@ data class Review (
     val memo: String,
     val createdAt: String
 )
+

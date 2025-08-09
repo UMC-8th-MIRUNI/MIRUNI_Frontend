@@ -20,3 +20,4 @@ interface ReviewDao {
     @Query("SELECT * FROM ReviewTable WHERE createdAt = :date")
     fun findReviewByDate(date: String) :  Review
 }
+

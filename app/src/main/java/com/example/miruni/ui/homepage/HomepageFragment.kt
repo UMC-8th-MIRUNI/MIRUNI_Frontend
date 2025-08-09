@@ -1,6 +1,5 @@
-package com.example.miruni
+package com.example.miruni.ui.homepage
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +9,8 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Dao
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentHomepageBinding

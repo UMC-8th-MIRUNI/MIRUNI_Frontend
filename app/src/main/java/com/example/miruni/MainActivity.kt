@@ -31,6 +31,7 @@ import com.example.miruni.ui.homepage.HomepageFragment
 import com.example.miruni.util.AlarmHelper
 import java.util.Calendar
 
+
 class MainActivity : AppCompatActivity() {
     /** 변수 선언 */
     // 뷰 바인딩
