@@ -26,7 +26,8 @@
             android:paddingHorizontal="11sp"
             android:background="@drawable/bg_ababab_square_7"
             android:fontFamily="@font/notosanskr_regular"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:textColor="#484C52"/>
 
         <TextView
             android:id="@+id/schedule_registration_content_deadline"
@@ -51,9 +52,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2025.07.31."
-                android:fontFamily="@font/notosanskr_regular"
+                android:fontFamily="@font/poppins_regular"
                 android:textSize="14sp"
-                android:textColor="#1E1E1E"
+                android:textColor="#484C52"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -89,9 +90,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2025.07.31."
-                android:fontFamily="@font/notosanskr_bold"
+                android:fontFamily="@font/poppins_regular"
                 android:textSize="14sp"
-                android:textColor="#1E1E1E"
+                android:textColor="#484C52"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

@@ -1,6 +1,7 @@
 package com.example.miruni.ui.calendar
 
 import android.app.DatePickerDialog
+import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
 import android.icu.text.DecimalFormat
 import android.os.Bundle
@@ -62,6 +63,7 @@ class RegistrationScheduleFragment : Fragment() {
         binding = FragmentRegistrationScheduleBinding.inflate(layoutInflater, container, false)
 
         hideNavigationBar()
+        initDate()
         initRegistrationClickListener()
         initSplitClickListener()
 
@@ -79,6 +81,16 @@ class RegistrationScheduleFragment : Fragment() {
         navigationBar.visibility = View.GONE
         homeBtn.visibility = View.GONE
         binding.scheduleRegistrationInclude.root.visibility = View.VISIBLE
+    }
+
+    private fun initDate() {
+        val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
+        selectedDate = spf.getString("selectedDate", "").toString()
+
+        val tmpDate = selectedDate.split("-")
+
+        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDateTv.text = String.format("${tmpDate[0]}.${tmpDate[1]}.${tmpDate[2]}")
+        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDeadlineTv.text = String.format("${tmpDate[0]}.${tmpDate[1]}.${tmpDate[2]}")
     }
 
     /**
