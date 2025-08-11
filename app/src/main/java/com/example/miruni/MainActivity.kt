@@ -562,11 +562,6 @@ class MainActivity : AppCompatActivity() {
             "locker" -> {
                 //transitionFragment(LockerFragment())
                 transitionFragment(MemoirListFragment())
-
-                // 확인용 코드
-                val intent = Intent(this, ProcessingActivity::class.java)
-                intent.putExtra("showFragment", "MemoirListFragment")
-                startActivity(intent)
             }
             "mypage" -> {
 //                supportFragmentManager.beginTransaction()

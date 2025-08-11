@@ -37,6 +37,7 @@ import androidx.compose.material3.Checkbox
 import com.example.miruni.R
 import com.example.miruni.data.Task
 
+/*
 @Preview
 @Composable
 fun HomepageProcessBoxpreview(){
@@ -370,5 +371,6 @@ fun TaskList(data: Task, click: Boolean, isChecked: Boolean = false, onCheckedCh
         )
     }
 }
+*/
 
 

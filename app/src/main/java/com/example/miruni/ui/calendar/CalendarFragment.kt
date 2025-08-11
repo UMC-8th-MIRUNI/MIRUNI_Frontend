@@ -65,6 +65,9 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
         scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
 
+        /** 상단바 색상 변경 **/
+        (activity as? MainActivity)?.setTopBarColor(R.color.white)
+
         /** 바텀 네비게이션 설정 */
         initBottomNavigation()
 

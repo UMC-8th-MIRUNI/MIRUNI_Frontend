@@ -14,6 +14,10 @@ class ToolFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+
+        /** 상단바 색상 변경 **/
+        (activity as? MainActivity)?.setTopBarColor(R.color.white)
+
         return binding.root
     }
 }

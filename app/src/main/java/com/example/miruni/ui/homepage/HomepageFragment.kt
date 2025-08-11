@@ -46,6 +46,7 @@ class HomepageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /** 상단바 색상 변경 **/
         (activity as? MainActivity)?.setTopBarColor(R.color.main)
 
 
