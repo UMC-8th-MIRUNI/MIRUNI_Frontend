@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.MemoirCountResponse
@@ -49,6 +50,10 @@ class MemoirListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /** 상단바 색상 변경 **/
+        (activity as? MainActivity)?.setTopBarColor(R.color.white)
+
         binding.listBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
