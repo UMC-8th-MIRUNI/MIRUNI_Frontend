@@ -17,4 +17,15 @@
         layout="@layout/layout_schedule_split"
         android:visibility="gone"/>
 
+    <!-- 일정 쪼개기 (로딩) -->
+    <include
+        android:id="@+id/schedule_split_loading_include"
+        layout="@layout/layout_schedule_split_loading"
+        android:visibility="gone"/>
+
+    <!-- 일정 쪼개기 (완료) -->
+    <include
+        android:id="@+id/schedule_split_complete_include"
+        layout="@layout/layout_schedule_split_complete"
+        android:visibility="gone"/>
 </LinearLayout>

@@ -1,8 +1,10 @@
 package com.example.miruni.ui.calendar
 
+import android.animation.ValueAnimator
 import android.app.DatePickerDialog
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
+import android.graphics.Rect
 import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import android.view.ViewTreeObserver
+import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -18,6 +22,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
@@ -29,7 +34,9 @@ import com.example.miruni.databinding.LayoutDropdownPriorityBinding
 import com.example.miruni.databinding.LayoutDropdownScheduleTypeBinding
 import com.example.miruni.databinding.LayoutPopupSplitDetailGuideBinding
 import com.example.miruni.databinding.LayoutPopupSplitGuideBinding
-import com.example.miruni.databinding.LayoutScheduleSplitBinding
+import com.example.miruni.databinding.LayoutScheduleRegistrationTopbarBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -170,9 +177,13 @@ class RegistrationScheduleFragment : Fragment() {
             }
             /** 쪼개기 */
             scheduleRegistrationContentBtnSplit.setOnClickListener {
-                binding.scheduleRegistrationInclude.root.visibility = View.GONE
-                binding.scheduleSplitInclude.root.visibility = View.VISIBLE
-                binding.scheduleSplitInclude.scheduleSplitIncludeTopbar.scheduleRegistrationTopbarTitleTv.text = "쪼개기"
+                screenChange(
+                    binding.scheduleRegistrationInclude.root,
+                    binding.scheduleSplitInclude.root,
+                    binding.scheduleRegistrationInclude.scheduleRegistrationIncludeTopbar,
+                    "쪼개기",
+                    true
+                    )
             }
         }
     }
@@ -207,10 +218,113 @@ class RegistrationScheduleFragment : Fragment() {
             }
             /** 쪼개기 */
             scheduleSplitSplitBtn.setOnClickListener {
-                TODO()
+                screenChange(
+                    binding.scheduleSplitInclude.root,
+                    binding.scheduleSplitLoadingInclude.root,
+                    binding.scheduleSplitLoadingInclude.scheduleSplitLoadingIncludeTopbar,
+                    null,
+                    false
+                )
+                initSplitLoading()
+                initSplitComplete()
+
+                // 백엔드로 데이터 보내고 -> 화면 전환하고 -> 일정 시간 지나면(or 데이터 받으면) -> 완료 화면 띄우기
             }
         }
     }
+
+    /**
+     * 쪼개기 로딩 화면 설정
+     */
+    private fun initSplitLoading() {
+        binding.scheduleSplitLoadingInclude.apply {
+
+            /** 뒤로 가기 */
+            scheduleSplitLoadingIncludeTopbar.scheduleRegistrationTopbarBackIv.setOnClickListener {
+                screenChange(
+                    binding.scheduleSplitLoadingInclude.root,
+                    binding.scheduleSplitInclude.root,
+                    binding.scheduleSplitInclude.scheduleSplitIncludeTopbar,
+                    "쪼개기",
+                    true
+                )
+            }
+
+            lifecycleScope.launch {
+                delay(2000)
+                screenChange(
+                    binding.scheduleSplitLoadingInclude.root,
+                    binding.scheduleSplitCompleteInclude.root,
+                    binding.scheduleSplitCompleteInclude.scheduleSplitCompleteIncludeTopbar,
+                    null,
+                    false
+                )
+
+                animateSplitCompleteCheck()
+            }
+        }
+    }
+
+    /**
+     * 쪼개기 완료 화면
+     */
+    private fun initSplitComplete() {
+        binding.scheduleSplitCompleteInclude.apply {
+
+            /** 뒤로 가기 */
+            scheduleSplitCompleteIncludeTopbar.scheduleRegistrationTopbarBackIv.setOnClickListener {
+                screenChange(
+                    binding.scheduleSplitCompleteInclude.root,
+                    binding.scheduleSplitInclude.root,
+                    binding.scheduleSplitInclude.scheduleSplitIncludeTopbar,
+                    "쪼개기",
+                    true
+                )
+            }
+            /** 확인 */
+            scheduleSplitCompleteOkTv.setOnClickListener {
+                Toast.makeText(context as MainActivity, "스케줄표", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun animateSplitCompleteCheck() {
+
+        binding.scheduleSplitCompleteInclude.apply {
+            scheduleSplitCompleteCheckIv.viewTreeObserver.addOnGlobalLayoutListener ( object:
+                ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    scheduleSplitCompleteCheckIv.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                    val checkImg = scheduleSplitCompleteCheckIv
+                    Log.d("DEBUG", "width=${checkImg.width}, height=${checkImg.height}")
+
+                    val fullWidth = checkImg.width
+                    val fullHeight = checkImg.height
+
+                    if (fullWidth == 0 || fullHeight == 0) {
+                        Log.w("Animation", "이미지 크기가 0입니다. 애니메이션을 건너뜁니다.")
+                        return
+                    }
+                    checkImg.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+
+                    checkImg.clipBounds = Rect(0, 0, 0, fullHeight)
+
+                    val animator = ValueAnimator.ofInt(0, fullWidth).apply {
+                        duration = 1000L
+                        interpolator = DecelerateInterpolator()
+                        addUpdateListener { anim ->
+                            val currentWidth = anim.animatedValue as Int
+                            checkImg.clipBounds = Rect(0, 0, currentWidth, checkImg.height)
+                        }
+                    }
+                    animator.start()
+                }
+            })
+
+        }
+    }
+
 
     /**
      * 날짜 선택
@@ -458,6 +572,25 @@ class RegistrationScheduleFragment : Fragment() {
             description,
             deadline
         )
+    }
+
+    /**
+     * 레이아웃 전환
+     */
+    private fun screenChange(
+        originView: View,
+        targetView: View,
+        topbar: LayoutScheduleRegistrationTopbarBinding,
+        topbarText: String?,
+        closeVisibility: Boolean) {
+
+        originView.visibility = View.GONE
+        targetView.visibility = View.VISIBLE
+
+        if (topbarText.isNullOrEmpty()) topbar.scheduleRegistrationTopbarTitleTv.visibility = View.GONE
+        if (!closeVisibility) {
+            topbar.scheduleRegistrationTopbarCancelIv.visibility = View.GONE
+        }
     }
 }
 

@@ -105,6 +105,7 @@ class CalendarFragment : Fragment() {
      */
     private fun initCalendar() {
         val today = binding.calendarIncludeCalendarCalendar.calendarCalendar.currentDate
+        selectedDate = CalendarDay.today()
         YMList[0] = today.year.toInt()
         YMList[1] = today.month.toInt()
 
