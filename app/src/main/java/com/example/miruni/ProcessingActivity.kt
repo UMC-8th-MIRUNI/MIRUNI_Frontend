@@ -50,6 +50,7 @@ class ProcessingActivity : AppCompatActivity() {
     private fun transitionFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.process_frm, fragment)
+            .addToBackStack(null)
             .commitAllowingStateLoss()
     }
 }

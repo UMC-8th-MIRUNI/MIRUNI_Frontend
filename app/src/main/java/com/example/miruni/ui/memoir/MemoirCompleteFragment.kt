@@ -21,6 +21,9 @@ import kotlinx.coroutines.launch
 
 private var body: MemoirDetailResponse? = null
 private var db: ScheduleDatabase? = null
+private lateinit var token: String
+private var reviewId = 0
+private lateinit var api: ApiService
 
 // 단일 회고 상세 조회 api연결
 class MemoirCompleteFragment: Fragment() {
@@ -44,9 +47,9 @@ class MemoirCompleteFragment: Fragment() {
 
         lifecycleScope.launch{
             try{
-                val token = "Bearer $t"
-                val api = getRetrofit().create(ApiService::class.java)
-                val reviewId = requireArguments().getInt("reviewId")
+                token = "Bearer $t"
+                api = getRetrofit().create(ApiService::class.java)
+                reviewId = requireArguments().getInt("reviewId")
                 val response = api.memoirDetail(token, reviewId)
                 Log.d("단일 회고 상세 조회", "성공: ${response}")
 
@@ -78,7 +81,7 @@ class MemoirCompleteFragment: Fragment() {
             // 회고 작성 완료 페이지로 이동
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.process_frm, MemoirAddFragment())
-            transaction.addToBackStack(null)
+            //transaction.addToBackStack(null)
             transaction.commit()
         }
         // 뒤로가기
@@ -118,6 +121,20 @@ class MemoirCompleteFragment: Fragment() {
 
                 R.id.write_delete -> {
                     // 삭제 API 연결
+                    try{
+                        lifecycleScope.launch {
+                            val response = api.memoirDelete(token, reviewId)
+                            if(response.isSuccessful) {
+                                val deleteId = response.body()?.result
+
+                                Log.d("회고 삭제", "성공: ${response}")
+                                Log.d("회고 삭제", "삭제된 회고 id: ${deleteId}")
+                            }else
+                                Log.e("회고 삭제", "response 실패: ${response.code()} - ${response.message()}")
+                        }
+                    }catch (e: Exception){
+                        Log.e("회고 삭제", "${e.message}")
+                    }
                     true
                 }
                 else -> false

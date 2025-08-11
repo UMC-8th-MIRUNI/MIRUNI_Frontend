@@ -1,4 +1,4 @@
-package com.example.miruni
+package com.example.miruni.util
 
 import android.app.ActivityManager
 import android.app.Notification
@@ -11,6 +11,8 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import com.example.miruni.FullscreenActivity
+import com.example.miruni.R
 
 // Service: 백그라운드에서 장기 작업 실행가능
 class FocusService : Service() {
