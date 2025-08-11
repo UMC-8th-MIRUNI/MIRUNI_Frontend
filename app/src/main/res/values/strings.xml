@@ -26,7 +26,7 @@
 
     <!-- homepage -->
     <string name="task_text1">오늘의 할 일은</string>
-    <string name="task_text2">가 있어!</string>
+    <string name="task_text2">가 있어요!</string>
     <string name="process_text">오늘 목표의 %1$s를 달성했어요!</string>
     <string name="percent">$1$s%</string>
     <string name="hompepage_process_text">진행률</string>
