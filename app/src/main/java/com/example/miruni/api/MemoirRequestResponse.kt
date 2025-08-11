@@ -91,3 +91,10 @@ data class MemoirSearchResponse(
     val message: String,
     val result: ReviewDate
 )
+
+/** 회고 삭제 **/
+data class MemoirDeliteResponse(
+    val errorCode: String?,
+    val message: String,
+    val result: Int? //성공하면 삭제된 id 반환 오류면 null반환
+)

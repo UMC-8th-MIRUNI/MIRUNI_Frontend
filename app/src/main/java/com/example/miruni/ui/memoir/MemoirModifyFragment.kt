@@ -64,12 +64,12 @@ class MemoirModifyFragment: Fragment(){
                     val bundle = Bundle()
 
                     /**  후에 reponse로 받은걸로 넘겨야함  **/
-                    bundle.putInt("reviewId", 2)
+                    bundle.putInt("reviewId", reviewId)
                     val fragment = MemoirCompleteFragment()
                     fragment.arguments = bundle
                     val transaction = parentFragmentManager.beginTransaction()
                     transaction.replace(R.id.process_frm, fragment)
-                    transaction.addToBackStack(null)
+                    //transaction.addToBackStack(null)
                     transaction.commit()
 
                     if(response.isSuccessful){
@@ -103,7 +103,7 @@ class MemoirModifyFragment: Fragment(){
         Log.d("수정 내용 조회 확인", "메모내용: ${review?.memo}")
         binding.modifyLayout.memoirWriteTxt.setSelection(binding.modifyLayout.memoirWriteTxt.text.length)
         binding.modifyLayout.memoirWriteDate.text = review?.createdAt
-        binding.modifyLayout.memoirDescription.text = arguments?.getString("description")
+        binding.modifyLayout.memoirDescription.text = review?.description
 
         /*binding.modifyLayout.memoirWriteTitle.text = arguments?.getString("title")
         binding.modifyLayout.archievePercent.setText(arguments?.getInt("achievement")!!.toString())

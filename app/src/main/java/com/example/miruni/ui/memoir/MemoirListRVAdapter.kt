@@ -3,13 +3,14 @@ package com.example.miruni.ui.memoir
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.miruni.api.ReviewDate
 import com.example.miruni.data.Review
 import com.example.miruni.databinding.ItemMemoitListBinding
 
-class MemoirListRVAdapter(private val item: List<Review>): RecyclerView.Adapter<MemoirListRVAdapter.ViewHolder>() {
+class MemoirListRVAdapter(private val item: List<ReviewDate>): RecyclerView.Adapter<MemoirListRVAdapter.ViewHolder>() {
 
     interface OnMemoirItemClick{
-        fun onItemClick(review: Review)
+        fun onItemClick(review: String)
     }
     private lateinit var itemClick: OnMemoirItemClick
 
@@ -25,9 +26,9 @@ class MemoirListRVAdapter(private val item: List<Review>): RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.memoirDate.text = item[position].createdAt
-        holder.binding.memoirCount.text = item[position].title
-        holder.binding.dateList.setOnClickListener { itemClick.onItemClick(item[position]) }
+        holder.binding.memoirDate.text = item[position].date
+        holder.binding.memoirCount.text = item[position].count.toString()
+        holder.binding.dateList.setOnClickListener { itemClick.onItemClick(item[position].date) }
     }
 
     override fun getItemCount() = item.size

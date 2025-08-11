@@ -6,10 +6,12 @@
     android:layout_height="300dp">
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/task_bg"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:scaleType="fitXY"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,36 +21,35 @@
         android:id="@+id/time_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
         android:fontFamily="@font/dmsans_regular"
         android:text="시작 시간:"
         android:textColor="#6B7280"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-        app:layout_constraintStart_toEndOf="@+id/homepage_task_status" />
+        app:layout_constraintStart_toStartOf="@+id/task"
+        app:layout_constraintTop_toBottomOf="@+id/task" />
 
     <TextView
         android:id="@+id/task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="15dp"
         android:fontFamily="@font/dmsans_bold"
         android:text="과제 제출하기"
         android:textSize="13sp"
-        app:layout_constraintStart_toEndOf="@+id/homepage_task_status"
-        app:layout_constraintTop_toTopOf="@+id/imageView10" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/task_bg" />
 
     <ImageView
         android:id="@+id/playBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
+        app:layout_constraintBottom_toBottomOf="@+id/task_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/homepage_next_play" />
+        app:srcCompat="@drawable/homepage_play" />
 
     <ImageView
         android:id="@+id/text_accent"
@@ -68,22 +69,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
         android:fontFamily="@font/dmsans_regular"
         android:text="오후 5:00"
         android:textColor="#6B7280"
         android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-        app:layout_constraintStart_toEndOf="@+id/time_status" />
+        app:layout_constraintStart_toEndOf="@+id/time_status"
+        app:layout_constraintTop_toBottomOf="@+id/text_accent" />
 
     <ImageView
         android:id="@+id/homepage_task_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-        app:layout_constraintStart_toStartOf="@+id/imageView10"
-        app:layout_constraintTop_toTopOf="@+id/imageView10"
+        android:layout_marginStart="10dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/task_bg"
+        app:layout_constraintStart_toStartOf="@+id/task_bg"
+        app:layout_constraintTop_toTopOf="@+id/task_bg"
         app:srcCompat="@drawable/homepage_complete_status_iv" />
+
+    <CheckBox
+        android:id="@+id/task_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/task_bg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

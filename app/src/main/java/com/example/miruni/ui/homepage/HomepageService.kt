@@ -4,8 +4,9 @@ import android.content.Context
 import android.util.Log
 import com.example.miruni.RetrofitInstance
 import com.example.miruni.TokenManager
+import com.example.miruni.api.HomepageResponse
 
-const val t = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaHprdGxkaEBnbWFpbC5jb20iLCJleHAiOjE3NTM5NTAzMzMsImlhdCI6MTc1Mzk0NjczM30.6O8qMjpDsn-Ibrc2B9vsg3wciPMKvaWiLqHhUFl641I"
+const val t = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiZXhwIjoxNzU0ODE0OTc0LCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNzU0ODExMzc0fQ.fXrlQk2FzoTCtebm1PFNBRvqXVTZQT5M3rB-uprxSUc"
 
 class HomepageService(private val context: Context) {
     suspend fun getHomepageData(): HomepageResponse?{
