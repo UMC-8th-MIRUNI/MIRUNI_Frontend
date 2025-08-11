@@ -68,6 +68,7 @@ class MemoirWriteFragment: Fragment() {
                                 planId = review.planId,
                                 mood = review.mood,
                                 title = review.title,
+                                description = review.description,
                                 achievement = review.achievement,
                                 memo = review.memo,
                                 createdAt = review.createdAt

@@ -13,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
+import com.example.miruni.api.MemoirCountResponse
+import com.example.miruni.api.ReviewDate
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Mood
 import com.example.miruni.data.Review
@@ -20,10 +22,18 @@ import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentMemoirListBinding
 import com.example.miruni.ui.homepage.t
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
-// 날짜 별 회고록 갯수 조회 API -> 연결 성공
+// 날짜 별 회고록 갯수 조회 API ->
 // 회고 날짜 검색 조회 API ->
 
+private lateinit var adapter: MemoirListRVAdapter
+private lateinit var countResponse: Response<MemoirCountResponse>
+private var body: List<ReviewDate> = emptyList()
+private lateinit var date: String
+private val api = getRetrofit().create(ApiService::class.java)
+private val token = "Bearer $t"
+private lateinit var db: ScheduleDatabase
 class MemoirListFragment: Fragment() {
     val binding by lazy {
         FragmentMemoirListBinding.inflate(layoutInflater)
@@ -35,27 +45,38 @@ class MemoirListFragment: Fragment() {
     ): View? {
         return binding.root
     }
-    private lateinit var date: String
-    private val api = getRetrofit().create(ApiService::class.java)
-    private val t = "Bearer ${com.example.miruni.ui.homepage.t}"
-    private lateinit var db: ScheduleDatabase
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.listBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
         val dummy = listOf(
-            Review(0, null, 1, Mood.기쁨, "헐", 100, "헉", "2025-02-23"),
-            Review(1, null, 2, Mood.기쁨, "헐", 100, "헉", "2025-02-23"),
-            Review(2, null, 3, Mood.기쁨, "헐", 100, "헉", "2025-02-23"),
-            Review(3, null, 4, Mood.기쁨, "헐", 100, "헉", "2025-02-23")
+            Review(0, null, 1, Mood.기쁨, "헐", "흑",100, "헉", "2025-02-23"),
+            Review(1, null, 2, Mood.기쁨, "헐", "흑",100, "헉", "2025-02-23"),
+            Review(2, null, 2, Mood.기쁨, "헐", "흑",100, "헉", "2025-02-23"),
+            Review(3, null, 4, Mood.기쁨, "헐", "흑",100, "헉", "2025-02-23")
         )
 
         lifecycleScope.launch {
             // 날짜 별 회고록 갯수 조회
             try{
-                val countResponse = api.memoirCountByDate(t)
-                Log.d("날짜 별 회고록 갯수 조회", "연결성공: ${countResponse}")
-                val body = countResponse.body()?.result?.size
+                countResponse = api.memoirCountByDate(token)
+                if(countResponse.isSuccessful){
+                    Log.d("날짜 별 회고록 갯수 조회", "연결 성공: ${countResponse}")
+                }else{
+                    Log.e("날짜 별 회고록 갯수 조회", "실패: ${countResponse.code()} - ${countResponse.message()}")
+                }
+                val list = countResponse.body()?.result
+                if (!list.isNullOrEmpty()) {
+                    for(i in list){
+                        Log.d("날짜 별 회고록 갯수 조회", "리스트확인: ${i.date} - ${i.count}")
+                    }
+                }else{
+                    Log.d("날짜 별 회고록 갯수 조회", "갯수가 null입니다")
+                }
+                body = countResponse.body()?.result ?: throw IllegalStateException("!! 날짜 별 회고록 갯수 조회 body: null값 !!")
             }catch (e: Exception){
                 Log.e("날짜 별 회고록 갯수 조회", "에러: ${e.message}")
             }
@@ -87,17 +108,17 @@ class MemoirListFragment: Fragment() {
 
 
 
-        val adapter = MemoirListRVAdapter(dummy)
+        adapter = MemoirListRVAdapter(body)
         binding.memoirRV.adapter = adapter
         binding.memoirRV.layoutManager = GridLayoutManager(requireContext(), 2)
 
         adapter.setOnItemClick(object : MemoirListRVAdapter.OnMemoirItemClick{
-            override fun onItemClick(review: Review) {
+            override fun onItemClick(date: String) {
                 // MemoirAddFragment로 이동
                 val fragment = MemoirAddFragment()
 
                 val bundle = Bundle()
-                date = bundle.getString("date") ?: ""
+                bundle.putString("date", date)
                 fragment.arguments = bundle
 
                 val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -107,6 +128,9 @@ class MemoirListFragment: Fragment() {
             }
 
         })
+
+
+
     }
     private fun search(query: String){
         // 회고 날짜 검색 조회
@@ -114,17 +138,19 @@ class MemoirListFragment: Fragment() {
         try {
             //date = binding.memoirSearch.text.toString()
             lifecycleScope.launch {
-                val searchResponse = api.memoirSearch(t, query)
+                val searchResponse = api.memoirSearch(token, query)
 
                 Log.d("회고 날짜 검색 조회", "연결성공: ${searchResponse}")
 
 
                 db = ScheduleDatabase.getInstance(requireContext())!!
-                val review = db.reviewDao().findReviewByDate(searchResponse.body()?.result!!.date)
+                val review = searchResponse.body()?.result ?: throw IllegalStateException("!! 회고날짜 검색 조회 body: null값 !!")
+
                 val list = listOf(
                     review
                 )
-                val adapter = MemoirListRVAdapter(list)
+                Log.d("회고 날짜 검색 조회", "${review.date} - ${review.count}")
+                adapter = MemoirListRVAdapter(list)
                 binding.memoirRV.adapter = adapter
                 binding.memoirRV.layoutManager = GridLayoutManager(requireContext(), 2)
             }

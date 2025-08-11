@@ -25,6 +25,7 @@ interface ApiService {
 
 
 
+
     /**  회고 관련  **/
 
     // 회고 작성 후 저장 API
@@ -69,4 +70,11 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("date") date: String
     ) : Response<MemoirSearchResponse>
+
+    // 회고 삭제 API
+    @DELETE("/api/schedule/review/{reviewId}")
+    suspend fun memoirDelete(
+        @Header("AUthorization") token: String,
+        @Path("reviewId") review: Int
+    ) : Response<MemoirDeliteResponse>
 }

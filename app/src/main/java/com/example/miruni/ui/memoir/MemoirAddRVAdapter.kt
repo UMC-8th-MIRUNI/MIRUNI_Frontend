@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.miruni.R
+import com.example.miruni.api.ReviewByDate
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ItemMemoirBinding
 
 class MemoirAddRVAdapter(
-    private val items: List<Task>,
+    private val items: List<ReviewByDate>,
     private val onItemClick: (Int) -> Unit) :
     RecyclerView.Adapter<MemoirAddRVAdapter.ViewHolder>() {
 
@@ -23,19 +24,15 @@ class MemoirAddRVAdapter(
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.binding.memeoirAddTitle.text = item.title
-        holder.binding.meoireItemDate.text = item.startTime
+        holder.binding.memeoirAddTitle.text = items.get(position).title
+        holder.binding.meoireItemDate.text = items.get(position).createdAt
 
         holder.binding.memoirMenuBtn.setOnClickListener {
             showMenu(it)
         }
         // 클릭하면 MemoirCompleteFragment로 넘어감
         holder.binding.memoirItem.setOnClickListener {
-
-            // reviewId 불러오고 콜백
-            val reviewId = 2
-            onItemClick(reviewId)
+            onItemClick(items.get(position).id)
         }
     }
     inner class ViewHolder(val binding: ItemMemoirBinding) : RecyclerView.ViewHolder(binding.root)
