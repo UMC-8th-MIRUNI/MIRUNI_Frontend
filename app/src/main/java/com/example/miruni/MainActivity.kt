@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
@@ -31,9 +32,9 @@ import com.example.miruni.data.Task
 import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.ui.calendar.CalendarFragment
 import com.example.miruni.ui.homepage.HomepageFragment
+import com.example.miruni.ui.memoir.MemoirListFragment
 import com.example.miruni.util.AlarmHelper
 import java.util.Calendar
-
 
 class MainActivity : AppCompatActivity() {
     /** 변수 선언 */
@@ -247,7 +248,7 @@ class MainActivity : AppCompatActivity() {
                 "2025-07-09",
                 "16:00",
                 "17:00",
-                "예정"
+                "완료"
             )
         )
         scheduleDB.taskDao().insert(
@@ -556,15 +557,16 @@ class MainActivity : AppCompatActivity() {
             }
             "home" -> {
                 transitionFragment(HomepageFragment())
+                setTopBarColor(R.color.main)
             }
             "locker" -> {
                 //transitionFragment(LockerFragment())
+                transitionFragment(MemoirListFragment())
 
                 // 확인용 코드
                 val intent = Intent(this, ProcessingActivity::class.java)
                 intent.putExtra("showFragment", "MemoirListFragment")
                 startActivity(intent)
-
             }
             "mypage" -> {
 //                supportFragmentManager.beginTransaction()

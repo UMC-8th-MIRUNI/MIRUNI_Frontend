@@ -307,7 +307,7 @@ fun TaskList(data: Task, click: Boolean, isChecked: Boolean = false, onCheckedCh
                         "fail" -> R.drawable.homepage_fail_status_iv
                         "delay" -> R.drawable.homepage_dealy_staus_iv
                         "complete" -> R.drawable.homepage_complete_status_iv
-                        else -> R.drawable.mypage_face
+                        else -> R.drawable.homepage_play
                     }
                 ),
                 contentDescription = null,
@@ -355,7 +355,7 @@ fun TaskList(data: Task, click: Boolean, isChecked: Boolean = false, onCheckedCh
         Image(
             painter = painterResource(
                 when(data.status){
-                    "complete" -> R.drawable.homepage_revire_btn
+                    "complete" -> R.drawable.homepage_review_btn
                     else -> R.drawable.homepage_play
                 }
             ),

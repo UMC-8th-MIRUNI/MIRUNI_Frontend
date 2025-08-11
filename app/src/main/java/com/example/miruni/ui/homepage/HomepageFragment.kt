@@ -8,9 +8,15 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.miruni.MainActivity
+import com.example.miruni.R
+import com.example.miruni.TextVPAdapter
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentHomepageBinding
@@ -19,42 +25,144 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomepageFragment: Fragment() {
-    val binding by lazy {
-        FragmentHomepageBinding.inflate(layoutInflater)
-    }
+//  홈페이지 전체 정보 조회 API연결
+// 일정 삭제 API 연결
 
-    private var taskDatas = ArrayList<Task>()
-    private lateinit var taskDB: ScheduleDatabase
+class HomepageFragment: Fragment() {
+    private lateinit var binding: FragmentHomepageBinding
+    private var datas = arrayListOf<Task>()
+    private lateinit var db: ScheduleDatabase
+    private lateinit var adapter: HomepageRVAdapter
+
+    private var deleteTaskId: List<Int> = emptyList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        binding = FragmentHomepageBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-            taskDB = ScheduleDatabase.getInstance(requireContext())!!
-            if(taskDB.taskDao().getTask().isEmpty()) {
-                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime = "12:00", endTime ="14:00",title =  "[회계원리] 레포트 과제 (1)", status ="expected"))
-                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="11:00", endTime ="15:30", title ="[자료구조] 강의 정리",  status ="fail"))
-                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="17:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
-                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="15:30", title ="[회계원리] 레포트 과제 (1)", status = "expected"))
-                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="14:00", title ="[UI/UX] 와이어프레임 작성", status = "complete"))
-                taskDB.taskDao().insert(Task(scheduleId = 0, executeDay = "2025-08-08", startTime ="12:00", endTime ="14:00", title ="[자료구조] 강의 정리",  status ="expected"))
-            }
-            withContext(Dispatchers.Main) {
-                taskDatas.addAll(taskDB.taskDao().getTask())
 
-                connectComposeView()
-                clickEvent()
-            }
-        }
+        (activity as? MainActivity)?.setTopBarColor(R.color.main)
 
+
+        connectAdapter()
+        clickEvent()
         dataBind()
+
         var motive = ""
         lateinit var taskList: List<Task>
+
+        binding.motivationTxt.text = motive
+
+        // 명언 더미데이터 + viewPager연결
+        val dummyData = listOf("이러쿵", "저러쿵", "화이팅~")
+
+        // viewPager + dotsIndicator연결
+        val VPAdapter = TextVPAdapter(dummyData)
+        binding.helloViewpager.adapter = VPAdapter
+        binding.dotsIndicator.attachTo(binding.helloViewpager)
+    }
+
+    // 데이터 매개변수로 받아오기
+    private fun connectAdapter() {
         lifecycleScope.launch {
+            // 저장 데이터 불러오기
+            db = ScheduleDatabase.getInstance(requireContext())
+                ?: throw IllegalStateException(" !! Homefragment 데이터베이스 연결 오류  !! ")
+            datas = db.taskDao().getTask() as ArrayList<Task>
+
+            // 오늘의 일정 adapter연결
+            val layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.HORIZONTAL, false)
+            adapter = HomepageRVAdapter(datas)
+
+            binding.homepageRecyclerView.layoutManager = layoutManager
+            binding.homepageRecyclerView.adapter = adapter
+
+            adapter.setOnClickListener(object : HomepageRVAdapter.onplayClickListener {
+                override fun onPlayClick(isDone: String) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onDeleteItem(seletedItems: List<Int>) {
+                    deleteTaskId = seletedItems
+                }
+
+            })
+
+        }
+    }
+
+    private fun clickEvent() {
+        // 중지버튼 눌렀을 때
+        binding.homepageFailBtn.setOnClickListener {
+            val list = datas.filter { it.status == "fail" }
+
+            // 다시 dapter에 연결
+        }
+        // 완료버튼 눌렀을 때
+        binding.homepageCompleteBtn.setOnClickListener {
+
+        }
+        // 예정 버튼 눌렀을 때
+        binding.homepageExpectedBtn.setOnClickListener {
+
+        }
+        // 전체 버튼 눌렀을 때
+        binding.homepageAllBtn.setOnClickListener {
+
+        }
+
+        // 다가오는 일정 play 실행
+        binding.taskPlay.setOnClickListener {
+
+        }
+        // 삭제하기 버튼 눌렀을 때
+        binding.taskDeleteBtn.setOnClickListener {
+            binding.taskDeleteCompleteBtn.visibility = VISIBLE
+            binding.taskDeleteBtn.visibility = View.GONE
+
+            adapter.deleteItem(true)
+        }
+        // 삭제완료 버튼 눌렀을 때
+        binding.taskDeleteCompleteBtn.setOnClickListener {
+            binding.taskDeleteBtn.visibility = VISIBLE
+            binding.taskDeleteCompleteBtn.visibility = View.GONE
+
+            // 삭제 재확인 Dialog 띄우기
+            val popupBinding = LayoutCheckpopupBinding.inflate(LayoutInflater.from(requireContext()))
+            val dialog = Dialog(requireContext())
+            dialog.setContentView(popupBinding.root)
+            dialog.show()
+
+            popupBinding.deleteNo.setOnClickListener {
+                dialog.hide()
+                adapter.deleteItem(false)
+            }
+            popupBinding.deleteYes.setOnClickListener {
+                // 삭제 api연결
+                // deleteTaskId 활용
+                for(task in deleteTaskId){
+
+                }
+
+                dialog.hide()
+                adapter.deleteItem(false)
+            }
+
+        }
+    }
+
+    fun dataBind() {
+        binding.username = "김가영"
+        binding.taskCount = "${5}"
+        binding.achievement = "${78}"
+    }
+
+        /*lifecycleScope.launch {
             val service = HomepageService(requireContext())
             val response = service.getHomepageData()
 
@@ -65,117 +173,8 @@ class HomepageFragment: Fragment() {
             } ?: run{
                 Log.e("Homepage에러", "ㅠㅠ")
             }
-        }
+        }*/
 
-        binding.motivationTxt.text = motive
-
-        // 명언 더미데이터 + viewPager연결
-        /*val dummyData = listOf("이러쿵", "저러쿵", "화이팅~")
-
-        // viewPager + dotsIndicator연결
-        val VPAdapter = TextVPAdapter(motive)
-        binding.helloViewpager.adapter = VPAdapter
-        binding.dotsIndicator.attachTo(binding.helloViewpager)*/
-
-    }
-    // 버튼 클릭 이벤트
-    fun clickEvent(){
-
-        binding.homepageCompleteBtn.setOnClickListener {
-            val list = taskDatas.filter { it.status == "complete" }
-            binding.homepageTodayTask.setContent {
-                todayTaskRV(datas = list)
-            }
-        }
-        binding.homepageFailBtn.setOnClickListener {
-            val list = taskDatas.filter { it.status == "fail" }
-            binding.homepageTodayTask.setContent {
-                todayTaskRV(datas = list)
-            }
-        }
-        binding.homepageExpectedBtn.setOnClickListener {
-            val list = taskDatas.filter{ it.status == "expected"}
-            binding.homepageTodayTask.setContent {
-                todayTaskRV(datas = list)
-            }
-        }
-        binding.taskDeleteBtn.setOnClickListener {
-            var deletedList = mutableStateListOf<Int>()
-            binding.taskDeleteBtn.visibility = INVISIBLE
-            binding.taskDeleteCompleteBtn.visibility = VISIBLE
-            binding.homepageTodayTask.setContent {
-                deleteTask(datas = taskDatas, checkedTask = deletedList)
-            }
-            binding.taskDeleteCompleteBtn.setOnClickListener {
-
-
-                val popupBinding = LayoutCheckpopupBinding.inflate(LayoutInflater.from(context))
-                // popup View로 재확인
-                val dialog = Dialog(requireContext())
-                dialog.setContentView(popupBinding.root)
-                dialog.show()
-
-
-
-                var name = ""
-                lifecycleScope.launch {
-                    deletedList.forEach { id ->
-                        name += "'${taskDB.taskDao().getTitleFromId(id)}', "
-                    }
-                    popupBinding.taskName.text = name
-                    popupBinding.deleteYes.setOnClickListener {
-                        lifecycleScope.launch {
-                            deletedList.forEach { id ->
-                                taskDB.taskDao().deleteTaskById(id)
-                            }
-                            taskDatas = taskDB.taskDao().getTask() as ArrayList<Task>
-                            deletedList.clear()
-
-                            withContext(Dispatchers.Main) {
-                                binding.homepageTodayTask.setContent {
-                                    todayTaskRV(datas = taskDatas)
-                                }
-                                dialog.dismiss()
-                            }
-                        }
-
-                    }
-                    popupBinding.deleteNo.setOnClickListener {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            binding.homepageTodayTask.setContent {
-                                todayTaskRV(datas = taskDatas)
-                            }
-                            dialog.dismiss()
-                        }
-                    }
-
-                }
-                binding.taskDeleteBtn.visibility = VISIBLE
-                binding.taskDeleteCompleteBtn.visibility = INVISIBLE
-            }
-
-        }
-    }
-    // composeView 연결
-    fun connectComposeView(){
-        binding.composeProcessBox.setContent {
-            // 진행률 변수 임의 설정
-            val progress = 80
-            HomepageProcessBox(progress = progress)
-        }
-        binding.homepageNextSchedule.setContent {
-            //val recentTask = dummyList.filter { it.date }
-            HomepageNextBox()
-        }
-        binding.homepageTodayTask.setContent {
-
-
-            todayTaskRV(datas = taskDatas)
-        }
-    }
-    // 데이터 바인딩 연결
-    fun dataBind(){
-        binding.username = "김가영"
-        binding.taskCount = 5
-    }
 }
+
+
