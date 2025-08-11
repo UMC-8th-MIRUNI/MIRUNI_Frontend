@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MIRUNI</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title">MIRUNI</string>
 
     <!-- layout checkpopup-->
     <string name="delete_check">일정을 삭제하시겠어요?</string>
@@ -54,28 +54,77 @@
     <string name="oneH">1시간</string>
     <string name="cycle">주기</string>
 
+    <!-- 달력 날짜 -->
+    <string-array name="monthArr">
+        <item>1월</item>
+        <item>2월</item>
+        <item>3월</item>
+        <item>4월</item>
+        <item>5월</item>
+        <item>6월</item>
+        <item>7월</item>
+        <item>8월</item>
+        <item>9월</item>
+        <item>10월</item>
+        <item>11월</item>
+        <item>12월</item>
+    </string-array>
+
     <!-- 쪼개기 가이드 -->
     <string name="split_guide_type_title">1. 일정 유형 선택</string>
     <string name="split_guide_show_detail"><u>(상세 설명 보기)</u></string>
     <string name="split_guide_type_content">: 7가지 작업 유형 중, 내 일정과 가장 가까운 항목을 선택하세요.</string>
-
+    <string name="split_guide_volume_title">2. 일정 범위</string>
     <string name="split_guide_volume_content">
          : 이번 일정에서 해야 할 일의 전체 범위를 구체적으로 작성하세요.
         \n 세부적일수록 AI가 더 정확하게 쪼개드려요!
         \n (예: "보고서 작성" → "마케팅 보고서 초안 작성부터 수정·제출까지")
     </string>
-
+    <string name="split_guide_request_title">3. 세부 요청 사항</string>
     <string name="split_guide_request_content">
          : AI가 일정을 나눌 때 참고할 특별한 요청을 적어주세요.
         \n (예: 30분 단위로 나누기, 중요한 작업을 먼저 배치하기, 휴식 포함하기)
     </string>
+    <string name="split_detail_guide_item1_title">1. 몰입형/사고 중심 작업</string>
+    <string name="split_detail_guide_item1">
+        : 인지를 하며 생각의 단계를 요하는 작업
+        \n • 예: 리서치, 발표 준비, 기획안 작성, 보고서(논문) 작성, 코딩</string>
+    <string name="split_detail_guide_item2_title">2. 창작/표현 작업</string>
+    <string name="split_detail_guide_item2">
+        무언가를 만들어내는 창작 기반 작업
+        \n • 예시: 글쓰기, 콘텐츠 제작, 디자인, 영상 편집, 포트폴리오 작업</string>
+    <string name="split_detail_guide_item3_title">3. 학습/정보 정리 작업</string>
+    <string name="split_detail_guide_item3">
+        지식을 습득하거나 정리하는 목적의 작업
+        \n • 예시: 강의 듣기, 독서, 요약 정리, 복습, 문서 정리</string>
+    <string name="split_detail_guide_item4_title">4. 실무/행정 처리 작업</string>
+    <string name="split_detail_guide_item4">
+        <![CDATA[준비 > 실행 > 완료의 명확한 흐름이 있는 실제 처리성 업무
+         \n • 예시: 공과금 납부, 이사 준비, 병원 예약, 서류 제출]]></string>
+    <string name="split_detail_guide_item5_title">5. 반복/루틴형 작업</string>
+    <string name="split_detail_guide_item5">
+        구조가 단순하거나 매일 반복되는 작업
+        \n • 예시: 운동, 설거지, 영어 단어 암기, 명상, 스트레칭</string>
+    <string name="split_detail_guide_item6_title">6. 협업/의사소통 작업</string>
+    <string name="split_detail_guide_item6">
+        누군가와 함께 일하거나 소통하며 논의하는 작업
+        \n • 예시: 미팅 준비, 회의록 정리 등</string>
+    <string name="split_detail_guide_item7_title">7. 준비/계획형 작업</string>
+    <string name="split_detail_guide_item7">
+        무언가 목표를 위해 미리 계획하거나 준비하는 작업
+        \n • 예시: 여행 준비, 장보기 리스트 작성 등</string>
 
-
+    <!-- 일정 쪼개기 -->
+    <string name="schedule_split_loading_guide">
+        AI 자동 업무 쪼개기 기능을 활용하여
+        \n 부담감을 느끼지 않을 만큼 일을
+        \n 쪼개줄게요!</string>
+    <string name="schedule_split_complete_guide">
+        미루니가 쪼갠 일정 스케줄을
+        \n 확인해보세요!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="title">MIRUNI</string>
 
     <string name="edit">수정하기</string>
     <string name="start">시작하기</string>
@@ -92,36 +141,6 @@
     <string name="yes_eng">Yes</string>
     <string name="back_eng">Back</string>
     <string name="next_eng">Next</string>
-
-    <string-array name="monthArr">
-        <item>1월</item>
-        <item>2월</item>
-        <item>3월</item>
-        <item>4월</item>
-        <item>5월</item>
-        <item>6월</item>
-        <item>7월</item>
-        <item>8월</item>
-        <item>9월</item>
-        <item>10월</item>
-        <item>11월</item>
-        <item>12월</item>
-    </string-array>
-
-    <string name="commit_todo">할 일 등록하기</string>
-    <string name="commit_title">Title</string>
-    <string name="commit_title_hint">1st Meeting with Andrew (Bookplus+)</string>
-    <string name="commit_date">Date</string>
-    <string name="commit_date_guide">2025.04.29 11:00 a.m.</string>
-    <string name="commit_instruction">instruction</string>
-    <string name="commit_commit">등록</string>
-    <string name="commit_split">쪼개기</string>
-
-    <string name="loading_guide1">업무를 쪼개는 중이에요..</string>
-    <string name="loading_guide2">
-        AI 자동 업무 쪼개기 기능을 활용하여
-        \n부담감을 느끼지 않을 만큼 일을
-        \n쪼개줄게요!</string>
 
     <string name="complete_plus">+</string>
     <string name="complete_get_point">3개의 포인트를 얻었어!</string>
@@ -153,20 +172,5 @@
     <string name="my_review">나의 회고</string>
     <string name="review_title_guide">회고 #</string>
     <string name="review_description_guide">Here is my description in my memories #</string>
-    <string name="split_guide_volume_title">2. 일정 범위</string>
-    <string name="split_guide_request_title">3. 세부 요청 사항</string>
-    <string name="split_detail_guide_item1">: 인지를 하며 생각의 단계를 요하는 작업 • 예: 리서치, 발표 준비, 기획안 작성, 보고서(논문) 작성, 코딩</string>
-    <string name="split_detail_guide_item1_title">1. 몰입형/사고 중심 작업</string>
-    <string name="split_detail_guide_item2_title">2. 창작/표현 작업</string>
-    <string name="split_detail_guide_item2">무언가를 만들어내는 창작 기반 작업 • 예시: 글쓰기, 콘텐츠 제작, 디자인, 영상 편집, 포트폴리오 작업</string>
-    <string name="split_detail_guide_item3_title">3. 학습/정보 정리 작업</string>
-    <string name="split_detail_guide_item3">지식을 습득하거나 정리하는 목적의 작업 • 예시: 강의 듣기, 독서, 요약 정리, 복습, 문서 정리</string>
-    <string name="split_detail_guide_item4_title">4. 실무/행정 처리 작업</string>
-    <string name="split_detail_guide_item4"><![CDATA[준비 > 실행 > 완료의 명확한 흐름이 있는 실제 처리성 업무 • 예시: 공과금 납부, 이사 준비, 병원 예약, 서류 제출]]></string>
-    <string name="split_detail_guide_item5_title">5. 반복/루틴형 작업</string>
-    <string name="split_detail_guide_item5">구조가 단순하거나 매일 반복되는 작업 • 예시: 운동, 설거지, 영어 단어 암기, 명상, 스트레칭</string>
-    <string name="split_detail_guide_item6_title">6. 협업/의사소통 작업</string>
-    <string name="split_detail_guide_item6">누군가와 함께 일하거나 소통하며 논의하는 작업 • 예시: 미팅 준비, 회의록 정리 등</string>
-    <string name="split_detail_guide_item7_title">7. 준비/계획형 작업</string>
-    <string name="split_detail_guide_item7">지무언가 목표를 위해 미리 계획하거나 준비하는 작업 • 예시: 여행 준비, 장보기 리스트 작성 등</string>
+
 </resources>
