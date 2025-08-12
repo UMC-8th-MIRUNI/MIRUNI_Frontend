@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="411dp"
         android:layout_height="108dp"
         android:layout_gravity="center_horizontal"
@@ -71,11 +73,11 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView12"
+        app:layout_constraintTop_toBottomOf="@+id/back3_btn"
         app:srcCompat="@drawable/pwdfindchecktitle" />
 
     <ImageView
-        android:id="@+id/imageView12"
+        android:id="@+id/back3_btn"
         android:layout_width="62dp"
         android:layout_height="68dp"
         android:layout_marginStart="16dp"
@@ -91,19 +93,18 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="helloworld@gmail.com으로 코드를 보냈어요"
-        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <ImageView
-        android:id="@+id/imageView13"
+        android:id="@+id/send2_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="432dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:srcCompat="@drawable/pwdfindcheckbtn" />
 
     <TextView
@@ -116,7 +117,7 @@
         android:textColor="@color/black"
         android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/imageView13" />
+        app:layout_constraintTop_toBottomOf="@+id/send2_btn" />
 
     <TextView
         android:id="@+id/textView10"
@@ -124,12 +125,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
         android:layout_marginTop="44dp"
-        android:text="코드로 다시 보내기"
+        android:text="코드 다시 보내기"
         android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView13" />
+        app:layout_constraintTop_toBottomOf="@+id/send2_btn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

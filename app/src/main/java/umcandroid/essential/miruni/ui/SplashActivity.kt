@@ -21,7 +21,11 @@ class SplashActivity : AppCompatActivity() {
         val handler = Handler(Looper.getMainLooper())
 
         handler.postDelayed({
-            startActivity(Intent(this, LoginActivity::class.java))
+            val intent = Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // 앱 켤 때만 스플래시 나오도록
+            }
+            startActivity(intent)
+            finish()  // 스플래시 액티비티 종료
         }, 1500)
 
     }

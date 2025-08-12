@@ -14,4 +14,9 @@ interface AuthService {
     suspend fun login(
         @Body request: LoginRequest
     ): Response<LoginResponse>
+
+    @POST("/api/auth/kakao")
+    suspend fun loginWithKakao(
+        @Body request: KakaoLoginRequest
+    ): Response<KakaoLoginResponse>
 }
