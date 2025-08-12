@@ -21,5 +21,9 @@ interface AuthService {
     @GET("api/homePage")
     suspend fun getHomepage(@Header("Authorization") token: String) : HomepageResponse
 
+    @POST("/api/auth/kakao")
+    suspend fun loginWithKakao(
+        @Body request: KakaoLoginRequest
+    ): Response<KakaoLoginResponse>
 
 }

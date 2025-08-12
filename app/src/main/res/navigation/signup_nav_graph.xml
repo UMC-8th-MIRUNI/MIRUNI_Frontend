@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph"
+    android:id="@+id/signup_nav_graph"
     app:startDestination="@id/signupFragment1">
 
     <fragment
@@ -55,4 +55,7 @@
     <fragment
         android:id="@+id/opening2Fragment"
         android:name="com.example.miruni.Opening2Fragment" />
+
+
+
 </navigation>
