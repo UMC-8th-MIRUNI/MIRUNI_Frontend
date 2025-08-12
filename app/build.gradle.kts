@@ -82,4 +82,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //kakao
+    implementation("com.kakao.sdk:v2-user:2.13.0")
+
+    implementation ("com.google.android.gms:play-services-auth:20.7.0")
 }

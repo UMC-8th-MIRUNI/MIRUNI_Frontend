@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/signup_nav_host"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        app:navGraph="@navigation/nav_graph"
+        app:navGraph="@navigation/signup_nav_graph"
         app:defaultNavHost="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
