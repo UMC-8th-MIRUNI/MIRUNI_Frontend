@@ -44,6 +44,9 @@ class ProcessingActivity : AppCompatActivity() {
             "MemoirListFragment" -> {
                 transitionFragment(MemoirListFragment())
             }
+            "AlarmFragment" -> {
+                transitionFragment(AlarmFragment())
+            }
         }
     }
 
