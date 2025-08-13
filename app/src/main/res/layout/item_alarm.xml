@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="85dp"
+    android:paddingBottom="15dp"
+    android:background="@drawable/bg_f3f4f6_stroke_top_bottom">
+
+    <ImageView
+        android:id="@+id/alarmIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/alarm_vertical_start"
+        app:layout_constraintTop_toTopOf="@+id/alarm_horizon_start"
+        app:srcCompat="@drawable/popup_icon" />
+
+    <TextView
+        android:id="@+id/alarmTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="TextView"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline32"
+        app:layout_constraintStart_toEndOf="@+id/alarmIcon"
+        app:layout_constraintTop_toTopOf="@+id/alarm_horizon_start" />
+
+    <TextView
+        android:id="@+id/alamrContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="TextView"
+        android:textColor="#4B5563"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/alarm_horizon_end"
+        app:layout_constraintEnd_toStartOf="@+id/guideline32"
+        app:layout_constraintStart_toEndOf="@+id/alarmIcon"
+        app:layout_constraintTop_toBottomOf="@+id/alarmTitle" />
+
+    <TextView
+        android:id="@+id/alarmTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:text="TextView"
+        android:textColor="#6B7280"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/alarmTitle"
+        app:layout_constraintEnd_toStartOf="@+id/alarm_vertical_end" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/alarm_horizon_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/alarm_horizon_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.99" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/alarm_vertical_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.03" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/alarm_vertical_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.97" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
