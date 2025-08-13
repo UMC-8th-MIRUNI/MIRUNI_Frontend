@@ -7,16 +7,11 @@ import com.example.miruni.api.ReviewDate
 import com.example.miruni.data.Review
 import com.example.miruni.databinding.ItemMemoitListBinding
 
-class MemoirListRVAdapter(private val item: List<ReviewDate>): RecyclerView.Adapter<MemoirListRVAdapter.ViewHolder>() {
+class MemoirListRVAdapter(
+    private val item: List<ReviewDate>,
+    private val itemClick: (String) -> Unit
+): RecyclerView.Adapter<MemoirListRVAdapter.ViewHolder>() {
 
-    interface OnMemoirItemClick{
-        fun onItemClick(review: String)
-    }
-    private lateinit var itemClick: OnMemoirItemClick
-
-    fun setOnItemClick(itemClickListener: OnMemoirItemClick){
-        itemClick = itemClickListener
-    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -28,7 +23,9 @@ class MemoirListRVAdapter(private val item: List<ReviewDate>): RecyclerView.Adap
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.memoirDate.text = item[position].date
         holder.binding.memoirCount.text = item[position].count.toString()
-        holder.binding.dateList.setOnClickListener { itemClick.onItemClick(item[position].date) }
+
+        /* 선택한 아이템 날짜 콜 백 */
+        holder.binding.dateList.setOnClickListener { itemClick(item[position].date) }
     }
 
     override fun getItemCount() = item.size

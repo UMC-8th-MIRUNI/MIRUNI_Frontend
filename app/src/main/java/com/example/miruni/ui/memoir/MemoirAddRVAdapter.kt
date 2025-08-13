@@ -30,9 +30,9 @@ class MemoirAddRVAdapter(
         holder.binding.memoirMenuBtn.setOnClickListener {
             showMenu(it)
         }
-        // 클릭하면 MemoirCompleteFragment로 넘어감
+        /* 클릭한 아이템 id 콜 백 */
         holder.binding.memoirItem.setOnClickListener {
-            onItemClick(items.get(position).id)
+            onItemClick(items.get(position).reviewId)
         }
     }
     inner class ViewHolder(val binding: ItemMemoirBinding) : RecyclerView.ViewHolder(binding.root)
@@ -44,9 +44,6 @@ class MemoirAddRVAdapter(
         menu.setOnMenuItemClickListener { item ->
             when(item.itemId){
                 R.id.add_modify -> {
-                    true
-                }
-                R.id.add_delete -> {
                     true
                 }
                 else -> false

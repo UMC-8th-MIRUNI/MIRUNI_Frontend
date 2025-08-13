@@ -67,7 +67,7 @@ data class MemoirDateListResponse(
     val result: List<ReviewByDate>
 )
 data class ReviewByDate(
-    val id: Int,
+    val reviewId: Int,
     val title: String,
     val description: String,
     val createdAt: String

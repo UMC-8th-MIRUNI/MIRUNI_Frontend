@@ -6,7 +6,7 @@ import com.example.miruni.RetrofitInstance
 import com.example.miruni.TokenManager
 import com.example.miruni.api.HomepageResponse
 
-const val t = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiZXhwIjoxNzU0ODE0OTc0LCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNzU0ODExMzc0fQ.fXrlQk2FzoTCtebm1PFNBRvqXVTZQT5M3rB-uprxSUc"
+const val t = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiZXhwIjoxNzU1MDgzMjY2LCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNzU1MDc5NjY2fQ.kvDPEYZ1XvGD5c5aMNr9_TEs27g6pw01qSmBEq6sbdY"
 
 class HomepageService(private val context: Context) {
     suspend fun getHomepageData(): HomepageResponse?{

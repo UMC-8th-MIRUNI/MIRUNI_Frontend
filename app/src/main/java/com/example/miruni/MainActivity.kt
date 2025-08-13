@@ -26,6 +26,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.miruni.data.Alarm
+import com.example.miruni.data.AlarmType
 import com.example.miruni.data.Schedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
@@ -33,7 +36,10 @@ import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.ui.calendar.CalendarFragment
 import com.example.miruni.ui.homepage.HomepageFragment
 import com.example.miruni.ui.memoir.MemoirListFragment
+import com.example.miruni.ui.memoir.StorageFragment
 import com.example.miruni.util.AlarmHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
@@ -55,6 +61,9 @@ class MainActivity : AppCompatActivity() {
     // 데이터 관리
     private lateinit var scheduleDB : ScheduleDatabase
     private var tasksList = arrayListOf<Task>()
+    // 알람 데이터 저장
+    private lateinit var alarm: List<Alarm>
+
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +87,51 @@ class MainActivity : AppCompatActivity() {
         }
         /** 랜덤 팝업 */
         randomDailyPopup(this)
+
+        /** AlarmFragment 이동 **/
+        binding.mainIncludeMain.mainTopBarAlarmIv.setOnClickListener {
+            val intent = Intent(this, ProcessingActivity::class.java)
+            intent.putExtra("showFragment", "AlarmFragment")
+            startActivity(intent)
+        }
+
+        /* 알람 테스트 데이터*/
+        lifecycleScope.launch(Dispatchers.IO) {
+            if(scheduleDB.alarmDao().getAllAlarm().isEmpty()){
+                scheduleDB.alarmDao().insertAlarm(
+                    Alarm(
+                        title = "배너 테스트 타이틀",
+                        content = "알람 테스트 내용",
+                        time = "${System.currentTimeMillis()}",
+                        alarmType = AlarmType.BANNER
+                    )
+                )
+                scheduleDB.alarmDao().insertAlarm(
+                    Alarm(
+                        title = "팝업 테스트 타이틀",
+                        content = "팝업 테스트 내용",
+                        time = "${System.currentTimeMillis()}",
+                        alarmType = AlarmType.POPUP
+                    )
+                )
+                scheduleDB.alarmDao().insertAlarm(
+                    Alarm(
+                        title = "배너 테스트 타이틀2",
+                        content = "알람 테스트 내용2",
+                        time = "${System.currentTimeMillis()}",
+                        alarmType = AlarmType.BANNER
+                    )
+                )
+                scheduleDB.alarmDao().insertAlarm(
+                    Alarm(
+                        title = "팝업 테스트 타이틀2",
+                        content = "팝업 테스트 내용2",
+                        time = "${System.currentTimeMillis()}",
+                        alarmType = AlarmType.POPUP
+                    )
+                )
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -561,7 +615,7 @@ class MainActivity : AppCompatActivity() {
             }
             "locker" -> {
                 //transitionFragment(LockerFragment())
-                transitionFragment(MemoirListFragment())
+                transitionFragment(StorageFragment())
             }
             "mypage" -> {
 //                supportFragmentManager.beginTransaction()
