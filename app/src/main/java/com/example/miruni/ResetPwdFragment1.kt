@@ -19,7 +19,7 @@ class ResetPwdFragment1 : Fragment() {
     ): View? {
         val binding = FragmentResetpwd1Binding.inflate(inflater, container, false)
 
-        binding.nextBtn.setOnClickListener {
+        binding.ivLoginButton.setOnClickListener {
             findNavController().navigate(R.id.action_resetPwdFragment1_to_resetPwdFragment2)
         }
         return binding.root

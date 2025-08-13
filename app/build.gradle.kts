@@ -65,6 +65,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
+    // piechart
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     // roomDB설정
     implementation("androidx.room:room-runtime:2.7.2")
     kapt("androidx.room:room-compiler:2.7.2")
