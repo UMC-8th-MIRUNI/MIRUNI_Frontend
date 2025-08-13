@@ -10,4 +10,8 @@
 
     <color name="primary_night">#71FF6C</color>
     <color name="text_night">#FFFFFF</color>
+
+    <color name="backgroundColor">#D9D9D9</color>
+
+    <color name="memior_background">#FBFBFB</color>
 </resources>

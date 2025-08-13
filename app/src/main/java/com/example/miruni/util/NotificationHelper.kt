@@ -5,8 +5,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.example.miruni.data.Alarm
+import com.example.miruni.data.AlarmType
+import com.example.miruni.data.ScheduleDatabase
 
 object NotificationHelper {
     fun notificationForPopup(service: Service, channelId: String): Notification {
@@ -26,6 +30,10 @@ object NotificationHelper {
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .build()
+
+        val popupInfoIntent = Intent(service, AlarmReceiver::class.java)
+        popupInfoIntent.putExtra("title", "팝업제목입니다")
+        popupInfoIntent.putExtra("content", "팝업내용입니다")
 
         return notification
     }

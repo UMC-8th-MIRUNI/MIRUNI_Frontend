@@ -5,12 +5,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.miruni.data.Alarm
+import com.example.miruni.data.AlarmType
+import com.example.miruni.data.ScheduleDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class AlarmReceiver : BroadcastReceiver() {
+class   AlarmReceiver : BroadcastReceiver() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onReceive(context: Context, intent: Intent) {
-
+        val db = ScheduleDatabase.getInstance(context)!!
         val type = intent.getStringExtra("type") ?: return
 
         when (AlarmHelper.AlarmType.valueOf(type)) {
@@ -19,6 +25,22 @@ class AlarmReceiver : BroadcastReceiver() {
                     val serviceIntent = Intent(context, PopupService::class.java)
                     context.startForegroundService(serviceIntent)
                 }
+                /* NotificationHelper - fun notificationForPopup()에서 받아옴 */
+                val title = intent?.getStringExtra("title") ?: "팝업 타이틀 없다"
+                val content = intent?.getStringExtra("content") ?: "팝업 내용 없다"
+
+                /* 알람 데이터 삽입 */
+                GlobalScope.launch(Dispatchers.IO) {
+                    db.alarmDao().insertAlarm(
+                        Alarm(
+                            title=title,
+                            content = content,
+                            time = "${System.currentTimeMillis()}",
+                            alarmType = AlarmType.POPUP
+                        )
+                    )
+                }
+
             }
             AlarmHelper.AlarmType.BANNER_1H, AlarmHelper.AlarmType.BANNER_10M -> { // 배너 알람의 경우
                 if (!isAppInForeground(context)) {
@@ -29,6 +51,19 @@ class AlarmReceiver : BroadcastReceiver() {
                         AlarmHelper.AlarmType.BANNER_10M -> String.format("10분 뒤에 <${title}>가 예정되어 있어!")
                         else -> ""
                     }
+
+                    /* 알람 데이터 삽입 */
+                    GlobalScope.launch(Dispatchers.IO){
+                        db.alarmDao().insertAlarm(
+                            Alarm(
+                                title = title,
+                                content = content,
+                                time = "${System.currentTimeMillis()}",
+                                alarmType = AlarmType.BANNER
+                            )
+                        )
+                    }
+
                     NotificationHelper.showBannerNotification(context, title, content)
                 }
             }
