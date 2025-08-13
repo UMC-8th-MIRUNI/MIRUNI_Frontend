@@ -32,17 +32,9 @@ class AlarmFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("AlarmFragment Data Check", "알람 프레그먼트 호출 됐다~")
-
         db = ScheduleDatabase.getInstance(requireContext())!!
         lifecycleScope.launch(Dispatchers.IO) {
             alarmDatas = db.alarmDao().getAllAlarm()
-
-            if(alarmDatas.isEmpty()){
-                Log.d("AlarmFragment Data Check", "저장된 알람 데이터 없음")
-            }else{
-                alarmDatas.forEach { Log.d("AlarmFragment Data Check", "$it") }
-            }
 
             val adapter = AlarmRVAdapter(alarmDatas)
             binding.alarmRV.adapter = adapter
