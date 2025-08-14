@@ -1,11 +1,15 @@
 package com.example.miruni.ui.calendar
 
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,21 +23,32 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import com.example.miruni.MainActivity
 import com.example.miruni.R
+import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentScheduleExecutionBinding
 import com.example.miruni.databinding.LayoutPopupScheduleDelayBinding
 import com.example.miruni.databinding.LayoutScheduleDelayAmpmBinding
 import com.example.miruni.databinding.LayoutScheduleDelayCalendarBinding
 import com.example.miruni.ui.homepage.HomepageFragment
+import com.example.miruni.util.FocusService
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import java.util.Calendar
+import kotlin.concurrent.fixedRateTimer
+import kotlin.concurrent.timer
 
 class ScheduleExecutionFragment : Fragment() {
 
     private lateinit var binding: FragmentScheduleExecutionBinding
     private lateinit var screenState: String
+    // 타이머
+    private lateinit var countDownTimer: CountDownTimer
+    private var timerRunning = true // 타이머 동작 여부
+    private var isRunFirst = true // 처음 실행 여부
+    private lateinit var executedTask: Task // 수행할 Task
+    var tempTime = 0L // 타이머 일시 정지 시간
 
     private val hoursOnDropdown = (1..12).toList()
     private val minutesOnDropdown = (1..59).toList()
@@ -67,16 +82,28 @@ class ScheduleExecutionFragment : Fragment() {
      * 일정 진행중 화면
      */
     private fun initExecution() {
+        val spf = requireContext().getSharedPreferences("executedTask", MODE_PRIVATE)
+        val taskId = spf.getInt("taskId", -1)
+
+        val scheduleDB = ScheduleDatabase.getInstance(requireContext())
+        executedTask = scheduleDB!!.taskDao().getTask(taskId)
+
+        startTimer()
+
         binding.scheduleExecutionInclude.apply {
             /** 중지 버튼 */
             scheduleExecutionStopTv.setOnClickListener {
+                Log.d("FLOW/initExecution", "scheduleExecutionStopTv")
                 screenState = "stop"
+                timerStartStop()
                 changeLayout(binding.scheduleExecutionInclude.root, binding.scheduleStopCompleteInclude.root)
                 initExecutionStopnComplete(screenState)
             }
             /** 완료 버튼 */
             scheduleExecutionCompleteTv.setOnClickListener {
+                Log.d("FLOW/initExecution", "scheduleExecutionStopTv")
                 screenState = "complete"
+                timerStartStop()
                 changeLayout(binding.scheduleExecutionInclude.root, binding.scheduleStopCompleteInclude.root)
                 initExecutionStopnComplete(screenState)
             }
@@ -95,6 +122,7 @@ class ScheduleExecutionFragment : Fragment() {
                 /** 취소 버튼 */
                 scheduleExecutionScCancelTv.setOnClickListener {
                     changeLayout(binding.scheduleStopCompleteInclude.root, binding.scheduleExecutionInclude.root)
+                    timerStartStop()
                 }
                 /** 확인 버튼 */
                 scheduleExecutionScCheckTv.setOnClickListener {
@@ -106,12 +134,23 @@ class ScheduleExecutionFragment : Fragment() {
                 /** 취소 버튼 */
                 scheduleExecutionScCancelTv.setOnClickListener {
                     changeLayout(binding.scheduleStopCompleteInclude.root, binding.scheduleExecutionInclude.root)
+                    timerStartStop()
                 }
                 /** 확인 버튼 */
                 scheduleExecutionScCheckTv.setOnClickListener {
                     /** 일정 진행 완료로 이동 -> 서버 송신 있는지 확인 **/
 
                     changeLayout(binding.scheduleStopCompleteInclude.root, binding.scheduleExecutionFinishInclude.root)
+
+                    var hour: Int = 0
+                    var min: Int = 0
+                    timeCalculate(
+                        resultHour = {h -> hour = h},
+                        resultMinute = {m -> min = m}
+                    )
+
+                    binding.scheduleExecutionFinishInclude.scheduleExecutionFinishTimeTv.text = String.format("${hour}:${min}")
+
                 }
             }
         }
@@ -122,6 +161,7 @@ class ScheduleExecutionFragment : Fragment() {
      */
     private fun initExecutionFinish() {
         binding.scheduleExecutionFinishInclude.apply {
+
             scheduleExecutionFinishCheckTv.setOnClickListener {
                 (context as MainActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, HomepageFragment())
@@ -382,17 +422,100 @@ class ScheduleExecutionFragment : Fragment() {
         ampmDropdown.showAsDropDown(anchor)
     }
 
-    private fun timer(time: Long) {
-        object : CountDownTimer(time, 60*1000L) {
-            override fun onTick(millisUntilFinished: Long) {
-                val hour = millisUntilFinished / (60*60*1000L)
-                val minute = (millisUntilFinished / (60*1000L)) % 60
-            }
-
-            override fun onFinish() {
-                TODO("Not yet implemented")
-            }
-
+    // 타이머 관리
+    private fun timerStartStop() {
+        if (timerRunning) {
+            // 타이머 작동 중
+            stopTimer()
+        } else {
+            // 타이머 미작동 중
+            startTimer()
         }
     }
+
+    /**
+     * 타이머 정지
+     */
+    private fun stopTimer() {
+        countDownTimer.cancel() // 정지
+        timerRunning = false // 상태 변경
+    }
+
+    /**
+     * 타이머 실행
+     */
+    private fun startTimer() {
+        if (isRunFirst) {
+            val startHourMinuteList = executedTask.startTime.split(":")
+            val endHourMinuteList = executedTask.endTime.split(":")
+
+            val setHour = endHourMinuteList[0].toLong() - startHourMinuteList[0].toLong()
+            val setMinute = endHourMinuteList[1].toLong() - startHourMinuteList[1].toLong()
+
+            tempTime = (setHour * 3600000) + (setMinute * 60000) + 1000
+        }
+
+        countDownTimer = object : CountDownTimer(tempTime, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                tempTime = millisUntilFinished
+                updateTimer()
+            }
+            override fun onFinish() {}
+        }.start()
+
+        timerRunning = true
+        isRunFirst = false
+    }
+
+    /**
+     * 타이머 텍스트 업데이트
+     */
+    private fun updateTimer() {
+        val hour = tempTime / 3600000
+        val min = tempTime % 3600000 / 60000
+
+//        val setEndTime = executedTask.endTime.split(":")
+//        val setStartTime = executedTask.startTime.split(":")
+//        Log.d("Timer/updateTimer", "setEndTime:${setEndTime}, setStartTime:${setStartTime}")
+//        Log.d("Timer/updateTimer", "exeEndTime:${tempTime / 3600000} exeStartTime:${tempTime % 3600000 / 60000}")
+//
+//        val hour = (setEndTime[0].toInt() - setStartTime[0].toInt()) - (tempTime / 3600000)
+//        val min = (setEndTime[1].toInt() - setStartTime[1].toInt()) - (tempTime % 3600000 / 60000)
+
+        binding.scheduleExecutionInclude.scheduleExecutionTimeTv.text = String.format("${hour}:${min}")
+    }
+
+    private fun timeCalculate(
+        resultHour: (Int) -> Unit,
+        resultMinute: (Int) -> Unit) {
+
+        val setEndTimeList = executedTask.endTime.split(":")
+        val setStartTimeList = executedTask.startTime.split(":")
+
+        var setHour = setEndTimeList[0].toInt() - setStartTimeList[0].toInt()
+        var setMinute = setEndTimeList[1].toInt() - setStartTimeList[1].toInt()
+
+        var calHour: Long = 0
+        var calMinute: Long = 0
+
+        if (setMinute > 0) {
+            calHour = setHour - (tempTime / 3600000)
+            calMinute = setMinute - (tempTime % 3600000 / 60000)
+        } else {
+            if (setHour > 0) {
+                setHour -= 1
+                setMinute = 60
+
+                calHour = setHour - (tempTime / 3600000)
+                calMinute = setMinute - (tempTime % 3600000 / 60000)
+            } else {
+                calHour = 0
+                calMinute = 0
+            }
+        }
+
+        resultHour(calHour.toInt())
+        resultMinute(calMinute.toInt())
+    }
+
 }
