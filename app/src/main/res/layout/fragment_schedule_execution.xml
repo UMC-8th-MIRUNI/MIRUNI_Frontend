@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.calendar.ScheduleExecutionFragment">
+
+    <!-- 일정 진행 중 화면 -->
+    <include
+        android:id="@+id/schedule_execution_include"
+        layout="@layout/layout_schedule_execution"
+        android:visibility="visible"/>
+
+    <!-- 일정 진행 중 중지/완료 클릭 시 -->
+    <include
+        android:id="@+id/schedule_stop_complete_include"
+        layout="@layout/layout_schedule_execution_stop_complete"
+        android:visibility="gone"/>
+
+    <!-- 진행 완료 화면 -->
+    <include
+        android:id="@+id/schedule_execution_finish_include"
+        layout="@layout/layout_schedule_execution_finish"
+        android:visibility="gone"/>
+</LinearLayout>

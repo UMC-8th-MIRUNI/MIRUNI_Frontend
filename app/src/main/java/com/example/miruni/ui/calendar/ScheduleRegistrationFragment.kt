@@ -15,11 +15,9 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewTreeObserver
 import android.view.animation.DecelerateInterpolator
-import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
@@ -29,12 +27,14 @@ import com.example.miruni.api.ApiService
 import com.example.miruni.api.RegistrationScheduleResponse
 import com.example.miruni.api.ScheduleToRegister
 import com.example.miruni.api.getRetrofit
-import com.example.miruni.databinding.FragmentRegistrationScheduleBinding
+import com.example.miruni.databinding.FragmentScheduleRegistrationBinding
 import com.example.miruni.databinding.LayoutDropdownPriorityBinding
 import com.example.miruni.databinding.LayoutDropdownScheduleTypeBinding
 import com.example.miruni.databinding.LayoutPopupSplitDetailGuideBinding
 import com.example.miruni.databinding.LayoutPopupSplitGuideBinding
 import com.example.miruni.databinding.LayoutScheduleRegistrationTopbarBinding
+import com.example.miruni.util.controlBottomNavigation
+import com.example.miruni.util.controlTopBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -42,8 +42,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.Calendar
 
-class RegistrationScheduleFragment : Fragment() {
-    private lateinit var binding: FragmentRegistrationScheduleBinding
+class ScheduleRegistrationFragment : Fragment() {
+    private lateinit var binding: FragmentScheduleRegistrationBinding
 
     private var selectedDate = ""
     private var isSelectedExctDate = 0
@@ -67,27 +67,16 @@ class RegistrationScheduleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentRegistrationScheduleBinding.inflate(layoutInflater, container, false)
+        binding = FragmentScheduleRegistrationBinding.inflate(layoutInflater, container, false)
 
-        hideNavigationBar()
+        controlBottomNavigation(context as MainActivity, false)
+        controlTopBar(context as MainActivity, false)
+
         initDate()
         initRegistrationClickListener()
         initSplitClickListener()
 
         return binding.root
-    }
-
-    /**
-     * 네비게이션바 숨기기
-     */
-    private fun hideNavigationBar() {
-        val activity = requireActivity() as MainActivity
-        val navigationBar = activity.findViewById<ConstraintLayout>(R.id.main_nav)
-        val homeBtn = activity.findViewById<ImageView>(R.id.nav_home_iv)
-
-        navigationBar.visibility = View.GONE
-        homeBtn.visibility = View.GONE
-        binding.scheduleRegistrationInclude.root.visibility = View.VISIBLE
     }
 
     private fun initDate() {
@@ -110,12 +99,19 @@ class RegistrationScheduleFragment : Fragment() {
                 (context as MainActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, CalendarFragment())
                     .commitAllowingStateLoss()
+
+                controlTopBar(context as MainActivity, true)
+                controlBottomNavigation(context as MainActivity, true)
             }
+
             /** x 버튼 */
             scheduleRegistrationTopbarCancelIv.setOnClickListener {
                 (context as MainActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, CalendarFragment())
                     .commitAllowingStateLoss()
+
+                controlTopBar(context as MainActivity, true)
+                controlBottomNavigation(context as MainActivity, true)
             }
         }
 
@@ -164,6 +160,9 @@ class RegistrationScheduleFragment : Fragment() {
                         (context as MainActivity).supportFragmentManager.beginTransaction()
                             .replace(R.id.main_frm, CalendarFragment())
                             .commitAllowingStateLoss()
+
+                        controlTopBar(context as MainActivity, true)
+                        controlBottomNavigation(context as MainActivity, true)
                     }
 
                     /**
@@ -204,6 +203,9 @@ class RegistrationScheduleFragment : Fragment() {
                 (context as MainActivity).supportFragmentManager.beginTransaction()
                     .replace(R.id.main_frm, CalendarFragment())
                     .commitAllowingStateLoss()
+
+                controlTopBar(context as MainActivity, true)
+                controlBottomNavigation(context as MainActivity, true)
             }
         }
         binding.scheduleSplitInclude.apply {

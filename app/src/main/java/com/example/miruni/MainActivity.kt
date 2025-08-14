@@ -3,7 +3,6 @@ package com.example.miruni
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-
 import android.app.Activity
 import android.app.AlarmManager
 import android.content.Context
@@ -13,15 +12,12 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-
 import android.util.Log
-
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
@@ -500,27 +496,27 @@ class MainActivity : AppCompatActivity() {
 
         // 랜딩 페이지: 홈
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, CalendarFragment())
+            .replace(R.id.main_frm, HomepageFragment())
             .commitAllowingStateLoss()
 
         // 네비게이션
-        binding.mainIncludeMain.navToolIv.setOnClickListener {
+        binding.mainIncludeMain.mainNavToolIv.setOnClickListener {
             trasitionScreen("tool")
             setIconColor()
         }
-        binding.mainIncludeMain.navCalendarIv.setOnClickListener {
+        binding.mainIncludeMain.mainNavCalendarIv.setOnClickListener {
             trasitionScreen("calendar")
             setIconColor()
         }
-        binding.mainIncludeMain.navHomeIv.setOnClickListener {
+        binding.mainIncludeMain.mainNavHomeIv.setOnClickListener {
             trasitionScreen("home")
             setIconColor()
         }
-        binding.mainIncludeMain.navLockerIv.setOnClickListener {
+        binding.mainIncludeMain.mainNavLockerIv.setOnClickListener {
             trasitionScreen("locker")
             setIconColor()
         }
-        binding.mainIncludeMain.navMypageIv.setOnClickListener {
+        binding.mainIncludeMain.mainNavMypageIv.setOnClickListener {
             trasitionScreen("mypage")
             setIconColor()
         }
@@ -587,31 +583,26 @@ class MainActivity : AppCompatActivity() {
         when (pageState) {
             "tool" -> {
                 binding.mainIncludeMain.apply {
-                    navToolIv.setColorFilter(resources.getColor(R.color.selectColor))
-                    navToolTv.setTextColor("#1AE019".toColorInt())
+                    mainNavToolIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    mainNavToolTv.setTextColor("#1AE019".toColorInt())
                 }
             }
             "calendar" -> {
                 binding.mainIncludeMain.apply {
-                    navCalendarIv.setColorFilter(resources.getColor(R.color.selectColor))
-                    navCalendarTv.setTextColor("#1AE019".toColorInt())
-                }
-            }
-            "home" -> {
-                binding.mainIncludeMain.apply {
-                    navHomeTv.setTextColor("#1AE019".toColorInt())
+                    mainNavCalendarIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    mainNavCalendarTv.setTextColor("#1AE019".toColorInt())
                 }
             }
             "locker" -> {
                 binding.mainIncludeMain.apply {
-                    navLockerIv.setColorFilter(resources.getColor(R.color.selectColor))
-                    navLockerTv.setTextColor("#1AE019".toColorInt())
+                    mainNavLockerIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    mainNavLockerTv.setTextColor("#1AE019".toColorInt())
                 }
             }
             "mypage" -> {
                 binding.mainIncludeMain.apply {
-                    navMypageIv.setColorFilter(resources.getColor(R.color.selectColor))
-                    navMypageTv.setTextColor("#1AE019".toColorInt())
+                    mainNavMypageIv.setColorFilter(resources.getColor(R.color.selectColor))
+                    mainNavMypageTv.setTextColor("#1AE019".toColorInt())
                 }
             }
         }
@@ -622,19 +613,17 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initIconColor() {
         binding.mainIncludeMain.apply {
-            navToolIv.setColorFilter(resources.getColor(R.color.unselectColor))
-            navToolTv.setTextColor("#484C52".toColorInt())
+            mainNavToolIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            mainNavToolTv.setTextColor("#484C52".toColorInt())
 
-            navCalendarIv.setColorFilter(resources.getColor(R.color.unselectColor))
-            navCalendarTv.setTextColor("#484C52".toColorInt())
+            mainNavCalendarIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            mainNavCalendarTv.setTextColor("#484C52".toColorInt())
 
-            navHomeTv.setTextColor("#484C52".toColorInt())
+            mainNavLockerIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            mainNavLockerTv.setTextColor("#484C52".toColorInt())
 
-            navLockerIv.setColorFilter(resources.getColor(R.color.unselectColor))
-            navLockerTv.setTextColor("#484C52".toColorInt())
-
-            navMypageIv.setColorFilter(resources.getColor(R.color.unselectColor))
-            navMypageTv.setTextColor("#484C52".toColorInt())
+            mainNavMypageIv.setColorFilter(resources.getColor(R.color.unselectColor))
+            mainNavMypageTv.setTextColor("#484C52".toColorInt())
         }
     }
 
