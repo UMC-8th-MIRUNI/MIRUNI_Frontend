@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.MemoirUpdateRequst
+import com.example.miruni.api.model.MemoirUpdateRequst
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Mood
 import com.example.miruni.data.ScheduleDatabase

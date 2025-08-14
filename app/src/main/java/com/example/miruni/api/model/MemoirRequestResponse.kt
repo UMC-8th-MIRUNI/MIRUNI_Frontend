@@ -1,7 +1,8 @@
-package com.example.miruni.api
+package com.example.miruni.api.model
 
 import com.example.miruni.data.Mood
 import com.example.miruni.data.Review
+
 
 /** 단일 회고 상세 조회 **/
 data class MemoirDetailResponse(

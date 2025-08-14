@@ -43,7 +43,7 @@ class LockFragment : Fragment() {
         fragment.arguments = bundle
 
         parentFragmentManager.beginTransaction()
-            .replace(R.id.process_frm, fragment)
+            .replace(R.id.main_frm, fragment)
             .addToBackStack(null)
             .commit()
     }

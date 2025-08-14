@@ -18,6 +18,7 @@
     <string name="report_open">오픈하기</string>
     <string name="before_report">저번달 리포트</string>
     <string name="before_report2">저번달 리포트 보기</string>
+    <string name="open_thismont_report">이번달 리포트</string>
 
     <!-- layout checkpopup-->
     <string name="delete_check">일정을 삭제하시겠어요?</string>
