@@ -1,21 +1,17 @@
 package com.example.miruni.ui.calendar
 
 import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.icu.text.DecimalFormat
 import android.os.Bundle
-import android.text.TextUtils.replace
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.databinding.FragmentCalendarBinding
@@ -30,6 +26,9 @@ import com.example.miruni.data.Task
 import com.example.miruni.util.DateToStringHelper
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import java.util.Calendar
+import androidx.core.content.edit
+import com.example.miruni.util.controlBottomNavigation
+import com.example.miruni.util.controlTopBar
 
 class CalendarFragment : Fragment() {
     /** 전역 변수 */
@@ -69,12 +68,15 @@ class CalendarFragment : Fragment() {
         (activity as? MainActivity)?.setTopBarColor(R.color.white)
 
         /** 바텀 네비게이션 설정 */
-        initBottomNavigation()
+        controlTopBar(context as MainActivity, true)
+        controlBottomNavigation(context as MainActivity, true)
 
         /** 데이터 관리 */
 //        loadTasks()
 
         /** 캘린더 관련 설정 */
+
+
         initCalendar()
         initTaskOnDateRVAdapter()
         initClickListener()
@@ -82,18 +84,6 @@ class CalendarFragment : Fragment() {
         loadDecorators()
 
         return binding.root
-    }
-
-    /**
-     * Bottom Navigation 초기화
-     */
-    private fun initBottomNavigation() {
-        val activity = requireActivity() as MainActivity
-        val navigationBar = activity.findViewById<ConstraintLayout>(R.id.main_nav)
-        val homeBtn = activity.findViewById<ImageView>(R.id.nav_home_iv)
-
-        navigationBar.visibility = View.VISIBLE
-        homeBtn.visibility = View.VISIBLE
     }
 
     /**
@@ -122,15 +112,6 @@ class CalendarFragment : Fragment() {
     }
 
     /**
-     * TaskOnDateRVAdapter 초기화
-     */
-    private fun initTaskOnDateRVAdapter() {
-        taskOnDateRVAdapter = TaskOnDateRVAdapter()
-        binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.adapter = taskOnDateRVAdapter
-    }
-
-    /**
      * 클릭 리스너
      */
     private fun initClickListener() {
@@ -145,7 +126,7 @@ class CalendarFragment : Fragment() {
                 editor.apply()
 
                 (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, RegistrationScheduleFragment())
+                    .replace(R.id.main_frm, ScheduleRegistrationFragment())
                     .commitAllowingStateLoss()
             }
             /** 날짜 선택 드롭다운 */
@@ -160,12 +141,9 @@ class CalendarFragment : Fragment() {
 
                 // 날짜 별 일정 소개 페이지로 이동
                 if (dateSelectState == "selected" && selectedDate == date) {
-                    val activity = requireActivity() as MainActivity
-                    val navigationBar = activity.findViewById<ConstraintLayout>(R.id.main_nav)
-                    val homeBtn = activity.findViewById<ImageView>(R.id.nav_home_iv)
+                    controlBottomNavigation(context as MainActivity, false)
+                    controlTopBar(context as MainActivity, false)
 
-                    navigationBar.visibility = View.GONE
-                    homeBtn.visibility = View.GONE
                     binding.calendarIncludeCalendarCalendar.root.visibility = View.GONE
                     binding.calendarIncludeTaskOnDate.root.visibility = View.VISIBLE
 
@@ -194,7 +172,9 @@ class CalendarFragment : Fragment() {
         binding.calendarIncludeTaskOnDate.apply {
             /** 뒤로 가기 */
             taskOnDateBackIv.setOnClickListener {
-                initBottomNavigation()
+                controlBottomNavigation(context as MainActivity, true)
+                controlTopBar(context as MainActivity, true)
+
                 binding.calendarIncludeTaskOnDate.root.visibility = View.GONE
                 binding.calendarIncludeCalendarCalendar.root.visibility = View.VISIBLE
             }
@@ -209,7 +189,7 @@ class CalendarFragment : Fragment() {
         selectedMonthOnDropdown = null
 
         val inflater =  LayoutInflater.from(context as MainActivity)
-        val popupView = inflater.inflate(R.layout.layout_dropdown_menu, null)
+        val popupView = inflater.inflate(R.layout.layout_calendar_dropdown, null)
 
         dropdownPopup = PopupWindow(
             popupView,
@@ -287,6 +267,27 @@ class CalendarFragment : Fragment() {
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
 
         return dayOfWeekList[dayOfWeek-1]
+    }
+
+    /**
+     * TaskOnDateRVAdapter 초기화
+     */
+    private fun initTaskOnDateRVAdapter() {
+        taskOnDateRVAdapter = TaskOnDateRVAdapter() {clickItem ->
+            val spf = (requireContext()).getSharedPreferences("executedTask", MODE_PRIVATE)
+            spf.edit() {
+                putInt("taskId", clickItem.id)
+            }
+
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, ScheduleExecutionFragment())
+                .commitAllowingStateLoss()
+
+            controlTopBar(context as MainActivity, false)
+            controlBottomNavigation(context as MainActivity, false)
+        }
+        binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.adapter = taskOnDateRVAdapter
     }
 
     /**

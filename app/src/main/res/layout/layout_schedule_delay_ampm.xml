@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/bg_white_square_4"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/schedule_delay_calendar_am"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="오전"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="10sp"
+        android:textColor="#BDC0CC"/>
+    <TextView
+        android:id="@+id/schedule_delay_calendar_pm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="오후"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="10sp"
+        android:textColor="#BDC0CC"/>
+</LinearLayout>

@@ -139,6 +139,10 @@
         미루니가 쪼갠 일정 스케줄을
         \n 확인해보세요!</string>
 
+    <string name="schedule_execution_guide">
+        지금 멈추면
+        \n땅콩을 n개 받을 수 있어요!</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -187,5 +191,7 @@
     <string name="my_review">나의 회고</string>
     <string name="review_title_guide">회고 #</string>
     <string name="review_description_guide">Here is my description in my memories #</string>
+    <string name="delayed_time_dialog_guide">지금 멈추시겠다면,\n다시 실행할 시간을 설정해주세요!</string>
+    <string name="popup_schedule_delay_title">지금 멈추시겠다면,\n다시 실행할 시간을 설정해주세요!</string>
 
 </resources>

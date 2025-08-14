@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#EBFFE9">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_title_top_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.067"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_peanut_top_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.137"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_peanut_bottom_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.192"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_miruni_top_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.246"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_miruni_bottom_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.662"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_time_top_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.689"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_btn_start_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.042"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_btn_end_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.958"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/schedule_execution_finish_btn_bottom_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.971"/>
+
+    <!-- 내용 -->
+
+    <TextView
+        android:id="@+id/schedule_execution_finish_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:fontFamily="@font/climatecrisis_regular"
+        android:textSize="22sp"
+        android:lineSpacingExtra="11sp"
+        android:letterSpacing="0.03"
+        android:textColor="#2E442D"
+        android:shadowDy="3.66"
+        android:shadowRadius="3.66"
+        android:shadowColor="#40000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_title_top_line"/>
+
+    <ImageView
+        android:id="@+id/schedule_execution_finish_peanut1_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1.42"
+        android:src="@drawable/peanut"
+        app:layout_constraintStart_toStartOf="@id/schedule_execution_finish_title_tv"
+        app:layout_constraintEnd_toStartOf="@id/schedule_execution_finish_peanut2_iv"
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_peanut_top_line"
+        app:layout_constraintBottom_toBottomOf="@id/schedule_execution_finish_peanut_bottom_line"/>
+    <ImageView
+        android:id="@+id/schedule_execution_finish_peanut2_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1.42"
+        android:src="@drawable/peanut"
+        app:layout_constraintStart_toEndOf="@id/schedule_execution_finish_peanut1_iv"
+        app:layout_constraintEnd_toStartOf="@id/schedule_execution_finish_peanut3_iv"
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_peanut_top_line" />
+    <ImageView
+        android:id="@+id/schedule_execution_finish_peanut3_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1.42"
+        android:src="@drawable/peanut"
+        app:layout_constraintStart_toEndOf="@id/schedule_execution_finish_peanut2_iv"
+        app:layout_constraintEnd_toEndOf="@id/schedule_execution_finish_title_tv"
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_peanut_top_line" />
+    <TextView
+        android:id="@+id/schedule_execution_finish_peanut_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="땅콩을 3개 획득했어요!"
+        android:fontFamily="@font/dmsans_semibold"
+        android:textSize="14sp"
+        android:textColor="#BBBBBB"
+        android:layout_marginTop="12.64sp"
+        app:layout_constraintTop_toBottomOf="@id/schedule_execution_finish_peanut1_iv"
+        app:layout_constraintStart_toStartOf="@id/schedule_execution_finish_title_tv"
+        app:layout_constraintEnd_toEndOf="@id/schedule_execution_finish_title_tv"/>
+
+    <ImageView
+        android:id="@+id/schedule_execution_finish_miruni_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/schedule_execution_complete_miruni"
+        app:layout_constraintStart_toStartOf="@id/schedule_execution_finish_btn_start_line"
+        app:layout_constraintEnd_toEndOf="@id/schedule_execution_finish_btn_end_line"
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_miruni_top_line"
+        app:layout_constraintBottom_toBottomOf="@id/schedule_execution_finish_miruni_bottom_line" />
+
+    <TextView
+        android:id="@+id/schedule_execution_finish_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00"
+        android:fontFamily="@font/dmsans_bold"
+        android:textSize="60sp"
+        android:textColor="#FB9562"
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_time_top_line"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/schedule_execution_finish_time_txt1_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/notosanskr_semibold"
+        android:text="만에"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginTop="-15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/schedule_execution_finish_time_tv" />
+    <TextView
+        android:id="@+id/schedule_execution_finish_time_txt2_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="성장 완료!"
+        android:fontFamily="@font/dmsans_semibold"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:layout_marginTop="-8sp"
+        app:layout_constraintTop_toBottomOf="@id/schedule_execution_finish_time_txt1_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/schedule_execution_finish_check_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="16sp"
+        android:textColor="#EBFFE9"
+        android:background="@drawable/bg_07d500_sqaure_10"
+        android:gravity="center_horizontal"
+        android:paddingVertical="10sp"
+        app:layout_constraintBottom_toBottomOf="@id/schedule_execution_finish_btn_bottom_line"
+        app:layout_constraintStart_toEndOf="@id/schedule_execution_finish_btn_start_line"
+        app:layout_constraintEnd_toEndOf="@id/schedule_execution_finish_btn_end_line"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
