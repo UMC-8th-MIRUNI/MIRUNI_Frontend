@@ -11,28 +11,30 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.TextVPAdapter
+import com.example.miruni.api.ApiService
+import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
+import com.example.miruni.data.repository.HomepageRepository
 import com.example.miruni.databinding.FragmentHomepageBinding
 import com.example.miruni.databinding.LayoutCheckpopupBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-//  홈페이지 전체 정보 조회 API연결
-// 일정 삭제 API 연결
-
 class HomepageFragment: Fragment() {
     private lateinit var binding: FragmentHomepageBinding
     private var datas = arrayListOf<Task>()
     private lateinit var db: ScheduleDatabase
     private lateinit var adapter: HomepageRVAdapter
+    private lateinit var viewModel: HomepageViewModel
 
     private var deleteTaskId: List<Int> = emptyList()
 
@@ -70,31 +72,33 @@ class HomepageFragment: Fragment() {
 
     // 데이터 매개변수로 받아오기
     private fun connectAdapter() {
-        lifecycleScope.launch {
-            // 저장 데이터 불러오기
-            db = ScheduleDatabase.getInstance(requireContext())
-                ?: throw IllegalStateException(" !! Homefragment 데이터베이스 연결 오류  !! ")
-            datas = db.taskDao().getTask() as ArrayList<Task>
 
-            // 오늘의 일정 adapter연결
-            val layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.HORIZONTAL, false)
-            adapter = HomepageRVAdapter(datas)
+        val token = "Bearer $t"
+        val repository = HomepageRepository()
+        val factory = HomepageViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[HomepageViewModel::class.java]
+        viewModel.loadHomepage(token)
 
-            binding.homepageRecyclerView.layoutManager = layoutManager
-            binding.homepageRecyclerView.adapter = adapter
-
-            adapter.setOnClickListener(object : HomepageRVAdapter.onplayClickListener {
-                override fun onPlayClick(isDone: String) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onDeleteItem(seletedItems: List<Int>) {
-                    deleteTaskId = seletedItems
-                }
-
-            })
+        viewModel.homepagedatas.observe(viewLifecycleOwner) { datas ->
 
         }
+
+        // 오늘의 일정 adapter연결
+        val layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.HORIZONTAL, false)
+        adapter = HomepageRVAdapter(datas)
+
+        binding.homepageRecyclerView.layoutManager = layoutManager
+        binding.homepageRecyclerView.adapter = adapter
+
+        adapter.setOnClickListener(object : HomepageRVAdapter.onplayClickListener {
+            override fun onPlayClick(isDone: String) {
+                TODO("Not yet implemented")
+            }
+            override fun onDeleteItem(seletedItems: List<Int>) {
+                deleteTaskId = seletedItems
+            }
+        })
+
     }
 
     private fun clickEvent() {
@@ -163,18 +167,7 @@ class HomepageFragment: Fragment() {
         binding.achievement = "${78}"
     }
 
-        /*lifecycleScope.launch {
-            val service = HomepageService(requireContext())
-            val response = service.getHomepageData()
 
-            response?.result?.let { result ->
-                binding.username = result.user.userName
-                motive = result.motivationalMessage
-                taskList = result.task
-            } ?: run{
-                Log.e("Homepage에러", "ㅠㅠ")
-            }
-        }*/
 
 }
 

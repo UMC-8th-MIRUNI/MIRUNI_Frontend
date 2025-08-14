@@ -150,7 +150,6 @@
 
 
         <LinearLayout
-            android:id="@+id/linearLayout"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:gravity="center_horizontal"
@@ -160,7 +159,6 @@
             app:layout_constraintBottom_toTopOf="@+id/guideline21"
             app:layout_constraintEnd_toStartOf="@+id/guideline18"
             app:layout_constraintStart_toStartOf="@+id/guideline16">
-
 
             <!-- 리포트 달성 했을 때-->
             <LinearLayout
@@ -198,10 +196,10 @@
 
                 </LinearLayout>
 
-                <!-- 저번달 리포트 오픈 버튼-->
+                <!-- 이번달 리포트 오픈 버튼-->
                 <LinearLayout
-                    android:id="@+id/report_thismonth"
-                    android:layout_width="match_parent"
+                    android:id="@+id/report_open"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:layout_weight="1"
@@ -211,12 +209,13 @@
                     android:orientation="horizontal">
 
                         <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:fontFamily="@font/dmsans_bold"
-                        android:text="@string/report_open"/>
+                            android:id="@+id/open_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/dmsans_bold"
+                            android:text="@string/report_open"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -231,7 +230,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -270,13 +269,15 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="34sp"
-                android:fontFamily="@font/dmsans_black"
-                android:textColor="#20831B"
-                android:text="30%"/>
+
+                <TextView
+                    android:id="@+id/open_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/dmsans_black"
+                    android:text="30%"
+                    android:textColor="#20831B"
+                    android:textSize="34sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -1,5 +1,15 @@
 package com.example.miruni.api
 
+import com.example.miruni.api.model.HomepageResponse
+import com.example.miruni.api.model.MemoirCountResponse
+import com.example.miruni.api.model.MemoirDateListResponse
+import com.example.miruni.api.model.MemoirDeliteResponse
+import com.example.miruni.api.model.MemoirDetailResponse
+import com.example.miruni.api.model.MemoirSaveRequest
+import com.example.miruni.api.model.MemoirSaveResponse
+import com.example.miruni.api.model.MemoirSearchResponse
+import com.example.miruni.api.model.MemoirUpdateRequst
+import com.example.miruni.api.model.MemoirUpdateResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,10 +28,6 @@ interface ApiService {
      */
     @POST("/api/schedule")
     fun registrationSchedule(@Body request: ScheduleToRegister): Call<RegistrationScheduleResponse>
-
-
-
-
 
 
 
