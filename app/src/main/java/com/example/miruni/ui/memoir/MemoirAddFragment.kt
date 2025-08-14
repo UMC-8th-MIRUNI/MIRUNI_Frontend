@@ -11,15 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.R
 import com.example.miruni.RVSpacer
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.MemoirDateListResponse
-import com.example.miruni.api.ReviewByDate
 import com.example.miruni.api.getRetrofit
+import com.example.miruni.api.model.ReviewByDate
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentMemoirAddBinding
 import com.example.miruni.ui.homepage.t
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 private lateinit var taskDB : ScheduleDatabase
 private lateinit var taskDatas : List<Task>

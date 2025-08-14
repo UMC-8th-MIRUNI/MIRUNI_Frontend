@@ -3,8 +3,7 @@ package com.example.miruni.ui.memoir
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.miruni.api.ReviewDate
-import com.example.miruni.data.Review
+import com.example.miruni.api.model.ReviewDate
 import com.example.miruni.databinding.ItemMemoitListBinding
 
 class MemoirListRVAdapter(

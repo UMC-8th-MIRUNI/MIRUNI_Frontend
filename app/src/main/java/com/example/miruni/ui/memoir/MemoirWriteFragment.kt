@@ -9,8 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.MemoirSaveRequest
-import com.example.miruni.api.MemoirSaveResponse
+import com.example.miruni.api.model.MemoirSaveRequest
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Mood
 import com.example.miruni.data.Review
@@ -197,7 +196,8 @@ class MemoirWriteFragment: Fragment() {
         val achievement = binding.writeLayout.archievePercent.text.toString().toInt()
         val memo = binding.writeLayout.memoirWriteTxt.text.toString()
 
-        Log.d("회고 작성 후 저장", Gson().toJson(MemoirSaveRequest(
+        Log.d("회고 작성 후 저장", Gson().toJson(
+            MemoirSaveRequest(
             aiPlanId = aiPlanId,
             planId = planId,
             mood = currentMood ?: Mood.ANXIOUS,
