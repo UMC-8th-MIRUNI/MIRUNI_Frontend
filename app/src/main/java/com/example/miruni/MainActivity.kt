@@ -57,6 +57,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scheduleDB : ScheduleDatabase
     private var tasksList = arrayListOf<Task>()
 
+    // 알람 데이터 저장
+    private lateinit var alarm: List<Alarm>
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -522,6 +525,7 @@ class MainActivity : AppCompatActivity() {
         if (tenMinuteBefore.after(Calendar.getInstance())) {
             AlarmHelper.setAlarm(context, tenMinuteBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_10M)
         }
+
     }
 
     /**
@@ -607,6 +611,7 @@ class MainActivity : AppCompatActivity() {
             }
             "locker" -> {
                 //transitionFragment(LockerFragment())
+                //transitionFragment(MemoirListFragment())
                 transitionFragment(StorageFragment())
             }
             "mypage" -> {

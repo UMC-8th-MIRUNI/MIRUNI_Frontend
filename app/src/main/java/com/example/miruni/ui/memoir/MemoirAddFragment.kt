@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.RVSpacer
 import com.example.miruni.api.ApiService
@@ -18,6 +19,7 @@ import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentMemoirAddBinding
 import com.example.miruni.ui.homepage.t
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 private lateinit var taskDB : ScheduleDatabase
 private lateinit var taskDatas : List<Task>
@@ -77,34 +79,34 @@ class MemoirAddFragment: Fragment() {
 
     /* 특정 날짜 회고 목록 조회 API 연동*/
     private suspend fun memoirDateList(){
-        try{
-            val token = "Bearer $t"
-            date = arguments?.getString("date").toString()
-            Log.d("특정 날짜 회고 목록 조회", "요청 날짜: $date")
-            val api = getRetrofit().create(ApiService::class.java)
-            val response = api.memoirDateList(token, date)
+            try{
+                val token = "Bearer $t"
+                date = arguments?.getString("date").toString()
+                Log.d("특정 날짜 회고 목록 조회", "요청 날짜: $date")
+                val api = getRetrofit().create(ApiService::class.java)
+                val response = api.memoirDateList(token, date)
 
-            Log.d("특정 날짜 회고 목록 조회", "성공: ${response}")
+                Log.d("특정 날짜 회고 목록 조회", "성공: ${response}")
 
-            body = response.body()?.result ?: throw IllegalStateException("!! 특정 날짜 회고 목록 조회 안됨 !!")
+                body = response.body()?.result ?: throw IllegalStateException("!! 특정 날짜 회고 목록 조회 안됨 !!")
 
-            taskDB = ScheduleDatabase.getInstance(requireContext())!!
-            taskDatas = taskDB.taskDao().getTask()
-        }catch (e: Exception){
-            Log.e("특정 날짜 회고 목록 조회", "에러발생: ${e.message}")
-        }
+                taskDB = ScheduleDatabase.getInstance(requireContext())!!
+                taskDatas = taskDB.taskDao().getTask()
+            }catch (e: Exception){
+                Log.e("특정 날짜 회고 목록 조회", "에러발생: ${e.message}")
+            }
 
-        // 단일 회고 상세 조회로 reviewId 넘겨주기
-        val reviewAapter = MemoirAddRVAdapter(body) { reviewId ->
-            // reviewId MemoirCompleteFragment로 넘기기
-            val bundle = Bundle()
-            bundle.putInt("reviewId", reviewId)
+            // 단일 회고 상세 조회로 reviewId 넘겨주기
+            val reviewAapter = MemoirAddRVAdapter(body) { reviewId ->
+                // reviewId MemoirCompleteFragment로 넘기기
+                val bundle = Bundle()
+                bundle.putInt("reviewId", reviewId)
 
-            val fragment = MemoirCompleteFragment()
-            fragment.arguments = bundle
+                val fragment = MemoirCompleteFragment()
+                fragment.arguments = bundle
 
-            moveFragment(fragment)
-        }
+                moveFragment(fragment)
+            }
 
         /* 리사이클러뷰 연결 */
         binding.memeoirAddRv.apply {

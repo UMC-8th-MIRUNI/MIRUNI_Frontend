@@ -76,7 +76,7 @@ class FocusService : Service() {
         val notification = Notification.Builder(this, channelId)
             .setContentTitle("앱 나가지마세요~")
             .setContentText("돌아가기 버튼을 눌러주세요")
-            .setSmallIcon(R.drawable.mypage_face)
+            .setSmallIcon(R.drawable.testttttt)
             .setFullScreenIntent(pendingIntent, true)
             .build()
 

@@ -63,11 +63,13 @@ class LoginFragment : Fragment() {
             result.onSuccess { response ->
                 Toast.makeText(requireContext(), "로그인 성공!", Toast.LENGTH_SHORT).show()
                 Log.d("LoginFragment", "로그인 응답: $response")
-                /*startActivity(Intent(MainActivity::class.java))
-                finish()*/
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
             }.onFailure { exception ->
                 Toast.makeText(requireContext(), "로그인 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+            requireActivity().finish()
         }
 
         binding.tvFindPassword.setOnClickListener {
