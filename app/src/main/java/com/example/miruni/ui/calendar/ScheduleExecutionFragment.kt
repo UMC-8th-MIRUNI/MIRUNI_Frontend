@@ -1,15 +1,12 @@
 package com.example.miruni.ui.calendar
 
 import android.content.Context.MODE_PRIVATE
-import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,14 +27,11 @@ import com.example.miruni.databinding.LayoutPopupScheduleDelayBinding
 import com.example.miruni.databinding.LayoutScheduleDelayAmpmBinding
 import com.example.miruni.databinding.LayoutScheduleDelayCalendarBinding
 import com.example.miruni.ui.homepage.HomepageFragment
-import com.example.miruni.util.FocusService
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import java.util.Calendar
-import kotlin.concurrent.fixedRateTimer
-import kotlin.concurrent.timer
 
 class ScheduleExecutionFragment : Fragment() {
 
@@ -93,7 +87,6 @@ class ScheduleExecutionFragment : Fragment() {
         binding.scheduleExecutionInclude.apply {
             /** 중지 버튼 */
             scheduleExecutionStopTv.setOnClickListener {
-                Log.d("FLOW/initExecution", "scheduleExecutionStopTv")
                 screenState = "stop"
                 timerStartStop()
                 changeLayout(binding.scheduleExecutionInclude.root, binding.scheduleStopCompleteInclude.root)
@@ -101,7 +94,6 @@ class ScheduleExecutionFragment : Fragment() {
             }
             /** 완료 버튼 */
             scheduleExecutionCompleteTv.setOnClickListener {
-                Log.d("FLOW/initExecution", "scheduleExecutionStopTv")
                 screenState = "complete"
                 timerStartStop()
                 changeLayout(binding.scheduleExecutionInclude.root, binding.scheduleStopCompleteInclude.root)
@@ -345,7 +337,6 @@ class ScheduleExecutionFragment : Fragment() {
                 val isSelected = item == selected
                 val textView = TextView(context as MainActivity).apply {
                     text = "$item"
-//                    setPadding(24, 16, 24 ,16)
                     textSize = 10f
                     setTypeface(
                         ResourcesCompat.getFont(context as MainActivity,
@@ -422,7 +413,9 @@ class ScheduleExecutionFragment : Fragment() {
         ampmDropdown.showAsDropDown(anchor)
     }
 
-    // 타이머 관리
+    /**
+     * 타이머 실행 및 정지 관리
+     */
     private fun timerStartStop() {
         if (timerRunning) {
             // 타이머 작동 중
@@ -474,17 +467,12 @@ class ScheduleExecutionFragment : Fragment() {
         val hour = tempTime / 3600000
         val min = tempTime % 3600000 / 60000
 
-//        val setEndTime = executedTask.endTime.split(":")
-//        val setStartTime = executedTask.startTime.split(":")
-//        Log.d("Timer/updateTimer", "setEndTime:${setEndTime}, setStartTime:${setStartTime}")
-//        Log.d("Timer/updateTimer", "exeEndTime:${tempTime / 3600000} exeStartTime:${tempTime % 3600000 / 60000}")
-//
-//        val hour = (setEndTime[0].toInt() - setStartTime[0].toInt()) - (tempTime / 3600000)
-//        val min = (setEndTime[1].toInt() - setStartTime[1].toInt()) - (tempTime % 3600000 / 60000)
-
         binding.scheduleExecutionInclude.scheduleExecutionTimeTv.text = String.format("${hour}:${min}")
     }
 
+    /**
+     * 스톱워치 형식으로 변환
+     */
     private fun timeCalculate(
         resultHour: (Int) -> Unit,
         resultMinute: (Int) -> Unit) {
