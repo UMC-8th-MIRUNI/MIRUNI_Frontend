@@ -68,8 +68,6 @@ class LoginFragment : Fragment() {
             }.onFailure { exception ->
                 Toast.makeText(requireContext(), "로그인 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
-            startActivity(Intent(requireContext(), MainActivity::class.java))
-            requireActivity().finish()
         }
 
         binding.tvFindPassword.setOnClickListener {

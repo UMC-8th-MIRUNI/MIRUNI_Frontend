@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.miruni.RetrofitInstance.authService
 import com.example.miruni.R
+import com.example.miruni.databinding.FragmentSignup5Binding
 
 class SignupFragment5 : Fragment() {
 
