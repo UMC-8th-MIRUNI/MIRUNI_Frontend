@@ -14,4 +14,8 @@
     <color name="backgroundColor">#D9D9D9</color>
 
     <color name="memior_background">#FBFBFB</color>
+
+    <color name="grey1">#bbbbbb</color>
+    <color name="grey2">#484C52</color>
+    <color name="grey4">#959595</color>
 </resources>

@@ -11,15 +11,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.RVSpacer
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.MemoirCountResponse
-import com.example.miruni.api.ReviewDate
+import com.example.miruni.api.model.MemoirCountResponse
+import com.example.miruni.api.model.ReviewDate
 import com.example.miruni.api.getRetrofit
-import com.example.miruni.data.Mood
-import com.example.miruni.data.Review
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentMemoirListBinding
 import com.example.miruni.ui.homepage.t

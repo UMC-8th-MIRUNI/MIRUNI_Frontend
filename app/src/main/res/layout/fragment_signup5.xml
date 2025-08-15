@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="188dp"
-        android:text="해당되는 항목을 모두 선택해주세요!"
+        android:text="5점 만점, 숫자를 하나만 선택해주세요!"
         android:textColor="#000000"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="😮‍ 귀찮아서"
+                android:text="① 전혀 미루지 않는다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -76,7 +76,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="😓 일이 너무 커 보일 때"
+                android:text="② 가끔 미룬다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -100,7 +100,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="🤷‍♂️ 무엇부터 해야 할지 몰라서"
+                android:text="③ 보통이다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -124,7 +124,7 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="😔 실패할까봐 걱정돼서"
+                android:text="④ 자주 미룬다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
@@ -148,65 +148,12 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="😵 집중이 안 돼서"
+                android:text="⑤ 항상 미룬다"
                 android:textColor="#1F1F1F"
                 android:textSize="15dp" />
 
             <CheckBox
                 android:id="@+id/checkbox_option5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/custom_checkbox_selector"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="374dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@drawable/round_signup3"
-            android:layout_marginTop="8dp">
-
-            <TextView
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="🙄 재미없거나 하기 싫어서"
-                android:textColor="#1F1F1F"
-                android:textSize="15dp" />
-
-            <CheckBox
-                android:id="@+id/checkbox_option6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:button="@drawable/custom_checkbox_selector"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="374dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="@drawable/round_signup3"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/editTextCustom"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@null"
-                android:ems="10"
-                android:text=""
-                android:hint="기타(직접 입력)"
-                android:inputType="text"
-                android:textColor="#1F1F1F"
-                android:textSize="15dp" />
-
-            <CheckBox
-                android:id="@+id/checkbox_option7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -227,15 +174,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/signup_btn" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="393dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="90dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/signup5_title" />
+
 
     <TextView
         android:id="@+id/textView2"
@@ -243,12 +182,31 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="184dp"
         android:layout_marginTop="13dp"
-        android:text="완료"
+        android:text="다음"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="@+id/iv_complete_button"
         app:layout_constraintTop_toTopOf="@+id/iv_complete_button" />
 
+    <ImageView
+        android:id="@+id/imageView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bar2" />
+
+    <ImageView
+        android:id="@+id/imageView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="108dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/q2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

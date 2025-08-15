@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.miruni.R
-import com.example.miruni.api.ReviewByDate
-import com.example.miruni.data.Task
+import com.example.miruni.api.model.ReviewByDate
 import com.example.miruni.databinding.ItemMemoirBinding
 
 class MemoirAddRVAdapter(

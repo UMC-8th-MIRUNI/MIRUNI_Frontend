@@ -31,8 +31,7 @@ import com.example.miruni.data.Task
 import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.ui.calendar.CalendarFragment
 import com.example.miruni.ui.homepage.HomepageFragment
-import com.example.miruni.ui.memoir.MemoirListFragment
-import com.example.miruni.ui.memoir.StorageFragment
+import com.example.miruni.ui.storage.StorageFragment
 import com.example.miruni.util.AlarmHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,9 +56,9 @@ class MainActivity : AppCompatActivity() {
     // 데이터 관리
     private lateinit var scheduleDB : ScheduleDatabase
     private var tasksList = arrayListOf<Task>()
+
     // 알람 데이터 저장
     private lateinit var alarm: List<Alarm>
-
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -526,6 +525,7 @@ class MainActivity : AppCompatActivity() {
         if (tenMinuteBefore.after(Calendar.getInstance())) {
             AlarmHelper.setAlarm(context, tenMinuteBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_10M)
         }
+
     }
 
     /**
@@ -611,6 +611,7 @@ class MainActivity : AppCompatActivity() {
             }
             "locker" -> {
                 //transitionFragment(LockerFragment())
+                //transitionFragment(MemoirListFragment())
                 transitionFragment(StorageFragment())
             }
             "mypage" -> {

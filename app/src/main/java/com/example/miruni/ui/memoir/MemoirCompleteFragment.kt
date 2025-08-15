@@ -1,7 +1,6 @@
 package com.example.miruni.ui.memoir
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -9,19 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.res.ResourcesCompat
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.MemoirDetailResponse
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Mood
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentMemoirCompleteBinding
 import com.example.miruni.ui.homepage.t
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.graphics.Color
+import androidx.compose.ui.text.font.ResourceFont
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.replace
+import com.example.miruni.api.model.MemoirDetailResponse
+import kotlinx.coroutines.Dispatchers
 
 
 private var body: MemoirDetailResponse? = null

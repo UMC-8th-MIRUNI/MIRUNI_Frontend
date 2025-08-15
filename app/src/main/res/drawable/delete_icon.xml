@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16">
+  <path
+      android:pathData="M4.667,14C4.3,14 3.986,13.87 3.725,13.609C3.465,13.348 3.334,13.034 3.333,12.667V4H2.667V2.667H6V2H10V2.667H13.333V4H12.667V12.667C12.667,13.033 12.536,13.347 12.275,13.609C12.014,13.87 11.7,14 11.333,14H4.667ZM6,11.333H7.333V5.333H6V11.333ZM8.667,11.333H10V5.333H8.667V11.333Z"
+      android:fillColor="#434040"
+      android:fillAlpha="0.9"/>
+</vector>
