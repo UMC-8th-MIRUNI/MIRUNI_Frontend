@@ -63,6 +63,11 @@ class LoginFragment : Fragment() {
             result.onSuccess { response ->
                 Toast.makeText(requireContext(), "로그인 성공!", Toast.LENGTH_SHORT).show()
                 Log.d("LoginFragment", "로그인 응답: $response")
+
+                val accessToken = response.result?.accessToken
+                val refreshToken = response.result?.refreshToken
+                saveTokens(accessToken, refreshToken)
+
                 startActivity(Intent(requireContext(), MainActivity::class.java))
                 requireActivity().finish()
             }.onFailure { exception ->
