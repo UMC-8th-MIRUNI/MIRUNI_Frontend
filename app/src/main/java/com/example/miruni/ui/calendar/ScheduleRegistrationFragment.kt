@@ -29,6 +29,8 @@ import com.example.miruni.api.RegisterScheduleRequest
 import com.example.miruni.api.RegisterScheduleResponse
 import com.example.miruni.api.ResultOfRegisterSchedule
 import com.example.miruni.api.getRetrofit
+import com.example.miruni.data.Plan
+import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.data.Time
 import com.example.miruni.data.ampm
@@ -55,6 +57,7 @@ import java.util.Calendar
 
 class ScheduleRegistrationFragment : Fragment() {
     private lateinit var binding: FragmentScheduleRegistrationBinding
+    private lateinit var scheduleDB: ScheduleDatabase
 
     // 일정 등록하기
     private val hoursOnDropdown = (1..12).toList()
@@ -84,6 +87,7 @@ class ScheduleRegistrationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentScheduleRegistrationBinding.inflate(layoutInflater, container, false)
+        scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
 
         controlBottomNavigation(context as MainActivity, false)
         controlTopBar(context as MainActivity, false)
@@ -100,6 +104,12 @@ class ScheduleRegistrationFragment : Fragment() {
         val selectedDate = spf.getString("selectedDate", "").toString()
         val tmpDate = selectedDate.split("-")
 
+        val deadlineCalendar = Calendar.getInstance()
+        deadlineCalendar.set(
+            tmpDate[0].toInt(),
+            tmpDate[1].toInt(),
+            tmpDate[2].toInt()
+        )
         val startCalendar = Calendar.getInstance()
         startCalendar.set(
             tmpDate[0].toInt(),
@@ -113,10 +123,10 @@ class ScheduleRegistrationFragment : Fragment() {
             tmpDate[2].toInt()
         )
         selectedDeadline = Time(
-            startCalendar,
-            startCalendar.get(Calendar.HOUR),
-            startCalendar.get(Calendar.MINUTE),
-            if (startCalendar.get(Calendar.HOUR_OF_DAY) > 11) ampm.PM else ampm.AM
+            deadlineCalendar,
+            deadlineCalendar.get(Calendar.HOUR),
+            deadlineCalendar.get(Calendar.MINUTE),
+            if (deadlineCalendar.get(Calendar.HOUR_OF_DAY) > 11) ampm.PM else ampm.AM
         )
         selectedExecutionStartDate = Time(
             startCalendar,
@@ -174,7 +184,7 @@ class ScheduleRegistrationFragment : Fragment() {
                 }
             }
             /** 일정 수행 날짜 설정 */
-            scheduleRegistrationContentDateIv.setOnClickListener {
+            scheduleRegistrationContentDateFrm.setOnClickListener {
                 showExecutionDatePopup(
                     it,
                     selectedExecutionStartDate,
@@ -195,7 +205,9 @@ class ScheduleRegistrationFragment : Fragment() {
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeBtn.apply {
             /** 등록하기 */
             scheduleRegistrationContentBtnRegister.setOnClickListener {
-                registerSchedule()
+                lifecycleScope.launch {
+                    registerSchedule()
+                }
             }
             /** 쪼개기 */
             scheduleRegistrationContentBtnSplit.setOnClickListener {
@@ -856,14 +868,14 @@ class ScheduleRegistrationFragment : Fragment() {
         Log.d("RegistrationSchedule/title", title)
 
         val deadline =
-            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour)}:${numberFormat.format(selectedDeadline?.minute)}:00.000")
+            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedDeadline?.minute)}:00.000")
         Log.d("RegistrationSchedule/deadline", deadline)
 
         val scheduledStart =
-            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedExecutionStartDate?.hour)}:${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
+            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledStart", scheduledStart)
         val scheduledEnd =
-            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedExecutionEndDate?.hour)}:${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
+            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
 
         val priority = convertSchedulePriority(selectedPriority)
@@ -898,62 +910,42 @@ class ScheduleRegistrationFragment : Fragment() {
         )
     }
 
+    /**
+     * 일정 등록
+     */
     private suspend fun registerSchedule() {
         try {
             val token = "Bearer $t"
             val registerScheduleRequest = setRegisterScheduleRequest() ?: return
+            Log.d("registerSchedule/Request", "title: ${registerScheduleRequest.title} \ndeadline: ${registerScheduleRequest.deadline} \nscheduledStart: ${registerScheduleRequest.scheduledStart} \nscheduledEnd: ${registerScheduleRequest.scheduledEnd} \npriority: ${registerScheduleRequest.priority} \ndescription: ${registerScheduleRequest.description}")
 
             val api = getRetrofit().create(ApiService::class.java)
             val response = api.registerSchedule(token, registerScheduleRequest)
 
             if (response.isSuccessful) {
-                val resultOfResponse = response.body()?.result
+                val resultOfResponse = response.body()!!.result
 
-                val responseOfGetSchedule = api.getSchedule(token, resultOfResponse?.planId ?: return)
-                if (responseOfGetSchedule.isSuccessful) {
-                    val resultOfGetSchedule = responseOfGetSchedule.body()?.result
-
-                    resultOfGetSchedule?.forEach { r->
-                        r.title
-                    }
-                }
+                val plan = Plan(
+                    id = resultOfResponse.planId,
+                    title = resultOfResponse.title,
+                    deadline = resultOfResponse.deadline,
+                    scheduledStart = resultOfResponse.scheduledStart,
+                    isDone = resultOfResponse.isDone,
+                )
+                scheduleDB.planDao().insert(plan)
+                Log.d("registerSchedule", "저장된 정보: ${response.body()}")
+            } else {
+                Log.d("registerSchedule", "실패: ${response.code()} - ${response.message()}")
             }
 
-            registerService.registerSchedule(token, registerScheduleRequest).enqueue(object : Callback<RegistrationScheduleResponse> {
-                /**
-                 * 응답이 왔을 때
-                 */
-                override fun onResponse(
-                    call: Call<RegistrationScheduleResponse>,
-                    response: Response<RegistrationScheduleResponse>
-                ) {
-                    Log.d("RegistrationSchedule/Register/SUCCESS", response.toString())
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CalendarFragment())
+                .commitAllowingStateLoss()
 
-                    val resp: RegistrationScheduleResponse = response.body()!!
-                    val planId = resp.planId
-                    val title = resp.title
-                    val deadline = resp.deadline
-                    val isDone = resp.isDone
-                    Log.d("RegistrationSchedule/Register/Response", "planId=${planId}, title=${title}, deadline=$${deadline}, isDone=${isDone}")
-
-                    (context as MainActivity).supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_frm, CalendarFragment())
-                        .commitAllowingStateLoss()
-
-                    controlTopBar(context as MainActivity, true)
-                    controlBottomNavigation(context as MainActivity, true)
-                }
-
-                /**
-                 * 네트워크 연결 자체가 실패했을 때
-                 */
-                override fun onFailure(call: Call<RegistrationScheduleResponse>, t: Throwable) {
-                    Log.d("RegisterSchedule/FAILURE", t.message.toString())
-                }
-
-            })
+            controlTopBar(context as MainActivity, true)
+            controlBottomNavigation(context as MainActivity, true)
         } catch (e: Exception) {
-
+            Log.e("registerSchedule", "에러: ${e.message}")
         }
     }
 

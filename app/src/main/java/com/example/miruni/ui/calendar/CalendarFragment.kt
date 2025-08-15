@@ -45,8 +45,7 @@ class CalendarFragment : Fragment() {
     private lateinit var scheduleDB: ScheduleDatabase
     private var taskOnDateList = ArrayList<Task>()
     private lateinit var taskOnDateRVAdapter: TaskOnDateRVAdapter
-    private var monthly: Monthly? = null
-    private var monthlyList = ArrayList<Monthly>()
+    private var monthly = ArrayList<Monthly>()
 
     // 캘린더
     private var YMList = arrayOf(0, 0)
@@ -84,7 +83,6 @@ class CalendarFragment : Fragment() {
         initTaskOnDateRVAdapter()
         initClickListener()
         initDelayedRV()
-        loadDecorators()
 
         return binding.root
     }
@@ -103,16 +101,12 @@ class CalendarFragment : Fragment() {
 
             // 정보 받아서 저장
             if(response.isSuccessful){
-                monthly = response.body()?.result ?: null
+                monthly = (response.body()!!.result as ArrayList<Monthly>)
 
-                if(monthly!= null){
-                    val monthly = Monthly(
-                        date = monthly!!.date,
-                        scheduleCount = monthly!!.scheduleCount,
-                        isAllDone = monthly!!.isAllDone
-                    )
-                }
+                Log.d("월별 조회 결과", "mothly-size: ${monthly.size}")
                 Log.d("월별 조회 결과", "성공: ${response.body()}")
+
+                loadDecorators()
             }else{
                 Log.e("월별 조회 결과", "reponse실패: ${response.code()} - ${response.message()}")
             }
@@ -174,7 +168,6 @@ class CalendarFragment : Fragment() {
                 lifecycleScope.launch {
                     loadTasks(date.year, date.month)
                 }
-                loadDecorators()
 
                 // 날짜 별 일정 소개 페이지로 이동
                 if (dateSelectState == "selected" && selectedDate == date) {
@@ -361,21 +354,28 @@ class CalendarFragment : Fragment() {
      * 날짜별 Task 수에 따라 EventDecorator 적용
      */
     private fun loadDecorators() {
-        val taskList = scheduleDB.taskDao().getTasks()
+        Log.d("loadDecorator", "LoadDecorator")
 
         val decorators = mutableListOf<DayViewDecorator>()
 
-        taskList.forEach { task ->
-            val ymd = task.executeDay.split("-")
+        Log.d("흐름", "monthly.forEach 전")
+        monthly.forEach { monthly ->
+            Log.d("흐름", "monthly.forEach 후")
 
+            Log.d("달", "date:${monthly.date}\nunfinishedCount:${monthly.unfinishedCount}")
+            val ymd = monthly.date.split("-")
+
+            Log.d("흐름", "decorators.add 전")
             decorators.add(
                 EventDecorator(
-                    day = CalendarDay.from(ymd[0].toInt(), ymd[1].toInt(), ymd[2].toInt()),
-                    count = scheduleDB.taskDao().getTasksByDay(task.executeDay).size,
+                    day = CalendarDay.from(Integer.parseInt(ymd[0], 10), Integer.parseInt(ymd[1], 10), Integer.parseInt(ymd[2], 10)),
+                    count = monthly.unfinishedCount,
                     countTextSize = 26f
                 )
             )
         }
+        Log.d("흐름", "monthly.forEach 끝")
+
 
         binding.calendarIncludeCalendarCalendar.calendarCalendar.apply {
             removeDecorators()
@@ -383,23 +383,5 @@ class CalendarFragment : Fragment() {
             invalidateDecorators()
         }
 
-        /** API 연결 시 */
-//        monthlyList.forEach { monthly ->
-//            val ymd = monthly.date.split("-")
-//
-//            decorators.add(
-//                EventDecorator(
-//                    day = CalendarDay.from(ymd[0].toInt(), ymd[1].toInt(), ymd[2].toInt()),
-//                    count = monthly.scheduleCount,
-//                    countTextSize = 26f
-//                )
-//            )
-//        }
-//
-//        binding.calendarIncludeCalendarCalendar.calendarCalendar.apply {
-//            removeDecorators()
-//            addDecorators(decorators)
-//            invalidateDecorators()
-//        }
     }
 }

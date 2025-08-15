@@ -8,11 +8,19 @@ package com.example.miruni.api
 data class RegisterScheduleRequest(
     val title: String, // 제목
     val deadline: String, // 마감 일시
-    val scheduleStart: String, // "2025-08-14T16:19:13.711Z"
-    val scheduleEnd: String,
+    val scheduledStart: String, // "2025-08-14T16:19:13.711Z"
+    val scheduledEnd: String,
     val priority: String,
-//    val category: String, // BASIC | AI
     val description: String
+)
+
+/**
+ * 일정 삭제
+ */
+data class DeleteScheduleRequest(
+    val category: String,
+    val planId: Int,
+    val aiPlanIds: List<Int>
 )
 
 /**
@@ -20,7 +28,7 @@ data class RegisterScheduleRequest(
  * POST /api/schedule/{planId}/split
  */
 data class SplitScheduleRequest(
-    val playType: String,
+    val planType: String,
     val taskRange: String,
     val detailRequest: String
 )
@@ -29,41 +37,49 @@ data class SplitScheduleRequest(
  * 일반/AI 일정 수정 - plans는 SplitSchedule 사용
  */
 data class UpdateScheduleRequest(
+    val category: String, // BASIC | AI
     val title: String,
-    val deadline: String,
-    val taskRange: String,
-    val priority: String,
+    val deadline: String, // yyyy-MM-ddThh:mm:ss
+    val priority: String, // HIGH | MEDIUM | LOW
+    val scheduledStart: String, // yyyy-MM-ddThh:mm:ss
+    val scheduledEnd: String, // yyyy-MM-ddThh:mm:ss
     val description: String,
-    val date: String,
-    val startTime: String,
-    val endTime: String,
-    val plans: List<SplitSchedule>
+    val delete: Boolean
 )
 
-data class DelayScheduleRequest(
-    val newStartDateTime: String, // 새롭게 설정한 datetime "yyyy-MM-ddThh:mm:ss:___"
-    val expectedMinutes: Int, // 예상 소요 시간
-    val category: String, // AI가 쪼깬 건지, 안 쪼갠 건지
-    val executeTime: Int // 수행 시간
-)
-
-/** Response Data Class */
 /**
- * GET api/schedules
+ * 일정 미루기
  */
-data class ScheduleInMonthResponse(
-    val errorCode: String?,
-    val message: String,
-    val result: Monthly?
-)
-data class Monthly(
-    var date: String, // yyyy-MM-dd
-    var scheduleCount: Int, // 일정 갯수
-    var isAllDone: Boolean // 일정 수행 여부
+data class DelayScheduleRequest(
+    val newStartDateTime: String, // 새롭게 설정한 datetime "yyyy-MM-ddThh:mm:ss.___"
+    val category: String, // AI가 쪼깬 건지, 안 쪼갠 건지
+    val executeTime: Int, // 실제 소요된 시간
+    val actualStart: Int // 실제 시작한 시각
 )
 
 /**
- * 일정 등록 요청 시 응답 데이터 클래스
+ * inProgressSchedule
+ */
+data class InProgressScheduleRequest(
+    val category: String
+)
+
+/**
+ * 일정 상태 완료 변경
+ */
+data class FinishedScheduleRequest(
+    val category: String,
+    val executeTime: Int,
+    val actualStart: Int
+)
+
+
+/** Response Data Class
+ * =====================================================
+ */
+
+/**
+ * 일정 등록
  * POST api/schedule
  */
 data class RegisterScheduleResponse(
@@ -80,6 +96,16 @@ data class ResultOfRegisterSchedule(
 )
 
 /**
+ * 일정 삭제
+ */
+data class DeleteScheduleResponse(
+    val requested: Int,
+    val deleted: Int,
+    val notFound: List<Int>,
+    val unauthorized: List<Int>
+)
+
+/**
  * AI 일정 쪼개기 응답
  * POST /api/schedule/{planId}/split
  */
@@ -89,12 +115,11 @@ data class SplitScheduleResponse(
     val result: List<PostSplitSchedule>
 )
 data class PostSplitSchedule(
-    val stepOrder: Int,
-    val scheduledDate: String, // "yyyy-MM-dd"
+    val id: Int,
     val description: String,
     val expectedDuration: Int,
-    val startTime: String, // "hh:mm:ss"
-    val endTime: String // "hh:mm:ss"
+    val scheduledStart: String, // "yyyy-MM-ddThh:mm:ss"
+    val scheduledEnd: String
 )
 
 /**
@@ -120,9 +145,16 @@ data class SplitSchedule( // 소주제
     val date: String, // yyyy-MM-dd
     val description: String,
     val expectedDuration: Int,
-    val scheduledStartTime: String, // hh:mm:ss
-    val scheduledEndTime: String, // hh:mm:ss
-    val aiDelete: Boolean?
+    val startTime: String, // hh:mm:ss
+    val endTime: String, // hh:mm:ss
+)
+
+/**
+ * 일반/AI 일정 수정
+ */
+data class UpdateScheduleResponse(
+    val planId: Int,
+    val updatedAt: String // yyyy-MM-ddThh:mm:ss.___
 )
 
 /**
@@ -144,30 +176,68 @@ data class ResultOfDelaySchedule(
 )
 
 /**
- * 안 한 일정, 미룬 일정 조회 응답
+ * inProgressSchedule
  */
-data class UnfinishedDelayedScheduleResponse(
+data class InProgressScheduleResponse(
+    val planId: Int,
+    val aiPlanId: Int,
+    val status: String
+)
+
+/**
+ * 일정 상태 완료 변경
+ */
+data class FinishedScheduleResponse(
+    val planId: Int,
+    val status: String,
+    val peanutCount: Int,
+    val scheduledStart: String,
+    val scheduledEnd: String
+)
+
+/**
+ * GET api/schedules
+ */
+data class ScheduleInMonthResponse(
     val errorCode: String?,
     val message: String,
-    val result: GotSchedule
+    val result: List<Monthly>
+)
+data class Monthly(
+    var date: String, // yyyy-MM-dd
+    var unfinishedCount: Int
+)
+
+/**
+ * 안 한 일정, 미룬 일정 조회 응답
+ */
+data class UnstartedDelayedScheduleResponse(
+    val errorCode: String?,
+    val message: String,
+    val result: List<GotSchedule>
 )
 data class GotSchedule(
     val id: Int,
     val title: String,
-    val scheduleStart: String, // yyyy-MM-ddThh:mm:ss:___
-    val category: String // BASIC | AI
+    val priority: String,
+    val deadline: String, // yyyy-MM-ddThh:mm:ss:___
+    val scheduledStart: String,
+    val daysDelayed: Int = 0
 )
 
-data class GetScheduleOfDayResponse(
+/**
+ * 일자별 일정 조회
+ */
+data class GetDailyScheduleResponse(
     val errorCode: String?,
     val message: String,
-    val result: ResultOfGetScheduleOfDay
+    val result: ResultOfGetDailySchedule
 )
-data class ResultOfGetScheduleOfDay(
+data class ResultOfGetDailySchedule(
     val totalCount: Int,
-    val schedules: List<SchedulesOfDay>
+    val schedules: List<DailySchedule>
 )
-data class SchedulesOfDay(
+data class DailySchedule(
     val id: Int,
     val parentTitle: String,
     val title: String,

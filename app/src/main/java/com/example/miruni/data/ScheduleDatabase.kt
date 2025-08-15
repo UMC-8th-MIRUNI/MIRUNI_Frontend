@@ -5,12 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Schedule::class, Task::class, Review::class, Alarm::class], version = 1)
+@Database(entities = [Schedule::class, Task::class, Review::class, Alarm::class, Plan::class], version = 1)
 abstract class ScheduleDatabase: RoomDatabase() {
     abstract fun scheduleDao(): ScheduleDao
     abstract fun taskDao(): TaskDao
     abstract fun reviewDao(): ReviewDao
     abstract fun alarmDao(): AlarmDao
+    abstract fun planDao(): PlanDao
     
     companion object {
         private var instance: ScheduleDatabase? = null
