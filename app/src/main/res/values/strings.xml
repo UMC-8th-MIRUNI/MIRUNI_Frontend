@@ -32,6 +32,7 @@
     <string name="memoir_record">한 줄 기록</string>
     <string name="memoir_record_add">느꼈던 점 등을 자유롭게 기록해보세요.</string>
     <string name="memoir_complete">회고록</string>
+    <string name="memoir_not_written">회고록 작성을 완료하지 않았어요!\n회고록을 작성해주세요</string>
 
     <!-- tool page-->
     <string name="tool_schedule">일정 쪼개기</string>
