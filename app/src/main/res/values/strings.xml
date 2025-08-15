@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">MIRUNI</string>
+    <string name="app_name" translatable="false">MIRUNI</string>
 
-    <string name="title">MIRUNI</string>
+    <string name="title" translatable="false">MIRUNI</string>
     
     <!-- 리포트 가이드 -->
     <string name="report_guide_title">리포트란?</string>
