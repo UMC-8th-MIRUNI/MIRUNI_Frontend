@@ -16,36 +16,26 @@ data class HomepageResult(
     val completedCount:Int, // 완료
     val achievementRate: Int, // 진행률
     val tasks: Tasks,
-    val paused: Paused,
-    val finished: Finished,
-    val nextTask: NextTask
+    val nextTask: List<NextTask>
 )
+// 오늘의 일정
 data class Tasks(
+    val notStarted: List<TaskItem>,
+    val paused: List<TaskItem>,
+    val finished: List<TaskItem>
+)
+data class TaskItem(
     val planId: Int,
-    val aiplanId: Int,
+    val aiPlanId: Int,
     val category: String,   // "BASIC/AI"
     val title: String,  //"과제 제출",
     val scheduledStart: String, // "오전 4:00" 예정 시간
-    val staus: String   // "NOT_STARTED"
+    val staus: String,   // "NOT_STARTED"
+    val pausedAt: String? = null, // 진행 시간
+    val stoppedAt: String? = null, // 중지 시간
+    val reviewId: Int? = null
 )
-data class Paused(
-    val planId: Int,
-    val aiPlanId: Int,
-    val category: String,   // "BASIC/AI",
-    val title: String, // "과제 제출"
-    val pausedAt: String, //"15:20", 진행 시간
-    val stoppedAt: String, // "오전 4:00", 중지 시간
-    val status: String // "NOT_STARTED"
-)
-data class Finished(
-    val planId: Int,
-    val aiPlanId: Int,
-    val category: String, //"BASIC/AI"
-    val title: String, //"과제 제출"
-    val stoppedAt: String, //"오전 4:00", // 완료 시간
-    val status: String, //"NOT_STARTED"
-    val reviewId: Int
-)
+// 다가오는 다음 일정
 data class NextTask(
     val planId: Int,
     val aiPlanId: Int,

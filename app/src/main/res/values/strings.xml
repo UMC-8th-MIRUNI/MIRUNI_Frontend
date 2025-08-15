@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">MIRUNI</string>
+    <string name="app_name" translatable="false">MIRUNI</string>
 
-    <string name="title">MIRUNI</string>
+    <string name="title" translatable="false">MIRUNI</string>
     
     <!-- 리포트 가이드 -->
     <string name="report_guide_title">리포트란?</string>
@@ -32,6 +32,7 @@
     <string name="memoir_record">한 줄 기록</string>
     <string name="memoir_record_add">느꼈던 점 등을 자유롭게 기록해보세요.</string>
     <string name="memoir_complete">회고록</string>
+    <string name="memoir_not_written">회고록 작성을 완료하지 않았어요!\n회고록을 작성해주세요</string>
 
     <!-- tool page-->
     <string name="tool_schedule">일정 쪼개기</string>

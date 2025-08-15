@@ -75,9 +75,9 @@ class MemoirWriteFragment: Fragment() {
                             memo = review?.memo ?: "",
                             createdAt = review?.createdAt ?: ""
                         )
-                        binding.writeLayout.memoirWriteTitle.text = review.title
-                        binding.writeLayout.memoirDescription.text = review.description
-                        binding.writeLayout.memoirWriteDate.text = review.createdAt
+                        binding.writeLayout.memoirTitle.memoirWriteTitle.text = review.title
+                        binding.writeLayout.memoirTitle.memoirDescription.text = review.description
+                        binding.writeLayout.memoirTitle.memoirWriteDate.text = review.createdAt
                         // 앱 내에 저장
                         db.reviewDao().insertReview(review)
                     }
@@ -114,7 +114,7 @@ class MemoirWriteFragment: Fragment() {
             }
         }
 
-        binding.writeLayout.memoirWriteBack.setOnClickListener {
+        binding.writeLayout.memoirTitle.memoirWriteBack.setOnClickListener {
             // 뒤로가기
             requireActivity().supportFragmentManager.popBackStack()
         }

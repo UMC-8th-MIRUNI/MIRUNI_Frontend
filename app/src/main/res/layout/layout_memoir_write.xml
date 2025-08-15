@@ -6,77 +6,13 @@
     android:background="@color/memior_background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/imageView54"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/title_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/memoir_write_title"
-        app:layout_constraintStart_toStartOf="@+id/guideline13"
-        app:layout_constraintTop_toTopOf="@+id/memoir_write_title" />
 
-    <ImageView
-        android:id="@+id/memoir_write_back"
-        android:layout_width="12dp"
-        android:layout_height="20dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline13"
-        app:layout_constraintTop_toTopOf="@+id/guideline7"
-        app:srcCompat="@drawable/alarm_back" />
+    <include layout="@layout/layout_memoir_top"
+        android:id="@+id/memoir_title"/>
 
-    <TextView
-        android:id="@+id/memoir_write_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:background="@null"
-        android:fontFamily="@font/dmsans_bold"
-        android:text="제목을 입력하세요"
-        android:textColor="#2E442D"
-        android:textSize="21sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView54"
-        app:layout_constraintTop_toTopOf="@+id/guideline36" />
 
-    <TextView
-        android:id="@+id/memoir_write_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:fontFamily="@font/dmsans_medium"
-        android:text="2025년 6월 8일"
-        android:textColor="#A2A2A2"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView52"
-        app:layout_constraintStart_toEndOf="@+id/imageView52" />
 
-    <TextView
-        android:id="@+id/memoir_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:fontFamily="@font/dmsans_medium"
-        android:text="오전 10:19"
-        android:textColor="#A2A2A2"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
-        app:layout_constraintStart_toEndOf="@+id/imageView9" />
 
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/guideline37"
-        app:layout_constraintStart_toStartOf="@+id/imageView52"
-        app:srcCompat="@drawable/description_icon" />
-
-    <ImageView
-        android:id="@+id/imageView52"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView9"
-        app:layout_constraintStart_toStartOf="@+id/memoir_write_title"
-        app:layout_constraintTop_toBottomOf="@+id/memoir_write_title"
-        app:srcCompat="@drawable/calendat_icon" />
 
     <LinearLayout
         android:id="@+id/memoir_write_ok"
@@ -99,7 +35,7 @@
             android:fontFamily="@font/dmsans_bold"
             android:padding="10dp"
             android:text="완료"
-            android:textColor="#585858"
+            android:textColor="#ffffff"
             android:textSize="15sp" />
 
     </LinearLayout>
@@ -108,12 +44,11 @@
         android:id="@+id/linearLayout4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:background="@drawable/bg_ffffff_15"
         android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@+id/guideline14"
         app:layout_constraintStart_toStartOf="@+id/guideline13"
-        app:layout_constraintTop_toBottomOf="@+id/memoir_description">
+        app:layout_constraintTop_toTopOf="@+id/guideline37">
 
         <TextView
             android:id="@+id/textView34"
@@ -381,14 +316,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.02" />
+        app:layout_constraintGuide_percent="0.019151846" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.04" />
+        app:layout_constraintGuide_percent="0.04379562" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline14"
@@ -411,20 +346,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9515924" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline36"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.08" />
+        app:layout_constraintGuide_percent="0.97" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline37"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.20109439" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

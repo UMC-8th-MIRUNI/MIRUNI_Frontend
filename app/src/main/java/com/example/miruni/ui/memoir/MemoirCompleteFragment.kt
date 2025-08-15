@@ -67,10 +67,10 @@ class MemoirCompleteFragment: Fragment() {
                     Log.d("단일 회고 상세 조회", "저장 회고 내용: ${body}")
 
                     binding.completeLayout.apply {
-                        memoirWriteTitle.text = body?.result?.title
-                        memoirWriteDate.text = body?.result?.createdAt
+                        memoirTitle.memoirWriteTitle.text = body?.result?.title
+                        memoirTitle.memoirWriteDate.text = body?.result?.createdAt
                         memoirWriteTxt.setText(body?.result?.memo ?: "")
-                        memoirDescription.text = body?.result?.description
+                        memoirTitle.memoirDescription.text = body?.result?.description
 
                         /* archievePercent style 수정*/
                         val font = ResourcesCompat.getFont(context, R.font.dmsans_bold)
@@ -103,7 +103,7 @@ class MemoirCompleteFragment: Fragment() {
             moveFragment(MemoirListFragment())
         }
         // 뒤로가기
-        binding.completeLayout.memoirWriteBack.setOnClickListener {
+        binding.completeLayout.memoirTitle.memoirWriteBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
     }

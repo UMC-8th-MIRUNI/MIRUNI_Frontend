@@ -7,6 +7,6 @@ import retrofit2.http.Header
 
 interface HomepageApi {
     /* 홈페이지 전체 정보 조회 */
-    @GET("/api/homePage")
+    @GET("/api/users/home")
     suspend fun getHomepage(@Header("Authorization") token: String) : Response<HomepageResponse>
 }

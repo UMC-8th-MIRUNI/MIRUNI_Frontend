@@ -7,7 +7,7 @@ import com.example.miruni.ui.storage.StorageViewModel
 
 class HomepageViewModelFactory (private val repository: HomepageRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if(modelClass.isAssignableFrom(StorageViewModel::class.java)){
+        if(modelClass.isAssignableFrom(HomepageViewModel::class.java)){
             @Suppress("UNCHECKED_CAST")
             return HomepageViewModel(repository) as T
         }

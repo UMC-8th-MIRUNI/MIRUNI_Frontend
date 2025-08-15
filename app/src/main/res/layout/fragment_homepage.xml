@@ -170,6 +170,7 @@
                         android:paddingBottom="10dp">
 
                         <TextView
+                            android:id="@+id/scheduledCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -179,6 +180,7 @@
                             android:textSize="15sp" />
 
                         <TextView
+                            android:id="@+id/pausedCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -188,6 +190,7 @@
                             android:textSize="15sp" />
 
                         <TextView
+                            android:id="@+id/completedCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -231,13 +234,13 @@
                     android:background="@drawable/bg_1ec718_16">
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/next_task_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/dmsans_bold"
-                        android:text="OPIC 자격증 공부"
+                        android:text="일정을 추가해주세요"
                         android:textColor="#ffffff"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -249,15 +252,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView5"
+                        app:layout_constraintTop_toBottomOf="@+id/next_task_title"
                         app:srcCompat="@drawable/homepage_calendar_icon" />
 
                     <TextView
-                        android:id="@+id/textView10"
+                        android:id="@+id/next_task_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/dmsans_medium"
-                        android:text="2025.07.12  오전 9:30"
                         android:textColor="#ffffff"
                         android:textSize="10sp"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView55"
@@ -277,14 +279,14 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/task_play"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView10"
+                        app:layout_constraintTop_toBottomOf="@+id/next_task_time"
                         tools:ignore="MissingConstraints">
 
                         <TextView
+                            android:id="@+id/next_task_description"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="문제집 p.60까지 풀기" />
+                            android:layout_marginStart="10dp" />
                     </LinearLayout>
 
                     <ImageView
