@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface StorageApi {
     /* 보관함 페이지 정보 조회*/
-    @GET("/api/report/storage")
+    @GET("/api/reports/storage")
     suspend fun getStorage(
         @Header("Authorization") token: String,
         @Query("year") year: Int,
@@ -17,7 +17,7 @@ interface StorageApi {
     ): Response<StorageResponse>
 
     /* 이번달 리포트 오픈 API */
-    @POST("/api/reports/{year}/{month}/openings")
+    @POST("/api/reports/{year}/{month}")
     suspend fun openReport(
         @Header("Authorization") token: String
     )

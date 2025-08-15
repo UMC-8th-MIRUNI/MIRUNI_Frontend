@@ -1,5 +1,6 @@
 package com.example.miruni.data.repository
 
+import android.util.Log
 import com.example.miruni.api.HomepageApi
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.api.model.HomepageResponse

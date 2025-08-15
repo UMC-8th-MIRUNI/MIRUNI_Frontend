@@ -95,14 +95,14 @@ class MemoirModifyFragment: Fragment(){
         binding.modifyLayout.memoirWriteDate.text = review?.createdAt
         binding.modifyLayout.memoirDescription.text = review?.description*/
 
-        binding.modifyLayout.memoirWriteTitle.text = arguments?.getString("title")
+        binding.modifyLayout.memoirTitle.memoirWriteTitle.text = arguments?.getString("title")
         binding.modifyLayout.archievePercent.setText(arguments?.getInt("achievement")!!.toString())
         binding.modifyLayout.archievePercent.setSelection(binding.modifyLayout.archievePercent.text.length)
         binding.modifyLayout.memoirWriteTxt.setText(arguments?.getString("memo"))
         Log.d("수정 내용 조회 확인", "메모내용: ${arguments?.getString("memo")}")
         binding.modifyLayout.memoirWriteTxt.setSelection(binding.modifyLayout.memoirWriteTxt.text.length)
-        binding.modifyLayout.memoirWriteDate.text = arguments?.getString("createdAt")
-        binding.modifyLayout.memoirDescription.text = arguments?.getString("description")
+        binding.modifyLayout.memoirTitle.memoirWriteDate.text = arguments?.getString("createdAt")
+        binding.modifyLayout.memoirTitle.memoirDescription.text = arguments?.getString("description")
     }
     fun showMood(mood: Mood): Mood? {
         val activeIcons = mapOf(

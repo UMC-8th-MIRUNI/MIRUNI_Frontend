@@ -116,7 +116,7 @@ interface ApiService {
     /**  회고 관련  **/
 
     // 회고 작성 후 저장 API
-    @POST("/api/schedule/review")
+    @POST("/api/reviews")
     suspend fun memoirSave(
         @Header("Authorization") token: String,
         @Header("Content-Type") contentType: String,
@@ -124,14 +124,14 @@ interface ApiService {
     ) : Response<MemoirSaveResponse>
 
     // 회고 단일 상세 조회 API
-    @GET("/api/schedule/review/{reviewId}")
+    @GET("/api/reviews/{reviewId}")
     suspend fun memoirDetail(
         @Header("Authorization") token: String,
         @Path("reviewId") reviewId: Int
     ) : Response<MemoirDetailResponse>
 
     // 회고 수정 API
-    @PATCH("/api/schedule/review/update/{reviewId}")
+    @PATCH("/api/reviews/{reviewId}")
     suspend fun memoirUpadate(
         @Header("Authorization") token: String,
         @Path("reviewId") reviewId: Int,
@@ -139,27 +139,27 @@ interface ApiService {
     ) : Response<MemoirUpdateResponse>
 
     // 특정 날짜 회고목록 조회 API
-    @GET("/api/schedule/review/date")
+    @GET("/api/reviews")
     suspend fun memoirDateList(
         @Header("Authorization") token: String,
         @Query("date") date: String
     ) : Response<MemoirDateListResponse>
 
     // 날짜 별 회고록 갯수 조회 API
-    @GET("/api/schedule/review/countByDate")
+    @GET("/api/reviews/days")
     suspend fun memoirCountByDate(
         @Header("Authorization") token: String
     ) : Response<MemoirCountResponse>
 
     // 회고 날짜 검색 조회 API
-    @GET("/api/schedule/review/search")
+    @GET("/api/reviews/days/{date}")
     suspend fun memoirSearch(
         @Header("Authorization") token: String,
         @Query("date") date: String
     ) : Response<MemoirSearchResponse>
 
     // 회고 삭제 API
-    @DELETE("/api/schedule/review/{reviewId}")
+    @DELETE("/api/reviews/{reviewId}")
     suspend fun memoirDelete(
         @Header("AUthorization") token: String,
         @Path("reviewId") review: Int
