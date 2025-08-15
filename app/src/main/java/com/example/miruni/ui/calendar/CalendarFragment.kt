@@ -27,8 +27,14 @@ import com.example.miruni.util.DateToStringHelper
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import java.util.Calendar
 import androidx.core.content.edit
+import androidx.lifecycle.lifecycleScope
+import com.example.miruni.api.ApiService
+import com.example.miruni.api.Monthly
+import com.example.miruni.api.getRetrofit
+import com.example.miruni.ui.homepage.t
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
+import kotlinx.coroutines.launch
 
 class CalendarFragment : Fragment() {
     /** 전역 변수 */
@@ -39,6 +45,8 @@ class CalendarFragment : Fragment() {
     private lateinit var scheduleDB: ScheduleDatabase
     private var taskOnDateList = ArrayList<Task>()
     private lateinit var taskOnDateRVAdapter: TaskOnDateRVAdapter
+    private var monthly: Monthly? = null
+    private var monthlyList = ArrayList<Monthly>()
 
     // 캘린더
     private var YMList = arrayOf(0, 0)
@@ -71,12 +79,7 @@ class CalendarFragment : Fragment() {
         controlTopBar(context as MainActivity, true)
         controlBottomNavigation(context as MainActivity, true)
 
-        /** 데이터 관리 */
-//        loadTasks()
-
         /** 캘린더 관련 설정 */
-
-
         initCalendar()
         initTaskOnDateRVAdapter()
         initClickListener()
@@ -89,8 +92,34 @@ class CalendarFragment : Fragment() {
     /**
      * 서버에서 Task 로드
      */
-    private fun loadTasks() {
-        TODO()
+    private suspend fun loadTasks(year: Int, month: Int) {
+
+        try {
+            val token = "Bearer $t"
+            val api = getRetrofit().create(ApiService::class.java)
+            val response = api.getScheduleInMonth(token, year, month)
+
+            Log.d("월별 조회 결과", "성공: $response")
+
+            // 정보 받아서 저장
+            if(response.isSuccessful){
+                monthly = response.body()?.result ?: null
+
+                if(monthly!= null){
+                    val monthly = Monthly(
+                        date = monthly!!.date,
+                        scheduleCount = monthly!!.scheduleCount,
+                        isAllDone = monthly!!.isAllDone
+                    )
+                }
+                Log.d("월별 조회 결과", "성공: ${response.body()}")
+            }else{
+                Log.e("월별 조회 결과", "reponse실패: ${response.code()} - ${response.message()}")
+            }
+        }catch (e: Exception){
+            Log.e("월별 조회 결과", "에러: ${e.message}")
+        }
+
     }
 
     /**
@@ -103,6 +132,9 @@ class CalendarFragment : Fragment() {
         YMList[1] = today.month.toInt()
 
         Log.d("Calendar:today", "YMList = ${YMList[0]}년 ${YMList[1]}월")
+        lifecycleScope.launch {
+            loadTasks(YMList[0], YMList[1])
+        }
 
         val monthArray = resources.getStringArray(R.array.monthArr)
         binding.calendarIncludeCalendarCalendar.apply {
@@ -138,6 +170,11 @@ class CalendarFragment : Fragment() {
 
                 calendarYearTv.text = String.format("${date.year}년")
                 calendarMonthTv.text = String.format("${date.month}월")
+
+                lifecycleScope.launch {
+                    loadTasks(date.year, date.month)
+                }
+                loadDecorators()
 
                 // 날짜 별 일정 소개 페이지로 이동
                 if (dateSelectState == "selected" && selectedDate == date) {
@@ -345,5 +382,24 @@ class CalendarFragment : Fragment() {
             addDecorators(decorators)
             invalidateDecorators()
         }
+
+        /** API 연결 시 */
+//        monthlyList.forEach { monthly ->
+//            val ymd = monthly.date.split("-")
+//
+//            decorators.add(
+//                EventDecorator(
+//                    day = CalendarDay.from(ymd[0].toInt(), ymd[1].toInt(), ymd[2].toInt()),
+//                    count = monthly.scheduleCount,
+//                    countTextSize = 26f
+//                )
+//            )
+//        }
+//
+//        binding.calendarIncludeCalendarCalendar.calendarCalendar.apply {
+//            removeDecorators()
+//            addDecorators(decorators)
+//            invalidateDecorators()
+//        }
     }
 }

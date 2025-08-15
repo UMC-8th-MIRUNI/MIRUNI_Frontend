@@ -362,10 +362,10 @@ class ScheduleExecutionFragment : Fragment() {
             }
 
             "minute" -> {
-                updateUI(timeForSelectList, minutesOnDropdown, selectedHour) { minute ->
+                updateUI(timeForSelectList, minutesOnDropdown, selectedMinute) { minute ->
                     selectedMinute = minute
                     onItemSelected(minute)
-                    updateUI(timeForSelectList, minutesOnDropdown, selectedHour) {}
+                    updateUI(timeForSelectList, minutesOnDropdown, selectedMinute) {}
                     dateSelectDropdown.dismiss()
                 }
             }

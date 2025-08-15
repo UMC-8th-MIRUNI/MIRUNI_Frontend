@@ -25,9 +25,11 @@ import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.RegistrationScheduleResponse
-import com.example.miruni.api.ScheduleToRegister
+import com.example.miruni.api.RegisterScheduleRequest
+import com.example.miruni.api.RegisterScheduleResponse
+import com.example.miruni.api.ResultOfRegisterSchedule
 import com.example.miruni.api.getRetrofit
+import com.example.miruni.data.Task
 import com.example.miruni.data.Time
 import com.example.miruni.data.ampm
 import com.example.miruni.databinding.FragmentScheduleRegistrationBinding
@@ -39,6 +41,7 @@ import com.example.miruni.databinding.LayoutPopupSplitGuideBinding
 import com.example.miruni.databinding.LayoutScheduleDelayAmpmBinding
 import com.example.miruni.databinding.LayoutScheduleDelayCalendarBinding
 import com.example.miruni.databinding.LayoutScheduleRegistrationTopbarBinding
+import com.example.miruni.ui.homepage.t
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -192,44 +195,7 @@ class ScheduleRegistrationFragment : Fragment() {
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeBtn.apply {
             /** 등록하기 */
             scheduleRegistrationContentBtnRegister.setOnClickListener {
-//                val scheduleToRegister = setRequestSchedule()
-//
-//                if (scheduleToRegister == null) return@setOnClickListener
-//
-//                val registerService = getRetrofit().create(ApiService::class.java)
-//                registerService.registrationSchedule(scheduleToRegister).enqueue(object : Callback<RegistrationScheduleResponse> {
-//                    /**
-//                     * 응답이 왔을 때
-//                     */
-//                    override fun onResponse(
-//                        call: Call<RegistrationScheduleResponse>,
-//                        response: Response<RegistrationScheduleResponse>
-//                    ) {
-//                        Log.d("RegistrationSchedule/Register/SUCCESS", response.toString())
-//
-//                        val resp: RegistrationScheduleResponse = response.body()!!
-//                        val planId = resp.planId
-//                        val title = resp.title
-//                        val deadline = resp.deadline
-//                        val isDone = resp.isDone
-//                        Log.d("RegistrationSchedule/Register/Response", "planId=${planId}, title=${title}, deadline=$${deadline}, isDone=${isDone}")
-//
-//                        (context as MainActivity).supportFragmentManager.beginTransaction()
-//                            .replace(R.id.main_frm, CalendarFragment())
-//                            .commitAllowingStateLoss()
-//
-//                        controlTopBar(context as MainActivity, true)
-//                        controlBottomNavigation(context as MainActivity, true)
-//                    }
-//
-//                    /**
-//                     * 네트워크 연결 자체가 실패했을 때
-//                     */
-//                    override fun onFailure(call: Call<RegistrationScheduleResponse>, t: Throwable) {
-//                        Log.d("RegisterSchedule/FAILURE", t.message.toString())
-//                    }
-//
-//                })
+                registerSchedule()
             }
             /** 쪼개기 */
             scheduleRegistrationContentBtnSplit.setOnClickListener {
@@ -882,39 +848,114 @@ class ScheduleRegistrationFragment : Fragment() {
     /**
      * 백엔드로 보낼 Request 바디 생성
      */
-//    private fun setRequestSchedule(): ScheduleToRegister? {
-//
-//        val title = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentTitleEt.text.toString()
-//        Log.d("RegistrationSchedule/title", title)
-//        val deadline = String.format("${selectedDate}T00:00:00.000")
-//        Log.d("RegistrationSchedule/deadline", deadline)
-//        val priority = selectedPriority
-//        Log.d("RegistrationSchedule/priority", priority)
-//        val description = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentCommentEt.text.toString()
-//        Log.d("RegistrationSchedule/description", description)
-//
-//        if (title.isEmpty()) {
-//            Toast.makeText(context as MainActivity, "제목을 입력해주세요", Toast.LENGTH_SHORT).show()
-//            return null
-//        }
-//        if (deadline.isEmpty()) {
-//            Toast.makeText(context as MainActivity, "마감기한 혹은 수행 날짜를 정해주세요", Toast.LENGTH_SHORT).show()
-//            return null
-//        }
-//        if (priority.isEmpty()) {
-//            Toast.makeText(context as MainActivity, "우선 순위를 정해주세요", Toast.LENGTH_SHORT).show()
-//            return null
-//        }
-//        if (description.isEmpty()) {
-//            Toast.makeText(context as MainActivity, "한 줄 설명은 작성하지 않았어요", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        return ScheduleToRegister(
-//            title,
-//            description,
-//            deadline
-//        )
-//    }
+    private fun setRegisterScheduleRequest(): RegisterScheduleRequest? {
+
+        val numberFormat = DecimalFormat("00")
+
+        val title = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentTitleEt.text.toString()
+        Log.d("RegistrationSchedule/title", title)
+
+        val deadline =
+            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour)}:${numberFormat.format(selectedDeadline?.minute)}:00.000")
+        Log.d("RegistrationSchedule/deadline", deadline)
+
+        val scheduledStart =
+            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedExecutionStartDate?.hour)}:${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
+        Log.d("RegistrationSchedule/scheduledStart", scheduledStart)
+        val scheduledEnd =
+            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedExecutionEndDate?.hour)}:${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
+        Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
+
+        val priority = convertSchedulePriority(selectedPriority)
+        Log.d("RegistrationSchedule/priority", priority.toString())
+
+        val description = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentCommentEt.text.toString()
+        Log.d("RegistrationSchedule/description", description)
+
+        if (title.isEmpty()) {
+            Toast.makeText(context as MainActivity, "제목을 입력해주세요", Toast.LENGTH_SHORT).show()
+            return null
+        }
+        if (deadline.isEmpty()) {
+            Toast.makeText(context as MainActivity, "마감기한 혹은 수행 날짜를 정해주세요", Toast.LENGTH_SHORT).show()
+            return null
+        }
+        if (priority == null) {
+            Toast.makeText(context as MainActivity, "우선 순위를 정해주세요", Toast.LENGTH_SHORT).show()
+            return null
+        }
+        if (description.isEmpty()) {
+            Toast.makeText(context as MainActivity, "한 줄 설명은 작성하지 않았어요", Toast.LENGTH_SHORT).show()
+        }
+
+        return RegisterScheduleRequest(
+            title,
+            deadline,
+            scheduledStart,
+            scheduledEnd,
+            priority,
+            description
+        )
+    }
+
+    private suspend fun registerSchedule() {
+        try {
+            val token = "Bearer $t"
+            val registerScheduleRequest = setRegisterScheduleRequest() ?: return
+
+            val api = getRetrofit().create(ApiService::class.java)
+            val response = api.registerSchedule(token, registerScheduleRequest)
+
+            if (response.isSuccessful) {
+                val resultOfResponse = response.body()?.result
+
+                val responseOfGetSchedule = api.getSchedule(token, resultOfResponse?.planId ?: return)
+                if (responseOfGetSchedule.isSuccessful) {
+                    val resultOfGetSchedule = responseOfGetSchedule.body()?.result
+
+                    resultOfGetSchedule?.forEach { r->
+                        r.title
+                    }
+                }
+            }
+
+            registerService.registerSchedule(token, registerScheduleRequest).enqueue(object : Callback<RegistrationScheduleResponse> {
+                /**
+                 * 응답이 왔을 때
+                 */
+                override fun onResponse(
+                    call: Call<RegistrationScheduleResponse>,
+                    response: Response<RegistrationScheduleResponse>
+                ) {
+                    Log.d("RegistrationSchedule/Register/SUCCESS", response.toString())
+
+                    val resp: RegistrationScheduleResponse = response.body()!!
+                    val planId = resp.planId
+                    val title = resp.title
+                    val deadline = resp.deadline
+                    val isDone = resp.isDone
+                    Log.d("RegistrationSchedule/Register/Response", "planId=${planId}, title=${title}, deadline=$${deadline}, isDone=${isDone}")
+
+                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, CalendarFragment())
+                        .commitAllowingStateLoss()
+
+                    controlTopBar(context as MainActivity, true)
+                    controlBottomNavigation(context as MainActivity, true)
+                }
+
+                /**
+                 * 네트워크 연결 자체가 실패했을 때
+                 */
+                override fun onFailure(call: Call<RegistrationScheduleResponse>, t: Throwable) {
+                    Log.d("RegisterSchedule/FAILURE", t.message.toString())
+                }
+
+            })
+        } catch (e: Exception) {
+
+        }
+    }
 
     /**
      * 레이아웃 전환
@@ -934,14 +975,28 @@ class ScheduleRegistrationFragment : Fragment() {
             topbar.scheduleRegistrationTopbarCancelIv.visibility = View.GONE
         }
     }
-}
 
-enum class ScheduleType {
-    IMMERSIVE,
-    CREATIVE,
-    STUDY_ORGANIZATION,
-    PRACTICAL_ADMIN,
-    ROUTINE,
-    COLLAB_COMMUNICATION,
-    PREPARATION_PLANNING
+    private fun convertScheduleType(scheduleTypeIndex: Int): String? {
+        val realScheduleType = when(scheduleTypeIndex) {
+            0 -> "IMMERSIVE"
+            1 -> "CREATIVE"
+            2 -> "STUDY_ORGANIZATION"
+            3 -> "PRACTICAL_ADMIN"
+            4 -> "ROUTINE"
+            5 -> "COLLAB_COMMUNICATION"
+            6 -> "PREPARATION_PLANNING"
+            else -> null
+        }
+        return realScheduleType
+    }
+
+    private fun convertSchedulePriority(schedulePrior: String): String? {
+        val realPriority = when(schedulePrior) {
+            "상" -> "HIGH"
+            "중" -> "MEDIUM"
+            "하" -> "LOW"
+            else -> null
+        }
+        return realPriority
+    }
 }

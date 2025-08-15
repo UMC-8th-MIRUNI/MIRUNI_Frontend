@@ -13,18 +13,71 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    /**
-     * 일정 등록
-     */
+    // 월 단위 일정 조회 API
+    @GET("/api/schedule")
+    suspend fun getScheduleInMonth(
+        @Header("Authorization") token: String,
+        @Query("year") year: Int,
+        @Query("month") month: Int
+    ): Response<ScheduleInMonthResponse>
+
+    // 일정 등록 API
     @POST("/api/schedule")
-    fun registrationSchedule(@Body request: ScheduleToRegister): Call<RegistrationScheduleResponse>
+    suspend fun registerSchedule(
+        @Header("Authorization") token: String,
+        @Body request: RegisterScheduleRequest
+    ): Response<RegisterScheduleResponse>
 
+    // AI 일정 쪼개기
+    @POST("/api/schedule/{planId}/split")
+    suspend fun splitSchedule(
+        @Header("Authorization") token: String,
+        @Path("planId") scheduleId: Int,
+        @Body request: SplitScheduleRequest
+    ): Response<SplitScheduleResponse>
 
+    // 일정별 세부 조회 API
+    @GET("/api/schedule/{planId}")
+    suspend fun getSchedule(
+        @Header("Authorization") token: String,
+        @Path("planId") taskId: Int
+    ): Response<GetSplitScheduleResponse>
 
+    // 일반/AI 일정 수정
+    // schedule과 task가 같은 id 체계를 공유함
+    @PATCH("/api/schedule/{planId}")
+    suspend fun updateSchedule(
+        @Header("Authorization") token: String,
+        @Path("planId") scheduleId: Int,
+        @Body request: UpdateScheduleRequest
+    ): Response<ResultOfGetSplitSchedule>
 
+    // 일정 미루기 API
+    @PATCH("/api/schedule/{planId}")
+    suspend fun delaySchedule(
+        @Header("Authorization") token: String,
+        @Path("planId") scheduleId: Int,
+        @Body request: DelayScheduleRequest
+    ): Response<DelayScheduleResponse>
 
+    // 안 한 일정 조회 - 미루지도, 수행하지도 않은 일정 조회
+    @GET("/api/schedule/unfinished")
+    suspend fun getUnfinishedSchedule(
+        @Header("Authorization") token: String
+    ): Response<UnfinishedDelayedScheduleResponse>
 
+    // 미룬 일정 조회 - 수행 날짜가 지났지만, 완료되지 않은 일정 조회
+    @GET("/api/schedule/delayed")
+    suspend fun getDelayedSchedule(
+        @Header("Authorization") token: String
+    ): Response<UnfinishedDelayedScheduleResponse>
 
+    // 일자별 일정 조회
+    @GET("/api/schedule/day")
+    suspend fun getScheduleOfDay(
+        @Header("Authorization") token: String,
+        @Query("date") date: String
+    ): Response<GetScheduleOfDayResponse>
 
     /**  회고 관련  **/
 
