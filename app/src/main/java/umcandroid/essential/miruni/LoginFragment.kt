@@ -91,12 +91,13 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "로그인 성공!", Toast.LENGTH_SHORT).show()
                 Log.d("LoginFragment", "로그인 응답: $response")
 
-//                // 로그인 성공 시
-//                val tokenFromServer = response.result?.accessToken
-//                viewModel2.accessToken.value = tokenFromServer
+                val accessToken = response.result?.accessToken
+                val refreshToken = response.result?.refreshToken
+                saveTokens(accessToken, refreshToken)
 
-//                startActivity(Intent(this, MainActivity::class.java))
-//                finish()
+//                startActivity(Intent(requireContext(), MainActivity::class.java))
+//                requireActivity().finish()
+
             }.onFailure { exception ->
                 Toast.makeText(requireContext(), "로그인 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
@@ -254,6 +255,8 @@ class LoginFragment : Fragment() {
             putString("access_token", accessToken ?: "")
             putString("refresh_token", refreshToken ?: "")
             apply()
+
+            Log.d("CheckToken", "AccessToken=$accessToken, RefreshToken=$refreshToken")
         }
     }
 
