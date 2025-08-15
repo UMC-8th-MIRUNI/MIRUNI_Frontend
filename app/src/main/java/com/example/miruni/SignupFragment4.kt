@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.miruni.databinding.FragmentSignup4Binding
 import androidx.fragment.app.activityViewModels
-import com.example.miruni.miruni.R
+import com.example.miruni.R
 
 class SignupFragment4 : Fragment() {
 
