@@ -2,6 +2,7 @@ package com.example.miruni
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface AuthService {
@@ -20,4 +21,9 @@ interface AuthService {
         @Body request: KakaoLoginRequest
     ): Response<KakaoLoginResponse>
 
+    @POST("api/auth/survey")
+    suspend fun sendSurvey(
+        @Header("Authorization") token: String,
+        @Body body: SurveyRequest
+    ): Response<SurveyResponse>
 }

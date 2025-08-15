@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
                 if (error != null) {
                     loginWithKakaoAccount(context)
                 } else if (token != null) {
-                    verifyAndSendToken(token.accessToken)
+                    requestKakaoUserInfo(token.accessToken)
                 }
             }
         } else {
@@ -99,7 +99,23 @@ class LoginFragment : Fragment() {
             if (error != null) {
                 Toast.makeText(context, "카카오 로그인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
             } else if (token != null) {
-                verifyAndSendToken(token.accessToken)
+                requestKakaoUserInfo(token.accessToken)
+            }
+        }
+    }
+
+    // 로그인 성공 후 사용자 정보 요청
+    private fun requestKakaoUserInfo(accessToken: String) {
+        UserApiClient.instance.me { user, error ->
+            if (error != null) {
+                Log.e("KakaoLogin", "사용자 정보 요청 실패", error)
+            } else if (user != null) {
+                val email = user.kakaoAccount?.email
+                val nickname = user.kakaoAccount?.profile?.nickname
+                Log.d("KakaoLogin", "사용자 이메일: $email, 닉네임: $nickname")
+
+                // 서버로 토큰 전송
+                sendTokenToServer(accessToken)
             }
         }
     }

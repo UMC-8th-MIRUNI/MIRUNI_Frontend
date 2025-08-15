@@ -22,6 +22,11 @@ class ResetPwdFragment1 : Fragment() {
         binding.ivLoginButton.setOnClickListener {
             findNavController().navigate(R.id.action_resetPwdFragment1_to_resetPwdFragment2)
         }
+
+        binding.backBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
         return binding.root
     }
 }
