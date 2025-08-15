@@ -13,7 +13,6 @@ import com.example.miruni.databinding.FragmentResetpwd3Binding
 import com.example.miruni.R
 import kotlinx.coroutines.launch
 
-
 class ResetPwdFragment3 : Fragment() {
 
     private lateinit var binding: FragmentResetpwd3Binding
