@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.RVSpacer
+import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.api.model.ReviewByDate
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentMemoirAddBinding
-import com.example.miruni.ui.homepage.t
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -80,7 +80,7 @@ class MemoirAddFragment: Fragment() {
     /* 특정 날짜 회고 목록 조회 API 연동*/
     private suspend fun memoirDateList(){
             try{
-                val token = "Bearer $t"
+                val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
                 date = arguments?.getString("date").toString()
                 Log.d("특정 날짜 회고 목록 조회", "요청 날짜: $date")
                 val api = getRetrofit().create(ApiService::class.java)

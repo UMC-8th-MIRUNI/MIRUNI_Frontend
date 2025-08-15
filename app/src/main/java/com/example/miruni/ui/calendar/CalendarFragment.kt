@@ -33,7 +33,6 @@ import com.example.miruni.TokenResult
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.Monthly
 import com.example.miruni.api.getRetrofit
-import com.example.miruni.ui.homepage.t
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import kotlinx.coroutines.launch

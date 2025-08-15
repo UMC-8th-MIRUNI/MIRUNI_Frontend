@@ -13,13 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.miruni.R
 import com.example.miruni.RVSpacer
+import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.model.MemoirCountResponse
 import com.example.miruni.api.model.ReviewDate
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentMemoirListBinding
-import com.example.miruni.ui.homepage.t
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,7 +29,7 @@ private lateinit var memoirAdapter: MemoirListRVAdapter
 private lateinit var countResponse: Response<MemoirCountResponse>
 private var body: List<ReviewDate> = emptyList()
 private val api = getRetrofit().create(ApiService::class.java)
-private val token = "Bearer $t"
+private lateinit var token: String
 private lateinit var db: ScheduleDatabase
 
 class MemoirListFragment: Fragment() {
@@ -82,6 +82,7 @@ class MemoirListFragment: Fragment() {
     /* 날짜별 회고록 갯수 조회 API 연동*/
     private suspend fun memoirCountByDate(){
         try {
+            token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
             countResponse = api.memoirCountByDate(token)
             if (countResponse.isSuccessful) {
                 Log.d("날짜 별 회고록 갯수 조회", "연결 성공: ${countResponse}")

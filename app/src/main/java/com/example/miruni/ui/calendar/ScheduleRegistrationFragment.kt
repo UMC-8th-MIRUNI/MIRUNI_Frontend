@@ -44,7 +44,6 @@ import com.example.miruni.databinding.LayoutPopupSplitGuideBinding
 import com.example.miruni.databinding.LayoutScheduleDelayAmpmBinding
 import com.example.miruni.databinding.LayoutScheduleDelayCalendarBinding
 import com.example.miruni.databinding.LayoutScheduleRegistrationTopbarBinding
-import com.example.miruni.ui.homepage.t
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import com.prolificinteractive.materialcalendarview.CalendarDay

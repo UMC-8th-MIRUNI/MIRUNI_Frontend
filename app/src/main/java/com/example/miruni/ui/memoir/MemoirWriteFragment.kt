@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.R
+import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.api.model.MemoirSaveRequest
@@ -15,7 +16,6 @@ import com.example.miruni.data.Mood
 import com.example.miruni.data.Review
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentMemoirWriteBinding
-import com.example.miruni.ui.homepage.t
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
@@ -52,7 +52,7 @@ class MemoirWriteFragment: Fragment() {
                 // 작성 값 저장 - request값 생성
                 val registerReview = setMemoirRequest()
 
-                val token = "Bearer $t"
+                val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
                 val contentType = "application/json"
                 val api = getRetrofit().create(ApiService::class.java)
                 val response = api.memoirSave(token, contentType, registerReview)

@@ -13,6 +13,7 @@ import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.TextVPAdapter
 import com.example.miruni.TimetableFragment
+import com.example.miruni.TokenManager
 import com.example.miruni.api.model.TaskItem
 import com.example.miruni.api.model.Tasks
 import com.example.miruni.data.ScheduleDatabase
@@ -66,7 +67,7 @@ class HomepageFragment: Fragment() {
     // 데이터 매개변수로 받아오기
     private fun connectAdapter() {
 
-        val token = "Bearer $t"
+        val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
         val repository = HomepageRepository()
         val factory = HomepageViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[HomepageViewModel::class.java]

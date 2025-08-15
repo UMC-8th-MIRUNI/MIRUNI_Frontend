@@ -14,10 +14,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
+import com.example.miruni.TokenManager
 import com.example.miruni.api.StorageApi
 import com.example.miruni.data.repository.StorageRepository
 import com.example.miruni.databinding.FragmentStorageBinding
-import com.example.miruni.ui.homepage.t
 import com.example.miruni.ui.memoir.MemoirListFragment
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -55,7 +55,7 @@ class StorageFragment: Fragment() {
         val year = today.year
         val month = today.monthValue
 
-        val token = "Bearer ${t}"
+        val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
 
         val repository = StorageRepository()
         val factory = StorageViewModelFactory(repository)

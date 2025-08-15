@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.R
+import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.model.MemoirUpdateRequst
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Mood
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentMemoirModifyBinding
-import com.example.miruni.ui.homepage.t
 import kotlinx.coroutines.launch
 
 class MemoirModifyFragment: Fragment(){
@@ -52,7 +52,7 @@ class MemoirModifyFragment: Fragment(){
 
                     val request = MemoirUpdateRequst(mood, achievement, memo)
 
-                    val token = "Bearer $t"
+                    val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
                     val api = getRetrofit().create(ApiService::class.java)
                     val response = api.memoirUpadate(token, reviewId, request)
 
