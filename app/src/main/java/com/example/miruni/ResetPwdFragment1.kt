@@ -25,6 +25,7 @@ class ResetPwdFragment1 : Fragment() {
     ): View {
         binding = FragmentResetpwd1Binding.inflate(inflater, container, false)
 
+
         binding.nextBtn.setOnClickListener {
             val email = binding.editTextText.text.toString().trim()
 

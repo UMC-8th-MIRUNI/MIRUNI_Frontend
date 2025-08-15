@@ -1,7 +1,6 @@
 package com.example.miruni.ui.calendar
 
 import android.animation.ValueAnimator
-import android.app.DatePickerDialog
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
 import android.graphics.Rect
@@ -15,26 +14,40 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewTreeObserver
 import android.view.animation.DecelerateInterpolator
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.RegistrationScheduleResponse
-import com.example.miruni.api.ScheduleToRegister
+import com.example.miruni.api.RegisterScheduleRequest
+import com.example.miruni.api.RegisterScheduleResponse
+import com.example.miruni.api.ResultOfRegisterSchedule
 import com.example.miruni.api.getRetrofit
+import com.example.miruni.data.Plan
+import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.Task
+import com.example.miruni.data.Time
+import com.example.miruni.data.ampm
 import com.example.miruni.databinding.FragmentScheduleRegistrationBinding
 import com.example.miruni.databinding.LayoutDropdownPriorityBinding
 import com.example.miruni.databinding.LayoutDropdownScheduleTypeBinding
+import com.example.miruni.databinding.LayoutPopupRegisterScheduleSelectExecutionDateBinding
 import com.example.miruni.databinding.LayoutPopupSplitDetailGuideBinding
 import com.example.miruni.databinding.LayoutPopupSplitGuideBinding
+import com.example.miruni.databinding.LayoutScheduleDelayAmpmBinding
+import com.example.miruni.databinding.LayoutScheduleDelayCalendarBinding
 import com.example.miruni.databinding.LayoutScheduleRegistrationTopbarBinding
+import com.example.miruni.ui.homepage.t
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -44,9 +57,15 @@ import java.util.Calendar
 
 class ScheduleRegistrationFragment : Fragment() {
     private lateinit var binding: FragmentScheduleRegistrationBinding
+    private lateinit var scheduleDB: ScheduleDatabase
 
-    private var selectedDate = ""
-    private var isSelectedExctDate = 0
+    // 일정 등록하기
+    private val hoursOnDropdown = (1..12).toList()
+    private val minutesOnDropdown = (1..59).toList()
+    private val ampmOnDropdown = listOf(ampm.AM, ampm.PM)
+    private var selectedDeadline: Time? = null
+    private var selectedExecutionStartDate: Time? = null
+    private var selectedExecutionEndDate: Time? = null
 
     private lateinit var priorityDropdown: PopupWindow
     private val priorityItems = arrayListOf("상", "중", "하")
@@ -68,6 +87,7 @@ class ScheduleRegistrationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentScheduleRegistrationBinding.inflate(layoutInflater, container, false)
+        scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
 
         controlBottomNavigation(context as MainActivity, false)
         controlTopBar(context as MainActivity, false)
@@ -81,12 +101,51 @@ class ScheduleRegistrationFragment : Fragment() {
 
     private fun initDate() {
         val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
-        selectedDate = spf.getString("selectedDate", "").toString()
-
+        val selectedDate = spf.getString("selectedDate", "").toString()
         val tmpDate = selectedDate.split("-")
 
-        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDateTv.text = String.format("${tmpDate[0]}.${tmpDate[1]}.${tmpDate[2]}")
-        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDeadlineTv.text = String.format("${tmpDate[0]}.${tmpDate[1]}.${tmpDate[2]}")
+        val deadlineCalendar = Calendar.getInstance()
+        deadlineCalendar.set(
+            tmpDate[0].toInt(),
+            tmpDate[1].toInt(),
+            tmpDate[2].toInt()
+        )
+        val startCalendar = Calendar.getInstance()
+        startCalendar.set(
+            tmpDate[0].toInt(),
+            tmpDate[1].toInt(),
+            tmpDate[2].toInt()
+        )
+        val endCalendar = Calendar.getInstance()
+        endCalendar.set(
+            tmpDate[0].toInt(),
+            tmpDate[1].toInt(),
+            tmpDate[2].toInt()
+        )
+        selectedDeadline = Time(
+            deadlineCalendar,
+            deadlineCalendar.get(Calendar.HOUR),
+            deadlineCalendar.get(Calendar.MINUTE),
+            if (deadlineCalendar.get(Calendar.HOUR_OF_DAY) > 11) ampm.PM else ampm.AM
+        )
+        selectedExecutionStartDate = Time(
+            startCalendar,
+            startCalendar.get(Calendar.HOUR),
+            startCalendar.get(Calendar.MINUTE),
+            if (startCalendar.get(Calendar.HOUR_OF_DAY) > 11) ampm.PM else ampm.AM
+        )
+        selectedExecutionEndDate = Time(
+            endCalendar,
+            endCalendar.get(Calendar.HOUR),
+            endCalendar.get(Calendar.MINUTE),
+            if (endCalendar.get(Calendar.HOUR_OF_DAY) > 11) ampm.PM else ampm.AM
+        )
+        endCalendar.add(Calendar.DAY_OF_MONTH, 1)
+
+        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDeadlineTv.text =
+            String.format("${selectedDeadline!!.date.get(Calendar.YEAR)}.${selectedDeadline!!.date.get(Calendar.MONTH)}.${selectedDeadline!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedDeadline!!.ampm == ampm.AM) "오전" else "오후"} ${selectedDeadline!!.hour}:${selectedDeadline!!.minute}")
+        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDateTv.text =
+            String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH)}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH)}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
     }
 
     /**
@@ -117,14 +176,25 @@ class ScheduleRegistrationFragment : Fragment() {
 
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.apply {
             /** 마감기한 설정 */
-            scheduleRegistrationContentDeadlineIv.setOnClickListener {
-                showDatePickerDialog(scheduleRegistrationContentDeadlineTv, 0)
-                isSelectedExctDate = 0
+            scheduleRegistrationContentDeadlineFrm.setOnClickListener {
+                showDeadlinePopup(it, selectedDeadline) {
+                    selectedDeadline = it
+                    scheduleRegistrationContentDeadlineTv.text =
+                        String.format("${it.date.get(Calendar.YEAR)}.${it.date.get(Calendar.MONTH)}.${it.date.get(Calendar.DAY_OF_MONTH)}. ${if (it.ampm == ampm.AM) "오전" else "오후"} ${it.hour}:${it.minute}")
+                }
             }
             /** 일정 수행 날짜 설정 */
-            scheduleRegistrationContentDateIv.setOnClickListener {
-                showDatePickerDialog(scheduleRegistrationContentDateTv, 1)
-                isSelectedExctDate = 1
+            scheduleRegistrationContentDateFrm.setOnClickListener {
+                showExecutionDatePopup(
+                    it,
+                    selectedExecutionStartDate,
+                    selectedExecutionEndDate,
+                    resultStartTime = { resultStart -> selectedExecutionStartDate = resultStart},
+                    resultEndTime = { resultEnd -> selectedExecutionEndDate = resultEnd}
+                ) {
+                    scheduleRegistrationContentDateTv.text =
+                        String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH)}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH)}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
+                }
             }
             /** 우선 순위 설정 */
             scheduleRegistrationContentPriorityTv.setOnClickListener {
@@ -135,44 +205,9 @@ class ScheduleRegistrationFragment : Fragment() {
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeBtn.apply {
             /** 등록하기 */
             scheduleRegistrationContentBtnRegister.setOnClickListener {
-                val scheduleToRegister = setRequestSchedule()
-
-                if (scheduleToRegister == null) return@setOnClickListener
-
-                val registerService = getRetrofit().create(ApiService::class.java)
-                registerService.registrationSchedule(scheduleToRegister).enqueue(object : Callback<RegistrationScheduleResponse> {
-                    /**
-                     * 응답이 왔을 때
-                     */
-                    override fun onResponse(
-                        call: Call<RegistrationScheduleResponse>,
-                        response: Response<RegistrationScheduleResponse>
-                    ) {
-                        Log.d("RegistrationSchedule/Register/SUCCESS", response.toString())
-
-                        val resp: RegistrationScheduleResponse = response.body()!!
-                        val planId = resp.planId
-                        val title = resp.title
-                        val deadline = resp.deadline
-                        val isDone = resp.isDone
-                        Log.d("RegistrationSchedule/Register/Response", "planId=${planId}, title=${title}, deadline=$${deadline}, isDone=${isDone}")
-
-                        (context as MainActivity).supportFragmentManager.beginTransaction()
-                            .replace(R.id.main_frm, CalendarFragment())
-                            .commitAllowingStateLoss()
-
-                        controlTopBar(context as MainActivity, true)
-                        controlBottomNavigation(context as MainActivity, true)
-                    }
-
-                    /**
-                     * 네트워크 연결 자체가 실패했을 때
-                     */
-                    override fun onFailure(call: Call<RegistrationScheduleResponse>, t: Throwable) {
-                        Log.d("RegisterSchedule/FAILURE", t.message.toString())
-                    }
-
-                })
+                lifecycleScope.launch {
+                    registerSchedule()
+                }
             }
             /** 쪼개기 */
             scheduleRegistrationContentBtnSplit.setOnClickListener {
@@ -327,29 +362,312 @@ class ScheduleRegistrationFragment : Fragment() {
         }
     }
 
+    /**
+     * 마감 날짜 선택
+     */
+    private fun showDeadlinePopup(
+        anchor: View,
+        selectedTimeBefore: Time?,
+        onItemSelected: (Time) -> Unit) {
+
+        val calendar = Calendar.getInstance()
+
+        var selectedTime = Time(
+            calendar,
+            calendar.get(Calendar.HOUR),
+            calendar.get(Calendar.MINUTE),
+            ampm.AM
+        )
+
+        val displayMetrics = requireContext().resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
+        val dropdownView = LayoutScheduleDelayCalendarBinding.inflate(layoutInflater)
+        // 달력 헤더
+        dropdownView.scheduleDelayCalendarCalendar.setTitleFormatter(object : TitleFormatter {
+            override fun format(day: CalendarDay?): CharSequence {
+                return "${day!!.month}월 ${day.year}"
+            }
+        })
+
+        // ui 초기화
+        if (selectedTimeBefore != null) { selectedTime = selectedTimeBefore }
+        dropdownView.scheduleDelayCalendarTimeHourTv.text = selectedTime.hour.toString()
+        dropdownView.scheduleDelayCalendarTimeMinuteTv.text = selectedTime.minute.toString()
+        dropdownView.scheduleDelayCalendarTimeAmpmTv.text = selectedTime.ampm.toString()
+        Log.d("selectedTime", "${selectedTime.date} / ${selectedTime.ampm}")
+
+        val calendarPopup = PopupWindow(
+            dropdownView.root,
+            (screenWidth * 0.68).toInt(),
+            (screenHeight * 0.41).toInt(),
+            true
+        )
+
+        calendarPopup.elevation = 5f
+        calendarPopup.isOutsideTouchable = true
+
+        /** 각 시간대 선택 */
+        dropdownView.apply {
+            scheduleDelayCalendarTimeHour.setOnClickListener {
+                initTimeSelectDropdown(it, selectedTime, "hour") {
+                    scheduleDelayCalendarTimeHourTv.text = it.toString()
+                    selectedTime.hour = it
+                }
+            }
+            scheduleDelayCalendarTimeMinute.setOnClickListener {
+                initTimeSelectDropdown(it, selectedTime, "minute") {
+                    scheduleDelayCalendarTimeMinuteTv.text = it.toString()
+                    selectedTime.minute = it
+                }
+            }
+            scheduleDelayCalendarTimeAmpm.setOnClickListener {
+                initAmpmSelectDropdown(it) { idx ->
+                    selectedTime.ampm = ampmOnDropdown[idx]
+                    scheduleDelayCalendarTimeAmpmTv.text = if (selectedTime.ampm == ampm.AM) "오전" else "오후"
+                }
+            }
+            scheduleDelayCalendarCalendar.setOnDateChangedListener { widget, date, selected ->
+                selectedTime.date.set(
+                    date.year,
+                    date.month,
+                    date.day
+                )
+            }
+            scheduleDelayCalendarOkTv.setOnClickListener {
+                onItemSelected(selectedTime)
+                calendarPopup.dismiss()
+            }
+        }
+
+        calendarPopup.showAsDropDown(anchor)
+    }
 
     /**
-     * 날짜 선택
+     * 실행 날짜 선택
      */
-    private fun showDatePickerDialog(anchor: TextView, selectType: Int) {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+    private fun showExecutionDatePopup(
+        anchor: View,
+        selectedStartTimeBefore: Time?,
+        selectedEndTimeBefore: Time?,
+        resultStartTime: (Time) -> Unit,
+        resultEndTime: (Time) -> Unit,
+        onComplete:() -> Unit
+    ) {
+        val displayMetrics = requireContext().resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
 
-        context?.let { it1 ->
-            DatePickerDialog(it1, { _, year, month, day ->
-                run {
-                    // / date -> deadline -> 반영할 필요 없음
-                    if (selectType < 1) { // x -> deadline / x -> date / deadline -> deadline / deadline -> date
-                        selectedDate = String.format("${year}-${DecimalFormat("00").format(month+1)}-${DecimalFormat("00").format(day)}")
-                    } else if (isSelectedExctDate == 1 && selectType == 1) { // date -> date
-                        selectedDate = String.format("${year}-${DecimalFormat("00").format(month+1)}-${DecimalFormat("00").format(day)}")
-                    }
-                    anchor.text = String.format("${year}.${DecimalFormat("00").format(month+1)}.${DecimalFormat("00").format(day)}")
+        val dropdownView = LayoutPopupRegisterScheduleSelectExecutionDateBinding.inflate(layoutInflater)
+        // 달력 헤더
+        dropdownView.scheduleRegistrationCalendar.setTitleFormatter(object : TitleFormatter {
+            override fun format(day: CalendarDay?): CharSequence {
+                return "${day!!.month}월 ${day.year}"
+            }
+        })
+
+        // ui 초기화
+        val startCalendar = Calendar.getInstance()
+        val endCalendar = Calendar.getInstance()
+
+        var selectedStartTime = Time(
+            startCalendar,
+            startCalendar.get(Calendar.HOUR),
+            startCalendar.get(Calendar.MINUTE),
+            ampm.AM
+        )
+        var selectedEndTime = Time(
+            endCalendar,
+            endCalendar.get(Calendar.HOUR),
+            endCalendar.get(Calendar.MINUTE),
+            ampm.AM
+        )
+        endCalendar.add(Calendar.MONTH, 1)
+
+        if (selectedStartTimeBefore != null) { selectedStartTime = selectedStartTimeBefore }
+        if (selectedEndTimeBefore != null) { selectedEndTime = selectedEndTimeBefore }
+
+        dropdownView.scheduleRegistrationStartTimeHourTv.text = selectedStartTime.hour.toString()
+        dropdownView.scheduleRegistrationStartTimeMinuteTv.text = selectedStartTime.minute.toString()
+        dropdownView.scheduleRegistrationStartTimeAmpmTv.text = selectedStartTime.ampm.toString()
+
+        dropdownView.scheduleRegistrationEndTimeHourTv.text = selectedEndTime.hour.toString()
+        dropdownView.scheduleRegistrationEndTimeMinuteTv.text = selectedEndTime.minute.toString()
+        dropdownView.scheduleRegistrationEndTimeAmpmTv.text = selectedEndTime.ampm.toString()
+
+        val calendarPopup = PopupWindow(
+            dropdownView.root,
+            (screenWidth * 0.68).toInt(),
+            (screenHeight * 0.46).toInt(),
+            true
+        )
+
+        calendarPopup.elevation = 5f
+        calendarPopup.isOutsideTouchable = true
+
+        /** 각 시간대 선택 */
+        dropdownView.apply {
+            scheduleRegistrationStartTimeHour.setOnClickListener {
+                initTimeSelectDropdown(it, selectedStartTime, "hour") {
+                    scheduleRegistrationStartTimeHourTv.text = it.toString()
+                    selectedStartTime.hour = it
                 }
-            }, year, month, day)
-        }?.show()
+            }
+            scheduleRegistrationStartTimeMinute.setOnClickListener {
+                initTimeSelectDropdown(it, selectedStartTime, "minute") {
+                    scheduleRegistrationStartTimeMinuteTv.text = it.toString()
+                    selectedStartTime.minute = it
+                }
+            }
+            scheduleRegistrationStartTimeAmpm.setOnClickListener {
+                initAmpmSelectDropdown(it) { idx ->
+                    selectedEndTime.ampm = ampmOnDropdown[idx]
+                    scheduleRegistrationEndTimeAmpmTv.text = if (selectedEndTime.ampm == ampm.AM) "오전" else "오후"
+                }
+            }
+            scheduleRegistrationEndTimeHour.setOnClickListener {
+                initTimeSelectDropdown(it, selectedEndTime, "hour") {
+                    scheduleRegistrationEndTimeHourTv.text = it.toString()
+                    selectedEndTime.hour = it
+                }
+            }
+            scheduleRegistrationEndTimeMinute.setOnClickListener {
+                initTimeSelectDropdown(it, selectedEndTime, "minute") {
+                    scheduleRegistrationEndTimeMinuteTv.text = it.toString()
+                    selectedEndTime.minute = it
+                }
+            }
+            scheduleRegistrationEndTimeAmpm.setOnClickListener {
+                initAmpmSelectDropdown(it) { idx ->
+                    selectedStartTime.ampm = ampmOnDropdown[idx]
+                    scheduleRegistrationStartTimeAmpmTv.text = if (selectedStartTime.ampm == ampm.AM) "오전" else "오후"
+                }
+            }
+            scheduleRegistrationCalendar.setOnRangeSelectedListener { widget, dates ->
+                selectedStartTime.date.set(
+                    dates[0].year,
+                    dates[0].month,
+                    dates[0].day
+                )
+                selectedEndTime.date.set(
+                    dates[dates.size - 1].year,
+                    dates[dates.size - 1].month,
+                    dates[dates.size - 1].day
+                )
+            }
+            scheduleRegistrationOkTv.setOnClickListener {
+                resultStartTime(selectedStartTime)
+                resultEndTime(selectedEndTime)
+                onComplete()
+                calendarPopup.dismiss()
+            }
+        }
+
+        calendarPopup.showAsDropDown(anchor)
+    }
+
+    /**
+     * 캘린더 팝업에서 시간 선택할 수 있는 드롭다운
+     */
+    private fun initTimeSelectDropdown(
+        anchor: View,
+        selectedTime: Time,
+        tag: String,
+        onItemSelected: (Int) -> Unit) {
+
+        val inflater =  LayoutInflater.from(context as MainActivity)
+        val dateSelectDropdownView = inflater.inflate(R.layout.layout_schedule_delay_date_dropdown, null)
+
+        val dateSelectDropdown = PopupWindow(
+            dateSelectDropdownView,
+            anchor.width,
+            LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        val timeForSelectList = dateSelectDropdownView.findViewById<LinearLayout>(R.id.calendar_dropdown_dateList)
+
+        fun updateUI(list: LinearLayout, items: List<Int>, selected: Int?, onClick: (Int) -> Unit) {
+            list.removeAllViews()
+            for (item in items) {
+                val isSelected = item == selected
+                val textView = TextView(context as MainActivity).apply {
+                    text = "$item"
+                    textSize = 10f
+                    setTypeface(
+                        ResourcesCompat.getFont(context as MainActivity,
+                            R.font.poppins_regular
+                        ))
+                    setBackgroundColor(if (isSelected) "#F1F5F9".toColorInt() else Color.TRANSPARENT)
+                    setOnClickListener {
+                        onClick(item)
+                    }
+                }
+                list.addView(textView)
+            }
+        }
+
+        when (tag) {
+            "hour" -> {
+                updateUI(timeForSelectList, hoursOnDropdown, selectedTime.hour) { hour ->
+                    selectedTime.hour = hour
+                    onItemSelected(hour)
+                    updateUI(timeForSelectList, hoursOnDropdown, selectedTime.hour) {}
+                    dateSelectDropdown.dismiss()
+                }
+            }
+
+            "minute" -> {
+                updateUI(timeForSelectList, minutesOnDropdown, selectedTime.minute) { minute ->
+                    selectedTime.minute = minute
+                    onItemSelected(minute)
+                    updateUI(timeForSelectList, minutesOnDropdown, selectedTime.minute) {}
+                    dateSelectDropdown.dismiss()
+                }
+            }
+        }
+
+        dateSelectDropdown.apply {
+            elevation = 8f
+            setBackgroundDrawable(Color.WHITE.toDrawable())
+            isOutsideTouchable = true
+            showAsDropDown(anchor)
+        }
+    }
+
+    /**
+     * 오전, 오후 선택
+     */
+    private fun initAmpmSelectDropdown(
+        anchor: View,
+        onItemSelected: (Int) -> Unit) {
+
+        val dropdownView = LayoutScheduleDelayAmpmBinding.inflate(layoutInflater)
+        val ampmDropdown = PopupWindow(
+            dropdownView.root,
+            anchor.width,
+            LayoutParams.WRAP_CONTENT,
+            true
+        )
+
+        ampmDropdown.elevation = 5f
+        ampmDropdown.setBackgroundDrawable(Color.WHITE.toDrawable())
+        ampmDropdown.isOutsideTouchable = true
+
+        val viewList = listOf(
+            dropdownView.scheduleDelayCalendarAm,
+            dropdownView.scheduleDelayCalendarPm
+        )
+
+        viewList.forEachIndexed() { index, item ->
+            item.setOnClickListener {
+                onItemSelected(index)
+                ampmDropdown.dismiss()
+            }
+        }
+
+        ampmDropdown.showAsDropDown(anchor)
     }
 
     /**
@@ -542,14 +860,27 @@ class ScheduleRegistrationFragment : Fragment() {
     /**
      * 백엔드로 보낼 Request 바디 생성
      */
-    private fun setRequestSchedule(): ScheduleToRegister? {
+    private fun setRegisterScheduleRequest(): RegisterScheduleRequest? {
+
+        val numberFormat = DecimalFormat("00")
 
         val title = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentTitleEt.text.toString()
         Log.d("RegistrationSchedule/title", title)
-        val deadline = String.format("${selectedDate}T00:00:00.000")
+
+        val deadline =
+            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedDeadline?.minute)}:00.000")
         Log.d("RegistrationSchedule/deadline", deadline)
-        val priority = selectedPriority
-        Log.d("RegistrationSchedule/priority", priority)
+
+        val scheduledStart =
+            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
+        Log.d("RegistrationSchedule/scheduledStart", scheduledStart)
+        val scheduledEnd =
+            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
+        Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
+
+        val priority = convertSchedulePriority(selectedPriority)
+        Log.d("RegistrationSchedule/priority", priority.toString())
+
         val description = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentCommentEt.text.toString()
         Log.d("RegistrationSchedule/description", description)
 
@@ -561,7 +892,7 @@ class ScheduleRegistrationFragment : Fragment() {
             Toast.makeText(context as MainActivity, "마감기한 혹은 수행 날짜를 정해주세요", Toast.LENGTH_SHORT).show()
             return null
         }
-        if (priority.isEmpty()) {
+        if (priority == null) {
             Toast.makeText(context as MainActivity, "우선 순위를 정해주세요", Toast.LENGTH_SHORT).show()
             return null
         }
@@ -569,11 +900,53 @@ class ScheduleRegistrationFragment : Fragment() {
             Toast.makeText(context as MainActivity, "한 줄 설명은 작성하지 않았어요", Toast.LENGTH_SHORT).show()
         }
 
-        return ScheduleToRegister(
+        return RegisterScheduleRequest(
             title,
-            description,
-            deadline
+            deadline,
+            scheduledStart,
+            scheduledEnd,
+            priority,
+            description
         )
+    }
+
+    /**
+     * 일정 등록
+     */
+    private suspend fun registerSchedule() {
+        try {
+            val token = "Bearer $t"
+            val registerScheduleRequest = setRegisterScheduleRequest() ?: return
+            Log.d("registerSchedule/Request", "title: ${registerScheduleRequest.title} \ndeadline: ${registerScheduleRequest.deadline} \nscheduledStart: ${registerScheduleRequest.scheduledStart} \nscheduledEnd: ${registerScheduleRequest.scheduledEnd} \npriority: ${registerScheduleRequest.priority} \ndescription: ${registerScheduleRequest.description}")
+
+            val api = getRetrofit().create(ApiService::class.java)
+            val response = api.registerSchedule(token, registerScheduleRequest)
+
+            if (response.isSuccessful) {
+                val resultOfResponse = response.body()!!.result
+
+                val plan = Plan(
+                    id = resultOfResponse.planId,
+                    title = resultOfResponse.title,
+                    deadline = resultOfResponse.deadline,
+                    scheduledStart = resultOfResponse.scheduledStart,
+                    isDone = resultOfResponse.isDone,
+                )
+                scheduleDB.planDao().insert(plan)
+                Log.d("registerSchedule", "저장된 정보: ${response.body()}")
+            } else {
+                Log.d("registerSchedule", "실패: ${response.code()} - ${response.message()}")
+            }
+
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CalendarFragment())
+                .commitAllowingStateLoss()
+
+            controlTopBar(context as MainActivity, true)
+            controlBottomNavigation(context as MainActivity, true)
+        } catch (e: Exception) {
+            Log.e("registerSchedule", "에러: ${e.message}")
+        }
     }
 
     /**
@@ -594,14 +967,28 @@ class ScheduleRegistrationFragment : Fragment() {
             topbar.scheduleRegistrationTopbarCancelIv.visibility = View.GONE
         }
     }
-}
 
-enum class ScheduleType {
-    IMMERSIVE,
-    CREATIVE,
-    STUDY_ORGANIZATION,
-    PRACTICAL_ADMIN,
-    ROUTINE,
-    COLLAB_COMMUNICATION,
-    PREPARATION_PLANNING
+    private fun convertScheduleType(scheduleTypeIndex: Int): String? {
+        val realScheduleType = when(scheduleTypeIndex) {
+            0 -> "IMMERSIVE"
+            1 -> "CREATIVE"
+            2 -> "STUDY_ORGANIZATION"
+            3 -> "PRACTICAL_ADMIN"
+            4 -> "ROUTINE"
+            5 -> "COLLAB_COMMUNICATION"
+            6 -> "PREPARATION_PLANNING"
+            else -> null
+        }
+        return realScheduleType
+    }
+
+    private fun convertSchedulePriority(schedulePrior: String): String? {
+        val realPriority = when(schedulePrior) {
+            "상" -> "HIGH"
+            "중" -> "MEDIUM"
+            "하" -> "LOW"
+            else -> null
+        }
+        return realPriority
+    }
 }
