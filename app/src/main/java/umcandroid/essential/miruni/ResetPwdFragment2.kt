@@ -17,9 +17,11 @@ class ResetPwdFragment2 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentResetpwd2Binding.inflate(inflater, container, false)
+        val email = arguments?.getString("email")
 
         binding.sendBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_resetPwdFragment2_to_resetPwdFragment3)
+            val bundle = Bundle().apply { putString("email", email) }
+            findNavController().navigate(R.id.action_resetPwdFragment2_to_resetPwdFragment3, bundle)
         }
 
         binding.back2Btn.setOnClickListener {

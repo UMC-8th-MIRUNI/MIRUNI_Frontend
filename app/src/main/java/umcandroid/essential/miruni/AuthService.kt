@@ -3,6 +3,7 @@ package umcandroid.essential.miruni
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface AuthService {
@@ -11,12 +12,12 @@ interface AuthService {
         @Body request: SignupRequest
     ): Response<SignupResponse>
 
-    @POST("api/auth/normal")
+    @POST("api/auth/login/normal")
     suspend fun login(
         @Body request: LoginRequest
     ): Response<LoginResponse>
 
-    @POST("/api/auth/kakao")
+    @POST("/api/auth/login/kakao")
     suspend fun loginWithKakao(
         @Body request: KakaoLoginRequest
     ): Response<KakaoLoginResponse>
@@ -26,4 +27,21 @@ interface AuthService {
         @Header("Authorization") token: String,
         @Body body: SurveyRequest
     ): Response<SurveyResponse>
+
+    @POST("/api/auth/password/reset")
+    suspend fun sendVerificationCode(
+        @Body request: ResetPwdRequest
+    ): Response<ResetPwdResponse>
+
+    @POST("/api/auth/password/reset/verification")
+    suspend fun verifyCode(
+        @Body request: VerifyCodeRequest
+    ): Response<VerifyCodeResponse>
+
+    @PATCH("/api/auth/password/reset")
+    suspend fun completeResetPassword(
+        @Header("Authorization") resetToken: String,
+        @Body request: ResetPwdCompleteRequest
+    ): Response<ResetPwdCompleteResponse>
+
 }
