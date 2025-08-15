@@ -24,6 +24,7 @@ import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
+import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.RegisterScheduleRequest
 import com.example.miruni.api.RegisterScheduleResponse
@@ -50,9 +51,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.Calendar
 
 class ScheduleRegistrationFragment : Fragment() {
@@ -915,7 +913,7 @@ class ScheduleRegistrationFragment : Fragment() {
      */
     private suspend fun registerSchedule() {
         try {
-            val token = "Bearer $t"
+            val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
             val registerScheduleRequest = setRegisterScheduleRequest() ?: return
             Log.d("registerSchedule/Request", "title: ${registerScheduleRequest.title} \ndeadline: ${registerScheduleRequest.deadline} \nscheduledStart: ${registerScheduleRequest.scheduledStart} \nscheduledEnd: ${registerScheduleRequest.scheduledEnd} \npriority: ${registerScheduleRequest.priority} \ndescription: ${registerScheduleRequest.description}")
 
