@@ -28,6 +28,8 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import java.util.Calendar
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
+import com.example.miruni.TokenManager
+import com.example.miruni.TokenResult
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.Monthly
 import com.example.miruni.api.getRetrofit
@@ -35,6 +37,7 @@ import com.example.miruni.ui.homepage.t
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 
 class CalendarFragment : Fragment() {
     /** 전역 변수 */
@@ -93,7 +96,8 @@ class CalendarFragment : Fragment() {
     private suspend fun loadTasks(year: Int, month: Int) {
 
         try {
-            val token = "Bearer $t"
+            val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+            Log.d("token", TokenManager.getToken(requireContext()).toString())
             val api = getRetrofit().create(ApiService::class.java)
             val response = api.getScheduleInMonth(token, year, month)
 

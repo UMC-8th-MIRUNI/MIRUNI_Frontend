@@ -21,6 +21,7 @@ import retrofit2.Response
 import com.example.miruni.RetrofitInstance.authService
 import java.security.MessageDigest
 import android.util.Base64
+import com.example.miruni.TokenManager.saveToken
 
 class LoginFragment : Fragment() {
     private val viewModel: LoginViewModel by viewModels()
@@ -66,7 +67,8 @@ class LoginFragment : Fragment() {
 
                 val accessToken = response.result?.accessToken
                 val refreshToken = response.result?.refreshToken
-                saveTokens(accessToken, refreshToken)
+                Log.d("token", accessToken.toString())
+                saveToken(requireContext(), accessToken.toString())
 
                 startActivity(Intent(requireContext(), MainActivity::class.java))
                 requireActivity().finish()
