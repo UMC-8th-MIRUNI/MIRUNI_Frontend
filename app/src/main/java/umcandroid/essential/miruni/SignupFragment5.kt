@@ -9,60 +9,70 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import umcandroid.essential.miruni.RetrofitInstance.authService
 //import com.example.miruni.R
 //import com.example.miruni.databinding.FragmentSignup5Binding
 import umcandroid.essential.miruni.databinding.FragmentSignup5Binding
 
 class SignupFragment5 : Fragment() {
 
-    private val viewModel: SignupViewModel by activityViewModels()
-    private lateinit var binding: FragmentSignup5Binding
+    private var _binding: FragmentSignup5Binding? = null
+    private val binding get() = _binding!!
+    private val viewModel: SurveyViewModel by activityViewModels()
+    private val repository = SurveyRepository(authService)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSignup5Binding.inflate(inflater, container, false)
+        _binding = FragmentSignup5Binding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 체크박스 선택값 ViewModel에 저장 + 서버 전송
         binding.ivCompleteButton.setOnClickListener {
             val selected = mutableListOf<String>()
-            if (binding.checkboxOption1.isChecked) selected.add("KTYPE")
-            if (binding.checkboxOption2.isChecked) selected.add("LTYPE")
-            if (binding.checkboxOption3.isChecked) selected.add("MTYPE")
-            if (binding.checkboxOption4.isChecked) selected.add("NTYPE")
-            if (binding.checkboxOption5.isChecked) selected.add("OTYPE")
-            if (binding.checkboxOption6.isChecked) {
-                val custom = binding.editTextCustom.text.toString()
-                if (custom.isNotBlank()) selected.add(custom)
+            if (binding.checkboxOption1.isChecked) selected.add("LAZY")
+            if (binding.checkboxOption2.isChecked) selected.add("TOO_BIG_TO_START")
+            if (binding.checkboxOption3.isChecked) selected.add("DONT_KNOW_WHERE_TO_START")
+            if (binding.checkboxOption4.isChecked) selected.add("PERFECTIONISM")
+            if (binding.checkboxOption5.isChecked) selected.add("CANT_CONCENTRATE")
+            if (binding.checkboxOption6.isChecked) selected.add("NOT_FUN")
+
+            viewModel.reasons.value = selected
+
+            // 서버 전송
+            viewModel.submitSurvey(repository)
+        }
+
+        // 서버 응답 관찰
+        viewModel.surveyResult.observe(viewLifecycleOwner) { response ->
+            response.result?.let {
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+
+                // Fragment가 attach 되어 있는지 확인 후 navigate
+                if (isAdded) {
+                    try {
+                        findNavController().navigate(R.id.action_signupFragment5_to_opening2Fragment)
+                    } catch (e: Exception) {
+                        Log.e("SignupFragment5", "Navigation error: ${e.message}")
+                    }
+                }
             }
-
-            viewModel.addPreferences(selected)
-            Log.d("SignupFragment5", "가입 시도: ${selected.joinToString()}") // 확인용 로그
-
-            viewModel.signup() // 화면 이동은 아래 observe에서 처리
-        }
-        viewModel.signupResult.observe(viewLifecycleOwner) { result ->
-            result.onSuccess { response ->
-                Toast.makeText(requireContext(), "회원가입 성공!", Toast.LENGTH_SHORT).show()
-                Log.d("SignupFragment5", "회원가입 응답: $response")
-
-                // 성공 후 화면 이동
-                findNavController().navigate(R.id.action_signupFragment5_to_opening2Fragment)
-            }.onFailure { exception ->
-                Toast.makeText(requireContext(), "회원가입 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
-                Log.e("SignupFragment5", "회원가입 실패: ${exception.message}")
-            }
         }
 
-
-        binding.ivSelectBack.setOnClickListener {
-            parentFragmentManager.popBackStack()
+        // 오류 처리
+        viewModel.error.observe(viewLifecycleOwner) { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

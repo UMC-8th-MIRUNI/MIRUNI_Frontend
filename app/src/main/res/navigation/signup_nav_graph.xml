@@ -8,7 +8,15 @@
         android:id="@+id/signupFragment1"
         android:name="umcandroid.essential.miruni.SignupFragment1">
         <action
-            android:id="@+id/action_signupFragment1_to_signupFragment2"
+            android:id="@+id/action_signupFragment1_to_signupFragment11"
+            app:destination="@id/signupFragment11" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupFragment11"
+        android:name="umcandroid.essential.miruni.SignupFragment11">
+        <action
+            android:id="@+id/action_signupFragment11_to_signupFragment2"
             app:destination="@id/signupFragment2" />
     </fragment>
 

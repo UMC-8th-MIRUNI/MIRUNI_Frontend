@@ -19,6 +19,10 @@ class Opening1Fragment : Fragment() {
     ): View? {
         val binding = FragmentOpening1Binding.inflate(inflater, container, false)
 
+        val nicknameFromServer = arguments?.getString("nickname") ?: ""
+        binding.naming.text = nicknameFromServer
+        binding.naming2.text = nicknameFromServer
+
         binding.ivOpeningButton.setOnClickListener {
             findNavController().navigate(R.id.action_opening1Fragment_to_signupFragment3)
         }

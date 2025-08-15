@@ -17,34 +17,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back" />
 
-    <TextView
-        android:id="@+id/tv_nickname_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
-        android:text="앞으로 어떻게 불러드리면 좋을까요?"
-        android:textColor="#000000"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
         android:id="@+id/iv_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="196dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/miruni_logo" />
+        app:srcCompat="@drawable/circle" />
 
     <EditText
         android:id="@+id/et_nickname"
         android:layout_width="366dp"
         android:layout_height="48dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="500dp"
         android:ems="10"
         android:hint="닉네임"
         android:inputType="text"
@@ -55,13 +44,60 @@
 
     <ImageView
         android:id="@+id/iv_nickname"
-        android:layout_width="92dp"
-        android:layout_height="33dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="88dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/signup2" />
+        app:srcCompat="@drawable/signup1" />
+
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="137dp"
+        android:layout_height="137dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
+        app:layout_constraintEnd_toEndOf="@+id/iv_logo"
+        app:layout_constraintStart_toStartOf="@+id/iv_logo"
+        app:layout_constraintTop_toTopOf="@+id/iv_logo"
+        app:srcCompat="@drawable/signup_miruni_logo" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="앞으로 어떻게 불러드리면 좋을까요?"
+        android:textColor="#BBBBBB"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_nickname"
+        app:srcCompat="@drawable/mdi_check_box_outline_blank" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="실명으로 불러주세요!"
+        android:textColor="@color/black"
+        android:textSize="17dp"
+        app:layout_constraintStart_toEndOf="@+id/imageView12"
+        app:layout_constraintTop_toBottomOf="@+id/et_nickname" />
 
     <ImageView
         android:id="@+id/iv_nickname_button"
@@ -72,7 +108,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/button" />
+        app:srcCompat="@drawable/iv_complete_btn" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="완료"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_nickname_button"
+        app:layout_constraintStart_toStartOf="@+id/iv_nickname_button"
+        app:layout_constraintTop_toTopOf="@+id/iv_nickname_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,5 @@
 package umcandroid.essential.miruni
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,13 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-//import com.example.miruni.R
-//import com.example.miruni.databinding.FragmentSignup1Binding
-import umcandroid.essential.miruni.databinding.FragmentSignup1Binding
+import umcandroid.essential.miruni.databinding.FragmentSignup11Binding
 
-//import umcandroid.essential.miruni.databinding.FragmentSignup1Binding
-
-class SignupFragment1 : Fragment() {
+class SignupFragment11 : Fragment() {
 
     private val viewModel: SignupViewModel by activityViewModels()
     private var isAgree = false // 체크 상태 저장
@@ -27,7 +22,7 @@ class SignupFragment1 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         Log.d("SignupFragment1", "onCreateView 호출됨")
-        val binding = FragmentSignup1Binding.inflate(inflater, container, false)
+        val binding = FragmentSignup11Binding.inflate(inflater, container, false)
 
         // 체크박스 클릭 이벤트
 //        binding.ivCheckbox.setOnClickListener {
@@ -40,30 +35,24 @@ class SignupFragment1 : Fragment() {
 //        }
 
         binding.ivButton.setOnClickListener {
-//            val name = binding.etName.text.toString()
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
-            val password_check = binding.etPasswordCheck.text.toString()
-//            val phoneNumber = binding.etPhone.text.toString()
+            val name = binding.etName.text.toString()
+            val birthday = binding.etBirthday.text.toString()
+            val phoneNumber = binding.etPhone.text.toString()
 
 
-            if (email.isEmpty()) {
+            if (name.isEmpty()) {
                 Toast.makeText(requireContext(), "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (password.isEmpty()) {
+            if (birthday.isEmpty()) {
                 Toast.makeText(requireContext(), "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if (password_check.isEmpty()) {
+            if (phoneNumber.isEmpty()) {
                 Toast.makeText(requireContext(), "비밀번호 확인을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (password != password_check) {
-                Toast.makeText(requireContext(), "비밀번호가 다릅니다.", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
 
 //            if (!isAgree) {
 //                Toast.makeText(requireContext(), "약관에 동의해주세요.", Toast.LENGTH_SHORT).show()
@@ -71,12 +60,11 @@ class SignupFragment1 : Fragment() {
 //            }
 
             // 이동
-            findNavController().navigate(R.id.action_signupFragment1_to_signupFragment11)
+            findNavController().navigate(R.id.action_signupFragment11_to_signupFragment2)
 
-//            viewModel.name.value = name
-            viewModel.email.value = email
-            viewModel.password.value = password
-//            viewModel.phoneNumber.value = phoneNumber
+            viewModel.name.value = name
+            viewModel.birthday.value = birthday
+            viewModel.phoneNumber.value = phoneNumber
         }
 
         binding.ivSignupBack.setOnClickListener {

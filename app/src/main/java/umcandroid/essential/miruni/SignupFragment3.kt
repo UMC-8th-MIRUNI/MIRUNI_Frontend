@@ -15,7 +15,7 @@ import umcandroid.essential.miruni.databinding.FragmentSignup3Binding
 
 class SignupFragment3 : Fragment() {
 
-    private val viewModel: SignupViewModel by activityViewModels()
+    private val viewModel: SurveyViewModel by activityViewModels()
     private lateinit var binding: FragmentSignup3Binding
 
     override fun onCreateView(
@@ -32,38 +32,15 @@ class SignupFragment3 : Fragment() {
 
         binding.ivCompleteButton.setOnClickListener {
             val selected = mutableListOf<String>()
-            if (binding.checkboxOption1.isChecked) selected.add("A")
-            if (binding.checkboxOption2.isChecked) selected.add("B")
-            if (binding.checkboxOption3.isChecked) selected.add("C")
-            if (binding.checkboxOption4.isChecked) selected.add("D")
-            if (binding.checkboxOption5.isChecked) selected.add("E")
-            if (binding.checkboxOption6.isChecked) {
-                val custom = binding.editTextCustom.text.toString()
-                if (custom.isNotBlank()) selected.add(custom)
-            }
-            viewModel.addPreferences(selected)
+            if (binding.checkboxOption1.isChecked) selected.add("PHONE")
+            if (binding.checkboxOption2.isChecked) selected.add("VIDEO")
+            if (binding.checkboxOption3.isChecked) selected.add("MEET_FRIENDS")
+            if (binding.checkboxOption4.isChecked) selected.add("TOO_MUCH_WORK")
+            if (binding.checkboxOption5.isChecked) selected.add("TOO_TIRED")
 
-//            viewModel.signup()
-            //예비
-//            val intent = Intent(requireContext(), LoginActivity::class.java)
-//            startActivity(intent)
-//            requireActivity().finish()
+            viewModel.situations.value = selected
             findNavController().navigate(R.id.action_signupFragment3_to_signupFragment4)
         }
-
-        // LiveData 관찰: 성공 여부에 따라 로그인 화면 이동
-//        viewModel.signupResult.observe(viewLifecycleOwner) { isSuccess ->
-//            if (isSuccess == true) {
-//                Toast.makeText(requireContext(), "회원가입 완료!", Toast.LENGTH_SHORT).show()
-//
-//                // LoginActivity로 이동
-//                val intent = Intent(requireContext(), LoginActivity::class.java)
-//                startActivity(intent)
-//                requireActivity().finish() // SignupActivity 종료
-//            } else {
-//                Toast.makeText(requireContext(), "회원가입 실패. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-//            }
-//        }
 
         binding.ivSelectBack.setOnClickListener {
             parentFragmentManager.popBackStack()
