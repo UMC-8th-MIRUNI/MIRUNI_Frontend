@@ -240,7 +240,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/dmsans_bold"
-                        android:text="일정을 추가해주세요"
+                        android:text=""
                         android:textColor="#ffffff"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -351,19 +351,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.98" />
-
-            <!--<androidx.compose.ui.platform.ComposeView
-                android:id="@+id/homepage_today_task"
-                android:layout_width="0dp"
-                android:layout_height="300dp"
-                android:layout_marginEnd="8dp"
-                android:nestedScrollingEnabled="false"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                tools:layout_editor_absoluteY="712dp">
-
-            </androidx.compose.ui.platform.ComposeView>-->
-
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -511,16 +498,13 @@
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/hello_viewpager"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
+                android:padding="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                app:layout_constraintEnd_toStartOf="@+id/imageView4"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="@+id/imageView3"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintEnd_toStartOf="@+id/guideline86"
+                app:layout_constraintStart_toStartOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
             <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
                 android:id="@+id/dotsIndicator"
@@ -530,22 +514,9 @@
                 app:dotsSize="5dp"
                 app:dotsSpacing="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/hello_viewpager"
-                app:layout_constraintEnd_toEndOf="@+id/hello_viewpager"
+                app:layout_constraintEnd_toStartOf="@+id/imageView4"
                 app:layout_constraintStart_toStartOf="@+id/hello_viewpager"
                 app:selectedDotColor="#484C52" />
-
-            <TextView
-                android:id="@+id/motivationTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:fontFamily="@font/dmsans_bold"
-                android:text="TextView"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-                app:layout_constraintEnd_toEndOf="@+id/imageView3"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/horizon_start"
@@ -556,6 +527,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintGuide_percent="0.05"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline86"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.47" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

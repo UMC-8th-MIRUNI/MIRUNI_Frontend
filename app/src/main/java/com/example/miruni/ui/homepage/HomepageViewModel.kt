@@ -5,7 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.miruni.api.model.DeleteTaskRequest
 import com.example.miruni.api.model.HomepageResponse
+import com.example.miruni.api.model.NextTask
+import com.example.miruni.api.model.TaskItem
 import com.example.miruni.api.model.Tasks
 import com.example.miruni.data.repository.HomepageRepository
 import kotlinx.coroutines.launch
@@ -13,27 +16,85 @@ import retrofit2.Response
 
 class HomepageViewModel(private val repository: HomepageRepository): ViewModel() {
 
-    private val HomepageDatas = MutableLiveData<HomepageResponse>()
-    val homepagedatas: LiveData<HomepageResponse> = HomepageDatas
+    private val HomepageDatas = MutableLiveData<uiData>()
+    val homepagedatas: LiveData<uiData> = HomepageDatas
 
-    private lateinit var homepage: Response<HomepageResponse>
     fun loadHomepage(token: String){
-        /* 홈페이지 전체 정보 조회 API */
+        /* 홈페이지 전체 정보 조회 */
         viewModelScope.launch {
             try {
-                homepage = repository.getHomepage(token)
-                HomepageDatas.value = homepage.body()
+                var homepage = repository.getHomepage(token)
+                /* 연결 확인 */
                 if(homepage.isSuccessful){
                     Log.d("홈페이지 전체 정보 조회", "성공: ${homepage.body()}")
-                }else{
-                    Log.e("홈페이지 전체 정보 조회", "에러: ${homepage.code()} - ${homepage.message()}")
-                }
+
+                    val result = homepage?.body()?.result
+                    result?.let { it ->
+                        val paused = it.tasks?.paused ?: emptyList()
+                        val finished = it.tasks?.finished ?: emptyList()
+                        val notStarted = it.tasks?.notStarted ?: emptyList()
+
+                        val nextTask = it.nextTask ?: emptyList()
+
+                        val allTask = paused + finished + notStarted
+
+                        HomepageDatas.value = uiData(
+                            username = it.name ?: "",
+                            totalCount = it.totalCount,
+                            scheduledCount = it.scheduledCount,
+                            pausedCount = it.pausedCount,
+                            completedCount = it.completedCount,
+                            achievementRate = it.achievementRate,
+
+                            paused = paused,
+                            finished = finished,
+                            notStarted = notStarted,
+
+                            nextTask = nextTask,
+
+                            allTask = allTask
+                        )
+                    }
+
+
+                }else{  Log.e("홈페이지 전체 정보 조회", "에러: ${homepage.code()} - ${homepage.message()}") }
+
+
             }catch (e: Exception){
+                Log.e("홈페이지 전체 정보 조회", "연결 에러", e)
                 Log.e("홈페이지 전체 정보 조회", "연결 에러: ${e.message}")
             }
         }
     }
-    fun getAllTask(tasks: Tasks){
+
+    fun deleteTask(token: String, request: DeleteTaskRequest){
+        viewModelScope.launch {
+            try {
+                val response = repository.deleteTask(token, request)
+
+                if(response.isSuccessful){
+                    Log.d("일정 삭제", "성공!: ${response.body()}")
+                }else { Log.e("일정 삭제", "응답 에러: ${response.code()}")}
+            }catch (e: Exception){
+                Log.e("일정 삭제", "에러: ${e.message}")
+            }
+        }
     }
 
+    data class uiData(
+        val username: String,
+        val totalCount: Int,
+        val scheduledCount: Int,
+        val pausedCount: Int,
+        val completedCount: Int,
+        val achievementRate : Int,
+
+        val paused: List<TaskItem>,
+        val finished: List<TaskItem>,
+        val notStarted: List<TaskItem>,
+
+        val nextTask: List<NextTask>,
+
+        val allTask: List<TaskItem>,
+    )
 }
