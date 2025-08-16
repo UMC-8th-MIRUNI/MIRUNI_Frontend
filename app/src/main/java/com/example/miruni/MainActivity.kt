@@ -32,6 +32,7 @@ import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.ui.calendar.CalendarFragment
 import com.example.miruni.ui.homepage.HomepageFragment
 import com.example.miruni.ui.storage.StorageFragment
+import com.example.miruni.ui.tool.ToolFragment
 import com.example.miruni.util.AlarmHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

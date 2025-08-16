@@ -27,10 +27,10 @@ data class Tasks(
 data class TaskItem(
     val planId: Int,
     val aiPlanId: Int,
-    val category: String,   // "BASIC/AI"
+    val category: Category,   // "BASIC/AI"
     val title: String,  //"과제 제출",
-    val scheduledStart: String, // "오전 4:00" 예정 시간
-    val staus: String,   // "NOT_STARTED"
+    val scheduledStart: String? = null, // "오전 4:00" 예정 시간
+    val status: String,   // "NOT_STARTED"
     val pausedAt: String? = null, // 진행 시간
     val stoppedAt: String? = null, // 중지 시간
     val reviewId: Int? = null
@@ -39,8 +39,27 @@ data class TaskItem(
 data class NextTask(
     val planId: Int,
     val aiPlanId: Int,
+    val category: String,
     val title: String, //"opic 자격증 공부"
     val description: String, //"문제집 p.60까지 풀기"
     val startDate: String, //"2025.05.28"
     val startTime: String //"오전 9:30"
 )
+
+
+/* 일정 삭제 */
+data class DeleteTaskRequest(
+    val category: Category,
+    val planId: Int,
+    val aiPlanIds: List<Int>
+)
+data class DeleteTaskResponse(
+    val requested: Int,
+    val deleted: Int,
+    val notFound: List<Int>,
+    val unauthorized: List<Int>
+)
+enum class Category{
+    AI,
+    BASIC
+}

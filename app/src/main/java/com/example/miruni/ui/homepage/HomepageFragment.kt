@@ -11,29 +11,31 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.miruni.MainActivity
 import com.example.miruni.R
-import com.example.miruni.TextVPAdapter
 import com.example.miruni.TimetableFragment
 import com.example.miruni.TokenManager
+import com.example.miruni.api.model.DeleteTaskRequest
 import com.example.miruni.api.model.TaskItem
-import com.example.miruni.api.model.Tasks
 import com.example.miruni.data.ScheduleDatabase
-import com.example.miruni.data.Task
+import com.example.miruni.data.WiseSaying
 import com.example.miruni.data.repository.HomepageRepository
 import com.example.miruni.databinding.FragmentHomepageBinding
 import com.example.miruni.databinding.LayoutCheckpopupBinding
 import com.example.miruni.ui.memoir.MemoirCompleteFragment
 import com.example.miruni.ui.memoir.MemoirNotFragment
-import com.example.miruni.ui.memoir.MemoirWriteFragment
+import kotlin.random.Random
 
 class HomepageFragment: Fragment() {
     private lateinit var binding: FragmentHomepageBinding
-    private var tasks = arrayListOf<Tasks>()
     private var allTask = arrayListOf<TaskItem>()
     private lateinit var db: ScheduleDatabase
     private lateinit var adapter: HomepageRVAdapter
     private lateinit var viewModel: HomepageViewModel
 
     private var deleteTaskId: List<Int> = emptyList()
+
+    private lateinit var finished: List<TaskItem> // 완료 일정
+    private lateinit var paused: List<TaskItem> // 중지 일정
+    private lateinit var notStarted: List<TaskItem> // 예정 일정
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,29 +46,16 @@ class HomepageFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.setTopBarColor(R.color.main)   // 상단바 색상 변경
 
-        /** 상단바 색상 변경 **/
-        (activity as? MainActivity)?.setTopBarColor(R.color.main)
-
-        connectAdapter()
-
-        var motive = ""
-        lateinit var taskList: List<Task>
-
-        binding.motivationTxt.text = motive
-
-        // 명언 더미데이터 + viewPager연결
-        val dummyData = listOf("이러쿵", "저러쿵", "화이팅~")
-
-        // viewPager + dotsIndicator연결
-        val VPAdapter = TextVPAdapter(dummyData)
-        binding.helloViewpager.adapter = VPAdapter
-        binding.dotsIndicator.attachTo(binding.helloViewpager)
+        clickEvent()
+        connectAdapter()    // 홈페이지 정보 받아서 연결
+        wiseSaying()    // 뷰 페이저에 명언 연결
     }
 
-    // 데이터 매개변수로 받아오기
-    private fun connectAdapter() {
 
+    // 홈페이지 데이터 매개변수로 받아오기
+    private fun connectAdapter() {
         val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
         val repository = HomepageRepository()
         val factory = HomepageViewModelFactory(repository)
@@ -74,51 +63,42 @@ class HomepageFragment: Fragment() {
         viewModel.loadHomepage(token)
 
 
-        viewModel.homepagedatas.observe(viewLifecycleOwner) { datas ->
+        viewModel.homepagedatas.observe(viewLifecycleOwner) { data ->
             /* 홈페이지 정보 조회 API 연결 */
-            val data = datas.result
             binding.apply {
-                username = data?.name   // username
-                taskCount = "${data?.totalCount}"   // 오늘 남은 할 일
-                scheduledCount.text = data?.scheduledCount.toString()   // 예정 개수
-                pausedCount.text = data?.pausedCount.toString() // 중지 개수
-                completedCount.text = data?.completedCount.toString()   // 완료 개수
-                achievement = data?.achievementRate.toString()  // 성취도
+                username = data.username  // username
+                taskCount = "${data.totalCount}"  // 오늘 남은 할 일
+                scheduledCount.text = data.scheduledCount.toString()   // 예정 개수
+                pausedCount.text = data.pausedCount.toString() // 중지 개수
+                completedCount.text = data.completedCount.toString()   // 완료 개수
+                achievement = data.achievementRate.toString()  // 성취도
 
                 /* 다가오는 다음 일정 */
-                if (data?.nextTask != null) {
-                    for(next in data?.nextTask!!){
-                        nextTaskTitle.text = next.title
-                        nextTaskTime.text = "${next.startDate} ${next.startTime}"
-                        nextTaskDescription.text = next.description
-                    }
-                }else{
-                    binding.taskPlay.visibility = View.GONE
+                for(date in data.nextTask){
+                    nextTaskTitle.text = date.title
+                    nextTaskTime.text = "${date.startDate} ${date.startTime}"
+                    nextTaskDescription.text = date.description
                 }
+
                 /* 오늘의 일정 목록 */
-                val tasks = data?.tasks
+                finished = data.finished
+                paused = data.paused
+                notStarted = data.notStarted
+
                 /* 모든 일정 다 더하기 */
-                allTask = (data?.tasks?.paused!! + data?.tasks?.finished!! + data?.tasks?.notStarted!!) as ArrayList
+                allTask = data.allTask as ArrayList<TaskItem>
 
-
-                if (tasks != null) {
-                    clickEvent(tasks)
-                }
             }
+            clickEvent()   // 오늘의 일정 정렬
 
-
-
+            adapter.updateData(allTask) // 데이터 RV에 전달
         }
 
-        // 오늘의 일정 adapter연결
+        /* 오늘의 일정 adapter 연결 */
         val layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.HORIZONTAL, false)
-        // 모든 일정 다 합치기
-        adapter = HomepageRVAdapter(allTask){ id ->
+        adapter = HomepageRVAdapter(){ id ->
             /* TimetableFragment로 planId 넘겨서 이동 */
-            val budle = Bundle()
-            budle.putInt("planId", id)
-            val fragment = TimetableFragment()
-            moveFragment(fragment)
+            moveTimetableFragment(id)
         }
 
         binding.homepageRecyclerView.layoutManager = layoutManager
@@ -126,84 +106,104 @@ class HomepageFragment: Fragment() {
 
         adapter.setOnClickListener(object : HomepageRVAdapter.onplayClickListener {
             override fun onPlayClick(planId: Int) {
-                // 실행 중 화면으로 이동
+                /* 실행 중 화면으로 이동 */
                 TODO("Not yet implemented")
             }
 
-            override fun onMemoirClick(reviewId: Int) {
-                var fragment: Fragment
-                val bundle = Bundle()
-                if(reviewId == 0){
-                    // 회고 작성 페이지로 이동
-                    fragment = MemoirNotFragment()
-                }
-                else{
-                    // 회고 완료 페이지로 이동
-                    fragment = MemoirCompleteFragment()
-                    bundle.putInt("reviewId", reviewId)
-                }
-                fragment.arguments = bundle
-                moveFragment(fragment)
+            override fun onMemoirClick(reviewId: Int, planId: Int) {
+                /* 회고 페이지 이동 */
+                moveMemoirFragment(reviewId, planId)
+            }
+
+            override fun ondeleteTask(request: DeleteTaskRequest) {
+                /* 삭제*/
+
             }
         })
 
     }
+    /* MemoirFraagment 이동 함수 */
+    private fun moveMemoirFragment(reviewId: Int, planId: Int){
+        var fragment: Fragment
+        val bundle = Bundle()
 
+        if(reviewId == 0){  // 회고 미작성 페이지로 이동
+            fragment = MemoirNotFragment()
+            bundle.putInt("planId", planId)
+        }
+        else{   // 회고 완료 페이지로 이동
+            fragment = MemoirCompleteFragment()
+            bundle.putInt("reviewId", reviewId)
+        }
 
-    /* 프레그먼트 이동 함수 */
-    private fun moveFragment(fragment: Fragment){
         requireActivity().supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_frm, fragment)
             addToBackStack(null)
+            arguments = bundle
             commit()
         }
+
     }
-    private fun clickEvent(tasks: Tasks) {
+
+    /* TimetableFragment 이동 함수 */
+    private fun moveTimetableFragment(planId: Int){
+        val fragment = TimetableFragment()
+        val bundle = Bundle()
+        bundle.putInt("planId", planId)
+
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_frm, fragment)
+            addToBackStack(null)
+            arguments = bundle
+            commit()
+        }
+
+    }
+    private fun clickEvent() {
         // 중지버튼 눌렀을 때
         binding.homepageFailBtn.setOnClickListener {
-            adapter = HomepageRVAdapter(tasks.paused){
-
-            }
+            adapter.updateData(paused)
         }
         // 완료버튼 눌렀을 때
         binding.homepageCompleteBtn.setOnClickListener {
-            adapter = HomepageRVAdapter(tasks.finished){
-
-            }
+            adapter.updateData(finished)
         }
         // 예정 버튼 눌렀을 때
         binding.homepageExpectedBtn.setOnClickListener {
-            adapter = HomepageRVAdapter(tasks.notStarted){
-
-            }
+            adapter.updateData(notStarted)
         }
         // 전체 버튼 눌렀을 때
         binding.homepageAllBtn.setOnClickListener {
-            adapter = HomepageRVAdapter(allTask){ id ->
-                /* TimetableFragment로 planId 넘겨서 이동 */
-                val budle = Bundle()
-                budle.putInt("planId", id)
-                val fragment = TimetableFragment()
-                moveFragment(fragment)
-            }
+            adapter.updateData(allTask)
         }
 
         // 다가오는 일정 play 실행
         binding.taskPlay.setOnClickListener {
-
+            /* 실행 중 화면으로 이동 */
         }
+
         // 삭제하기 버튼 눌렀을 때
         binding.taskDeleteBtn.setOnClickListener {
             binding.taskDeleteCompleteBtn.visibility = VISIBLE
             binding.taskDeleteBtn.visibility = View.GONE
 
             adapter.deleteItem(true)
+
         }
         // 삭제완료 버튼 눌렀을 때
         binding.taskDeleteCompleteBtn.setOnClickListener {
             binding.taskDeleteBtn.visibility = VISIBLE
             binding.taskDeleteCompleteBtn.visibility = View.GONE
 
+            // 클릭 한 리스트 반환
+            val list = adapter.getSelectedItems()
+
+            val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+
+            /* 내부 저장해서 보내기..*/
+            for(data in list){
+                viewModel.deleteTask(token, data)
+            }
             // 삭제 재확인 Dialog 띄우기
             val popupBinding = LayoutCheckpopupBinding.inflate(LayoutInflater.from(requireContext()))
             val dialog = Dialog(requireContext())
@@ -226,6 +226,18 @@ class HomepageFragment: Fragment() {
         }
     }
 
+    private fun wiseSaying(){
+        val wise = WiseSaying()
+        val wiseSaying = mutableListOf<String>()
+
+        repeat(3){
+            wiseSaying.add(wise.list.get(Random.nextInt(0,wise.list.size-1)))
+        }
+
+        val VPAdapter = TextVPAdapter(wiseSaying)
+        binding.helloViewpager.adapter = VPAdapter
+        binding.dotsIndicator.attachTo(binding.helloViewpager)
+    }
 
 
 }
