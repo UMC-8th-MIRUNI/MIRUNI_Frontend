@@ -23,29 +23,32 @@ import com.example.miruni.R
 import com.example.miruni.data.Schedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
-import com.example.miruni.util.DateToStringHelper
+import com.example.miruni.util.calendarDayToStringHelper
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import java.util.Calendar
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.TokenManager
-import com.example.miruni.TokenResult
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.Monthly
 import com.example.miruni.api.getRetrofit
+import com.example.miruni.data.Plan
+import com.example.miruni.util.calendarToDateStringHelper
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
+import com.example.miruni.util.getDateTimeStringHelper
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
 
 class CalendarFragment : Fragment() {
     /** 전역 변수 */
     // 뷰 바인딩
     private lateinit var binding : FragmentCalendarBinding
+    private lateinit var accessToken: String
 
     // 데이터 관리
     private lateinit var scheduleDB: ScheduleDatabase
     private var taskOnDateList = ArrayList<Task>()
+    private var planList = ArrayList<Plan>()
     private lateinit var taskOnDateRVAdapter: TaskOnDateRVAdapter
     private var monthly = ArrayList<Monthly>()
 
@@ -72,6 +75,7 @@ class CalendarFragment : Fragment() {
 
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
         scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
+        accessToken = String.format("Bearer ${TokenManager.getToken(requireContext())}")
 
         /** 상단바 색상 변경 **/
         (activity as? MainActivity)?.setTopBarColor(R.color.white)
@@ -95,10 +99,8 @@ class CalendarFragment : Fragment() {
     private suspend fun loadTasks(year: Int, month: Int) {
 
         try {
-            val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-            Log.d("token", TokenManager.getToken(requireContext()).toString())
             val api = getRetrofit().create(ApiService::class.java)
-            val response = api.getScheduleInMonth(token, year, month)
+            val response = api.getScheduleInMonth(accessToken, year, month)
 
             Log.d("월별 조회 결과", "성공: $response")
 
@@ -151,7 +153,7 @@ class CalendarFragment : Fragment() {
                 val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
                 val editor = spf.edit()
 
-                editor.putString("selectedDate", DateToStringHelper(selectedDate))
+                editor.putString("selectedDate", calendarDayToStringHelper(selectedDate))
                 editor.apply()
 
                 (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -162,31 +164,20 @@ class CalendarFragment : Fragment() {
             calendarDropdownIv.setOnClickListener {
                 showDateSelectDropdown(binding.calendarIncludeCalendarCalendar.calendarDropdownIv)
             }
-            /** 날짜 선택 후 일정 소개 페이지로 이동 */
+            /** 날짜 선택 시 */
             calendarCalendar.setOnDateChangedListener { widget, date, selected ->
 
+                // 달력 헤더 날짜 수정
                 calendarYearTv.text = String.format("${date.year}년")
                 calendarMonthTv.text = String.format("${date.month}월")
 
+                // 날짜 선택으로 인한 달력 이동 대응
                 lifecycleScope.launch {
                     loadTasks(date.year, date.month)
                 }
 
-                // 날짜 별 일정 소개 페이지로 이동
-                if (dateSelectState == "selected" && selectedDate == date) {
-                    controlBottomNavigation(context as MainActivity, false)
-                    controlTopBar(context as MainActivity, false)
-
-                    binding.calendarIncludeCalendarCalendar.root.visibility = View.GONE
-                    binding.calendarIncludeTaskOnDate.root.visibility = View.VISIBLE
-
-                    val dayOfWeek = checkDayOfWeek(date.year, date.month, date.day)
-
-                    binding.calendarIncludeTaskOnDate.taskOnDateDateTv.text = String.format("${date.year}년 ${date.month}월 ${date.day}일 (${dayOfWeek})")
-
-                    // 날짜에 맞는 일정 갯수
-                    initTaskOnDateRV(date)
-                } else {
+                // 날짜 첫 클릭
+                if (dateSelectState != "selected" || selectedDate != date) {
                     currentSelectionDecorator?.let {
                         calendarCalendar.removeDecorator(it)
                     }
@@ -198,6 +189,20 @@ class CalendarFragment : Fragment() {
 
                     dateSelectState = "selected"
                     selectedDate = date
+
+                    lifecycleScope.launch {
+                        loadTaskOnDate(calendarDayToStringHelper(date))
+                    }
+
+                } else { // 날짜 더블 클릭
+                    controlBottomNavigation(context as MainActivity, false)
+                    controlTopBar(context as MainActivity, false)
+
+                    binding.calendarIncludeCalendarCalendar.root.visibility = View.GONE
+                    binding.calendarIncludeTaskOnDate.root.visibility = View.VISIBLE
+
+                    val dayOfWeek = checkDayOfWeek(date.year, date.month, date.day)
+                    binding.calendarIncludeTaskOnDate.taskOnDateDateTv.text = String.format("${date.year}년 ${date.month}월 ${date.day}일 (${dayOfWeek})")
                 }
             }
         }
@@ -324,23 +329,6 @@ class CalendarFragment : Fragment() {
     }
 
     /**
-     * 해당 날짜별 일정 RV 초기화: 데이터 초기화
-     */
-    private fun initTaskOnDateRV(date: CalendarDay) {
-        binding.calendarIncludeTaskOnDate.apply {
-
-            val taskDate = String.format("${date.year}-${DecimalFormat("00").format(date.month)}-${DecimalFormat("00").format(date.day)}")
-
-            taskOnDateList.clear()
-            taskOnDateRVAdapter.deleteAllTasks()
-
-            taskOnDateList.addAll(scheduleDB.taskDao().getTasksByDay(taskDate))
-            taskOnDateRVAdapter.addTask(taskOnDateList)
-            taskOnDateCountTv.text = String.format("일정 갯수 : ${taskOnDateList.size}개")
-        }
-    }
-
-    /**
      * 미룬 일정 RV 초기화
      */
     private fun initDelayedRV() {
@@ -383,8 +371,50 @@ class CalendarFragment : Fragment() {
         binding.calendarIncludeCalendarCalendar.calendarCalendar.apply {
             removeDecorators()
             addDecorators(decorators)
+            currentSelectionDecorator?.let { addDecorator(it) }
             invalidateDecorators()
         }
+    }
 
+    private suspend fun loadTaskOnDate(date: String) {
+        try {
+            val api = getRetrofit().create(ApiService::class.java)
+            Log.d("Calendar", date)
+            val response = api.getDailySchedule(accessToken, date)
+
+            if (response.isSuccessful) {
+                planList.clear()
+                val result = response.body()!!.result
+
+                result.schedules.forEach { schedule ->
+
+                    Log.d("Calendar", "schedule: ${schedule.id}" +
+                            "\n${schedule.parentTitle}" +
+                            "\n${schedule.title}" +
+                            "\n${schedule.startTime}" +
+                            "\n${schedule.endTime}" +
+                            "\n${schedule.priority}" +
+                            "\n${schedule.category}")
+                    val plan = Plan(
+                        id = schedule.id,
+                        parentTitle = schedule.parentTitle,
+                        title = schedule.title,
+                        scheduledStart = getDateTimeStringHelper(timeString = schedule.startTime).toString(),
+                        scheduledEnd = getDateTimeStringHelper(timeString = schedule.endTime).toString(),
+                        priority = schedule.priority,
+                        category = schedule.category
+                    )
+                    planList.add(plan)
+                    Log.d("Calendar", "저장된 값: ${plan}")
+                }
+                Log.d("Calendar", "저장된 갯수: ${planList.size}")
+                taskOnDateRVAdapter.addTask(ArrayList(planList))
+                binding.calendarIncludeTaskOnDate.taskOnDateCountTv.text = String.format("일정 갯수 : ${planList.size}개")
+            } else {
+                Log.d("Calendar", "실패: ${response.code()} / ${response.message()}")
+            }
+        } catch (e: Exception) {
+            Log.e("Calendar", "에러: ${e.message}")
+        }
     }
 }
