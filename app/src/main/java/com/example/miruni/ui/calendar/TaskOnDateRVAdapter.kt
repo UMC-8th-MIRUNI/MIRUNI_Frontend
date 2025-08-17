@@ -62,7 +62,7 @@ class TaskOnDateRVAdapter(private val onItemClick: (Plan) -> Unit) : RecyclerVie
 
             Log.d("Calendar", "${plan.scheduledStart} - ${plan.scheduledEnd}")
 
-            binding.itemSchedulePriorityTv.text = Priority.valueOf(plan.priority!!).toString()
+            binding.itemSchedulePriorityTv.text = Priority.valueOf(plan.priority!!).localLabel
             binding.itemTaskTimeTv.text = String.format("${splitDateTimeHelper(plan.scheduledStart.toString(), false)} - ${splitDateTimeHelper(plan.scheduledEnd.toString(), false)}")
 
             if (isSelected) {
