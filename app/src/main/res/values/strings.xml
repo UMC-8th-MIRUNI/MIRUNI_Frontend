@@ -45,6 +45,7 @@
     <string name="schedule_content">일을 미리 끝낼 수 있는\n적절한 일정을 알려줄게요!</string>
     <string name="tool_lock">방해요소 차단</string>
     <string name="lock_content">집중에 방해되는 요소를 차단하고\n할 일에만 몰두해봐요!</string>
+    <string name="tool_alarm">알람</string>
 
     <!-- homepage -->
     <string name="task_text1">오늘의 할 일은</string>

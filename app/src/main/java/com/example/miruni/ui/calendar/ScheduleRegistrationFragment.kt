@@ -24,6 +24,7 @@ import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
+import com.example.miruni.TimetableFragment
 import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.RegisterScheduleRequest
@@ -96,6 +97,9 @@ class ScheduleRegistrationFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * 진입 날짜 초기화
+     */
     private fun initDate() {
         val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
         val selectedDate = spf.getString("selectedDate", "").toString()
@@ -317,6 +321,11 @@ class ScheduleRegistrationFragment : Fragment() {
             }
             /** 확인 */
             scheduleSplitCompleteOkTv.setOnClickListener {
+
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, TimetableFragment())
+                    .commitAllowingStateLoss()
+
                 Toast.makeText(context as MainActivity, "스케줄표", Toast.LENGTH_SHORT).show()
             }
         }
