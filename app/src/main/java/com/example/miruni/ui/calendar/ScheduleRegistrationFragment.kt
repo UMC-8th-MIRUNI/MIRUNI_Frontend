@@ -28,12 +28,11 @@ import com.example.miruni.TimetableFragment
 import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.RegisterScheduleRequest
-import com.example.miruni.api.RegisterScheduleResponse
-import com.example.miruni.api.ResultOfRegisterSchedule
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Plan
+import com.example.miruni.data.Priority
+import com.example.miruni.data.Type
 import com.example.miruni.data.ScheduleDatabase
-import com.example.miruni.data.Task
 import com.example.miruni.data.Time
 import com.example.miruni.data.ampm
 import com.example.miruni.databinding.FragmentScheduleRegistrationBinding
@@ -68,7 +67,7 @@ class ScheduleRegistrationFragment : Fragment() {
     private lateinit var priorityDropdown: PopupWindow
     private val priorityItems = arrayListOf("상", "중", "하")
     private var selectedPriority = ""
-    private var selectedScheduleType = -1
+    private var selectedScheduleType: Type = Type.IMMERSIVE
 
     private val scheduleTypeList = listOf(
         "몰입형/사고 중심 작업",
@@ -290,6 +289,9 @@ class ScheduleRegistrationFragment : Fragment() {
 
             lifecycleScope.launch {
                 delay(2000)
+
+//                splitSchedule()
+
                 screenChange(
                     binding.scheduleSplitLoadingInclude.root,
                     binding.scheduleSplitCompleteInclude.root,
@@ -712,12 +714,16 @@ class ScheduleRegistrationFragment : Fragment() {
                 priorityDropdown.dismiss()
             }
 
-            if (text == selectedItem) {
-                textView.setTextColor(Color.WHITE)
-                textView.setBackgroundColor("#1AE019".toColorInt())
-            } else {
-                textView.setTextColor(Color.BLACK)
-                Color.TRANSPARENT
+            try{
+                if (text == Priority.valueOf(selectedItem.toString()).localLabel) {
+                    textView.setTextColor(Color.WHITE)
+                    textView.setBackgroundColor("#1AE019".toColorInt())
+                } else {
+                    textView.setTextColor(Color.BLACK)
+                    Color.TRANSPARENT
+                }
+            }catch (e: IllegalArgumentException) {
+                null
             }
         }
 
@@ -823,7 +829,7 @@ class ScheduleRegistrationFragment : Fragment() {
                 anchor.setBackgroundResource(R.drawable.bg_ababab_square_7)
             }
 
-            if (index == selectedScheduleType) {
+            if (index == selectedScheduleType.ordinal) {
                 viewList[index].first.setTextColor(Color.WHITE)
                 viewList[index].second.setColorFilter(Color.WHITE)
                 viewList[index].first.setTextColor(Color.WHITE)
@@ -847,7 +853,8 @@ class ScheduleRegistrationFragment : Fragment() {
      */
     private fun showPriorityDropdown(anchor: View) {
         initPriorityDropdown(anchor, priorityItems, selectedPriority) { selected ->
-            selectedPriority = selected
+            selectedPriority = Priority.fromLocalLabel(selected).toString()
+            Log.d("scheduleRegistration", "showPriorityDropdown: $selectedPriority")
             binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentPriorityTv.text = selected
         }
     }
@@ -857,8 +864,9 @@ class ScheduleRegistrationFragment : Fragment() {
      */
     private fun showScheduleTypeDropdown(anchor: View) {
         initScheduleTypeDropdown(anchor) {selected ->
-            selectedScheduleType = selected
-            binding.scheduleSplitInclude.scheduleSplitTypeTv.text = scheduleTypeList[selected]
+            selectedScheduleType = Type.values()[selected]
+            binding.scheduleSplitInclude.scheduleSplitTypeTv.text = Type.valueOf(selectedScheduleType.toString()).localLabel
+            Log.d("scheduleRegistration", "split type: ${Type.values()[selected]}")
             binding.scheduleSplitInclude.scheduleSplitTypeMoreIv.visibility = View.VISIBLE
         }
     }
@@ -884,7 +892,7 @@ class ScheduleRegistrationFragment : Fragment() {
             String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
 
-        val priority = convertSchedulePriority(selectedPriority)
+        val priority = selectedPriority
         Log.d("RegistrationSchedule/priority", priority.toString())
 
         val description = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentCommentEt.text.toString()
@@ -986,15 +994,5 @@ class ScheduleRegistrationFragment : Fragment() {
             else -> null
         }
         return realScheduleType
-    }
-
-    private fun convertSchedulePriority(schedulePrior: String): String? {
-        val realPriority = when(schedulePrior) {
-            "상" -> "HIGH"
-            "중" -> "MEDIUM"
-            "하" -> "LOW"
-            else -> null
-        }
-        return realPriority
     }
 }
