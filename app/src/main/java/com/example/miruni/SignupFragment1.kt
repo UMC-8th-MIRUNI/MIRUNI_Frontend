@@ -25,6 +25,13 @@ class SignupFragment1 : Fragment() {
         Log.d("SignupFragment1", "onCreateView 호출됨")
         val binding = FragmentSignup1Binding.inflate(inflater, container, false)
 
+        val emailFromGoogle = arguments?.getString("email") ?: ""
+        if (emailFromGoogle.isNotEmpty()) {
+            viewModel.email.value = emailFromGoogle
+            binding.etEmail.setText(emailFromGoogle)
+            binding.etEmail.isEnabled = false
+        }
+
         // 체크박스 클릭 이벤트
 //        binding.ivCheckbox.setOnClickListener {
 //            isAgree = !isAgree

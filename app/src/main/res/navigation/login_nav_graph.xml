@@ -10,6 +10,11 @@
         <action
             android:id="@+id/action_loginFragment_to_resetPwdFragment1"
             app:destination="@id/resetPwdFragment1" />
+
+        <action
+            android:id="@+id/action_loginFragment_to_fragment_signup11"
+            app:destination="@id/signupFragment11" />
+
     </fragment>
 
     <fragment
