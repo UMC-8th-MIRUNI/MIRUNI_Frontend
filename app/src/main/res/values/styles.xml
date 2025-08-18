@@ -37,4 +37,31 @@
         <item name="android:textFontWeight" tools:targetApi="28">400</item>
         <item name="android:textSize">24sp</item>
     </style>
+
+    <!-- 버튼 텍스트 스타일 -->
+    <style name="btnText">
+        <item name="android:fontFamily">@font/dmsans_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="block_title">
+        <item name="android:fontFamily">@font/dmsans_semibold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:text">@string/block_title</item>
+    </style>
+
+    <style name="block_comment">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:text">@string/block_comment</item>
+    </style>
+
+    <style name="block_setting">
+        <item name="android:fontFamily">@font/dmsans_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:text">@string/bolck_setting_comment</item>
+    </style>
+
+
 </resources>

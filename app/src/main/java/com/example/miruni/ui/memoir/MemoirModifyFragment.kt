@@ -41,7 +41,6 @@ class MemoirModifyFragment: Fragment(){
 
         // 수정완료 버튼
         binding.modifyLayout.memoirWriteOk.setOnClickListener {
-            // api request
             lifecycleScope.launch {
                 try{
                     var reviewId = arguments?.getInt("reviewId") ?: 0
@@ -82,24 +81,10 @@ class MemoirModifyFragment: Fragment(){
     }
     // 기존 회고 데이터 불러오기
     fun initLayout(){
-        val id = arguments?.getInt("reviewId")!!
-        db = ScheduleDatabase.getInstance(requireContext())!!
-        val review = db?.reviewDao()?.findReviewById(id)
-
-        /*binding.modifyLayout.memoirWriteTitle.text = review?.title ?: "title없어용"
-        binding.modifyLayout.archievePercent.setText(review?.achievement?.toString() ?: "0")
-        binding.modifyLayout.archievePercent.setSelection(binding.modifyLayout.archievePercent.text.length)
-        binding.modifyLayout.memoirWriteTxt.setText(review?.memo ?: "왜없지")
-        Log.d("수정 내용 조회 확인", "메모내용: ${review?.memo}")
-        binding.modifyLayout.memoirWriteTxt.setSelection(binding.modifyLayout.memoirWriteTxt.text.length)
-        binding.modifyLayout.memoirWriteDate.text = review?.createdAt
-        binding.modifyLayout.memoirDescription.text = review?.description*/
-
         binding.modifyLayout.memoirTitle.memoirWriteTitle.text = arguments?.getString("title")
         binding.modifyLayout.archievePercent.setText(arguments?.getInt("achievement")!!.toString())
         binding.modifyLayout.archievePercent.setSelection(binding.modifyLayout.archievePercent.text.length)
         binding.modifyLayout.memoirWriteTxt.setText(arguments?.getString("memo"))
-        Log.d("수정 내용 조회 확인", "메모내용: ${arguments?.getString("memo")}")
         binding.modifyLayout.memoirWriteTxt.setSelection(binding.modifyLayout.memoirWriteTxt.text.length)
         binding.modifyLayout.memoirTitle.memoirWriteDate.text = arguments?.getString("createdAt")
         binding.modifyLayout.memoirTitle.memoirDescription.text = arguments?.getString("description")

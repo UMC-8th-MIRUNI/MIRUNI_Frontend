@@ -1,29 +1,25 @@
 package com.example.miruni.ui.memoir
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.RVSpacer
 import com.example.miruni.TokenManager
-import com.example.miruni.api.ApiService
-import com.example.miruni.api.getRetrofit
 import com.example.miruni.api.model.ReviewByDate
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
+import com.example.miruni.data.repository.MemoirRepository
 import com.example.miruni.databinding.FragmentMemoirAddBinding
-import kotlinx.coroutines.launch
-import retrofit2.Response
 
 private lateinit var taskDB : ScheduleDatabase
 private lateinit var taskDatas : List<Task>
 private lateinit var body: List<ReviewByDate>
+private lateinit var reviewAdapter: MemoirAddRVAdapter
 
 class MemoirAddFragment: Fragment() {
     val binding by lazy {
@@ -37,18 +33,16 @@ class MemoirAddFragment: Fragment() {
     ): View? {
         return binding.root
     }
-    private lateinit var date: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE   // 상단 바 없애기
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE // nav 없애기
 
         binding.memoirAddDate.text = arguments?.getString("date")   // MemoirFragment에서 받아 온 bundle값
 
-        lifecycleScope.launch {
-            memoirDateList() // 특정 날짜 회고 목록 조회
-        }
+        memoirDateList() // 특정 날짜 회고 목록 조회
 
         initClickListener() // 클릭 이벤트
 
@@ -78,26 +72,21 @@ class MemoirAddFragment: Fragment() {
     }
 
     /* 특정 날짜 회고 목록 조회 API 연동*/
-    private suspend fun memoirDateList(){
-            try{
-                val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-                date = arguments?.getString("date").toString()
-                Log.d("특정 날짜 회고 목록 조회", "요청 날짜: $date")
-                val api = getRetrofit().create(ApiService::class.java)
-                val response = api.memoirDateList(token, date)
+    private fun memoirDateList(){
+        val date = arguments?.getString("date").toString()
 
-                Log.d("특정 날짜 회고 목록 조회", "성공: ${response}")
+        val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+        val repository = MemoirRepository()
+        val factory = MemoirViewModelFactory(repository)
+        val viewModel = ViewModelProvider(this, factory)[MemoirViewModel::class.java]
 
-                body = response.body()?.result ?: throw IllegalStateException("!! 특정 날짜 회고 목록 조회 안됨 !!")
-
-                taskDB = ScheduleDatabase.getInstance(requireContext())!!
-                taskDatas = taskDB.taskDao().getTask()
-            }catch (e: Exception){
-                Log.e("특정 날짜 회고 목록 조회", "에러발생: ${e.message}")
-            }
+        viewModel.memoirDateList(token, date)
+        viewModel.listData.observe(viewLifecycleOwner){ data ->
+            body = data.result
 
             // 단일 회고 상세 조회로 reviewId 넘겨주기
-            val reviewAapter = MemoirAddRVAdapter(body) { reviewId ->
+                reviewAdapter = MemoirAddRVAdapter{ reviewId ->
+
                 // reviewId MemoirCompleteFragment로 넘기기
                 val bundle = Bundle()
                 bundle.putInt("reviewId", reviewId)
@@ -108,16 +97,27 @@ class MemoirAddFragment: Fragment() {
                 moveFragment(fragment)
             }
 
-        /* 리사이클러뷰 연결 */
-        binding.memeoirAddRv.apply {
-            adapter = reviewAapter
-            layoutManager = LinearLayoutManager(requireContext())
+            /* 메뉴 클릭 이벤트 처리 (삭제) */
+            reviewAdapter.setOnClickListener(object : MemoirAddRVAdapter.onClickMenuListener{
+                override fun onClickMenu(reviewId: Int) {
+                    viewModel.getMemoirDelete(token, reviewId)
+                    body = body.filter { it.reviewId != reviewId }
+                    reviewAdapter.initRecyclerView(body)
+                }
+            })
 
-            if(itemDecorationCount == 0) {
-                val spacer = resources.getDimensionPixelSize(R.dimen.recycler_dimen)
-                addItemDecoration(RVSpacer(spacer))
+
+            /* 리사이클러뷰 연결 */
+            binding.memeoirAddRv.apply {
+                adapter = reviewAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+
+                if(itemDecorationCount == 0) {
+                    val spacer = resources.getDimensionPixelSize(R.dimen.recycler_dimen)
+                    addItemDecoration(RVSpacer(spacer))
+                }
             }
+            reviewAdapter.initRecyclerView(body)
         }
     }
-
 }

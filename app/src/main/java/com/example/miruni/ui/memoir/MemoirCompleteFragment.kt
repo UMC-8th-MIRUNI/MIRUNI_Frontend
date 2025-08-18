@@ -2,38 +2,35 @@ package com.example.miruni.ui.memoir
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.example.miruni.R
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Mood
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentMemoirCompleteBinding
-import kotlinx.coroutines.launch
 import android.graphics.Color
-import androidx.compose.ui.text.font.ResourceFont
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.util.Log
+import android.widget.EditText
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.replace
+import androidx.core.view.marginStart
+import androidx.lifecycle.ViewModelProvider
 import com.example.miruni.TokenManager
 import com.example.miruni.api.model.MemoirDetailResponse
-import kotlinx.coroutines.Dispatchers
+import com.example.miruni.data.repository.MemoirRepository
 
 
 private var body: MemoirDetailResponse? = null
 private var db: ScheduleDatabase? = null
 private var reviewId = 0
-private lateinit var api: ApiService
 private lateinit var token: String
-
+private val repository = MemoirRepository()
+private val factory = MemoirViewModelFactory(repository)
+private lateinit var viewModel: MemoirViewModel
 // 단일 회고 상세 조회 api연결
 class MemoirCompleteFragment: Fragment() {
     val binding by lazy {
@@ -55,58 +52,36 @@ class MemoirCompleteFragment: Fragment() {
         binding.completeLayout.memoirWriteMenu.visibility = View.VISIBLE
         db = ScheduleDatabase.getInstance(requireContext())
 
-        lifecycleScope.launch{
-            try{
-                token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-                api = getRetrofit().create(ApiService::class.java)
-                reviewId = requireArguments().getInt("reviewId")
-                val response = api.memoirDetail(token, reviewId)
-                Log.d("단일 회고 상세 조회", "성공: ${response}")
+        viewModel = ViewModelProvider(this, factory)[MemoirViewModel::class.java]
 
-                if(response.isSuccessful){
-                    body = response.body()!!
-                    Log.d("단일 회고 상세 조회", "저장 회고 내용: ${body}")
+        token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+        reviewId = requireArguments().getInt("reviewId")
 
-                    binding.completeLayout.apply {
-                        memoirTitle.memoirWriteTitle.text = body?.result?.title
-                        memoirTitle.memoirWriteDate.text = body?.result?.createdAt
-                        memoirWriteTxt.setText(body?.result?.memo ?: "")
-                        memoirTitle.memoirDescription.text = body?.result?.description
+        viewModel.getMemoirDetail(token, reviewId)
+        viewModel.detailData.observe(viewLifecycleOwner){ data ->
+            body = data
+            /* 데이터 연결 */
+            binding.completeLayout.apply {
+                memoirTitle.memoirWriteTitle.text = data?.result?.title
+                memoirTitle.memoirWriteDate.text = data?.result?.createdAt
+                memoirWriteTxt.setText(data?.result?.memo ?: "작성된 메모가 없습니다.")
+                memoirTitle.memoirDescription.text = data?.result?.description
 
-                        /* archievePercent style 수정*/
-                        val font = ResourcesCompat.getFont(context, R.font.dmsans_bold)
-                        archievePercent.apply {
-                            setText(body?.result?.achievement.toString())
-                            background = null
-                            setTextColor(Color.parseColor("#1EC718"))
-                            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-                            typeface = font
-                        }
-                    }
-                    val mood = body?.result?.mood ?: Mood.ANXIOUS
-
-                    moodUpdate(mood)
-                }else{
-                    Log.e("단일 회고 상세 조회", "reponse실패: ${response.code()} - ${response.message()}")
-                }
-            }catch (e: Exception){
-                Log.e("단일 회고 상세 조회", "에러발생: ${ e.message }")
+                val achievement = data?.result?.achievement ?: 0
+                updateView(archievePercent, achievement)    // archievePercent style 수정
             }
+            val mood = data?.result?.mood ?: Mood.ANXIOUS
 
+            moodUpdate(mood)
+            // 메뉴
+            binding.completeLayout.memoirWriteMenu.setOnClickListener {
+                showMemu(it, data)
+            }
         }
-        Log.d("메뉴 확인", "프레그먼트 진입은 함")
-        binding.completeLayout.memoirWriteMenu.setOnClickListener {
-            Log.d("메뉴 확인", "메뉴클릭되다")
-            showMemu(it)
-        }
-        binding.completeLayout.memoirWriteOk.setOnClickListener {
-            // 회고 작성 완료 페이지로 이동
-            moveFragment(MemoirListFragment())
-        }
-        // 뒤로가기
-        binding.completeLayout.memoirTitle.memoirWriteBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+
+        initClickListener() // 버튼 클릭
+
+
     }
     /* 프레그먼트 이동 함수 */
     private fun moveFragment(fragment: Fragment){
@@ -116,23 +91,23 @@ class MemoirCompleteFragment: Fragment() {
         }
     }
 
-    private fun showMemu(view: View){
+    private fun showMemu(view: View, data: MemoirDetailResponse){
         val menu = PopupMenu(requireContext(), view)
         menu.menuInflater.inflate(R.menu.memoir_write_menu, menu.menu)
 
         menu.setOnMenuItemClickListener { item ->
             when(item.itemId){
+                /* 수정하기 */
                 R.id.write_modify ->{
                     val bundle = Bundle().apply {
-                        val reviewId = body?.result?.id ?: throw IllegalStateException("id = Null입니다")
+                        val reviewId = data?.result?.id ?: throw IllegalStateException("id = Null입니다")
                         putInt("reviewId", reviewId)
-                        putString("mood", body?.result?.mood?.name)
-                        putInt("achievement", body?.result!!.achievement)
-                        putString("mood", body?.result?.mood?.name)
-                        putString("memo", body?.result?.memo)
-                        putString("title", body?.result?.title)
-                        putString("createdAt", body?.result?.createdAt)
-                        putString("description", body?.result?.description)
+                        putInt("achievement", data?.result?.achievement ?: 0)
+                        putString("mood", data?.result?.mood?.name)
+                        putString("memo", data?.result?.memo)
+                        putString("title", data?.result?.title)
+                        putString("createdAt", data?.result?.createdAt)
+                        putString("description", data?.result?.description)
                     }
                     val fragment = MemoirModifyFragment()
                     fragment.arguments = bundle
@@ -141,25 +116,11 @@ class MemoirCompleteFragment: Fragment() {
                     moveFragment(fragment)
                     true
                 }
-
+                /* 삭제하기 */
                 R.id.write_delete -> {
-                    // 삭제 API 연결
-                    try{
-                        lifecycleScope.launch(Dispatchers.IO) {
-
-                            val response = api.memoirDelete(token, reviewId)
-
-                            if(response.isSuccessful) {
-                                Log.d("회고 삭제", "성공: ${response}")
-                            }else
-                                Log.e("회고 삭제", "response 실패: ${response.code()} - ${response.message()}")
-                        }
-                        // 화면 전환
-                        moveFragment(MemoirListFragment())
-
-                    }catch (e: Exception){
-                        Log.e("회고 삭제", "${e.message}")
-                    }
+                    viewModel.getMemoirDelete(token, reviewId)
+                    // 화면 전환
+                    moveFragment(MemoirListFragment())
                     true
                 }
                 else -> false
@@ -191,6 +152,28 @@ class MemoirCompleteFragment: Fragment() {
                 binding.completeLayout.surprisedMiruniInactive.visibility = View.INVISIBLE
                 binding.completeLayout.surprisedMiruniActive.visibility = View.VISIBLE
             }
+        }
+    }
+    /* 버튼 기능 */
+    private fun initClickListener(){
+        // 회고 작성 완료 페이지로 이동
+        binding.completeLayout.memoirWriteOk.setOnClickListener {
+            moveFragment(MemoirListFragment())
+        }
+        // 뒤로가기
+        binding.completeLayout.memoirTitle.memoirWriteBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+    /* 성취도 숫자 스타일 변경 */
+    private fun updateView(achievement: EditText, text: Int){
+        val font = ResourcesCompat.getFont(context, R.font.dmsans_bold)
+        achievement.apply {
+            setText(text.toString())
+            background = null
+            setTextColor(Color.parseColor("#1EC718"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 30f)
+            typeface = font
         }
     }
 }
