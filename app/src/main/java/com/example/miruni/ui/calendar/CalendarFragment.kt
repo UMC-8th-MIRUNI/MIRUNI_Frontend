@@ -33,7 +33,6 @@ import com.example.miruni.api.ApiService
 import com.example.miruni.api.Monthly
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Plan
-import com.example.miruni.util.calendarToDateStringHelper
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import com.example.miruni.util.getDateTimeStringHelper
@@ -47,7 +46,6 @@ class CalendarFragment : Fragment() {
 
     // 데이터 관리
     private lateinit var scheduleDB: ScheduleDatabase
-    private var taskOnDateList = ArrayList<Task>()
     private var planList = ArrayList<Plan>()
     private lateinit var taskOnDateRVAdapter: TaskOnDateRVAdapter
     private var monthly = ArrayList<Monthly>()

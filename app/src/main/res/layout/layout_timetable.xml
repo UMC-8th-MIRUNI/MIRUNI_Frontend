@@ -383,12 +383,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/timetable_RV"
-            android:layout_width="385dp"
-            android:layout_height="309dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/timetable_table_title_bottom_line" />
+            app:layout_constraintTop_toTopOf="@+id/timetable_table_title_bottom_line"
+            tools:listitem="@layout/item_timetable"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.Guideline

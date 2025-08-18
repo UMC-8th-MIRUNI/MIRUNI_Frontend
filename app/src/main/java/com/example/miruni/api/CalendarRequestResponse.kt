@@ -25,7 +25,7 @@ data class DeleteScheduleRequest(
 
 /**
  * AI 일정 쪼개기 API
- * POST /api/schedule/{planId}/split
+ * POST /api/schedule/{planId}
  */
 data class SplitScheduleRequest(
     val planType: String,
