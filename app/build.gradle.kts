@@ -75,6 +75,7 @@ dependencies {
     //kakao
     implementation("com.kakao.sdk:v2-user:2.13.0")
 
+    // google
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
 
 

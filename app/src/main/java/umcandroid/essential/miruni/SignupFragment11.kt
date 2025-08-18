@@ -24,15 +24,6 @@ class SignupFragment11 : Fragment() {
         Log.d("SignupFragment1", "onCreateView 호출됨")
         val binding = FragmentSignup11Binding.inflate(inflater, container, false)
 
-        // 체크박스 클릭 이벤트
-//        binding.ivCheckbox.setOnClickListener {
-//            isAgree = !isAgree
-//            if (isAgree) {
-//                binding.ivCheckbox.setImageResource(R.drawable.checkbox) // 체크된 이미지
-//            } else {
-//                binding.ivCheckbox.setImageResource(R.drawable.img) // 체크 안된 이미지
-//            }
-//        }
 
         binding.ivButton.setOnClickListener {
             val name = binding.etName.text.toString()

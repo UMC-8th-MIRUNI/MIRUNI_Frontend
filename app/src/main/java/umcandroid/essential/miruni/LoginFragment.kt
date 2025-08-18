@@ -21,6 +21,7 @@ import retrofit2.Response
 import umcandroid.essential.miruni.RetrofitInstance.authService
 import java.security.MessageDigest
 import android.util.Base64
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -34,11 +35,15 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-//    private val viewModel2: SurveyViewModel by activityViewModels()
-
-    //구글
+    //구글 로그인
     private lateinit var googleSignInClient: GoogleSignInClient
-    private val RC_SIGN_IN = 1001  // 요청 코드
+
+    // Activity Result API 사용
+    private val googleSignInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            handleSignInResult(task)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,18 +52,12 @@ class LoginFragment : Fragment() {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        // 구글 로그인 옵션 설정
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.google_client_id))  // 발급받은 클라이언트 ID
-            .requestEmail()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+        setupGoogleSignIn()
 
         binding.ivGoogleButton.setOnClickListener {
-            signInWithGoogle()
+            val signInIntent = googleSignInClient.signInIntent
+            googleSignInLauncher.launch(signInIntent)
         }
-
 
         return binding.root
     }
@@ -109,40 +108,86 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun signInWithGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
+    private fun setupGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken("80560946457-k5cv74758cu6eo4pb1vr9isu5vheqcki.apps.googleusercontent.com") // 반드시 웹 클라이언트 ID
+//            .requestIdToken("80560946457-2e7vdcu4h3ck607k5b5ov9d9tjfv4gnf.apps.googleusercontent.com") // com.example.miruni
+            .requestEmail()
+            .build()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            // 성공: account.idToken 사용 가능
             val idToken = account?.idToken
-            Log.d("GoogleLogin", "ID Token: $idToken")
+            val email = account?.email
+            Log.d("GoogleLogin", "idToken=$idToken, email=$email")
 
-            // 서버로 토큰 전송 후 로그인 처리
-            idToken?.let { sendGoogleTokenToServer(it) }
+            if (idToken != null) {
+                // 서버로 토큰 전송 후 로그인 처리
+                sendGoogleTokenToServer(idToken)
+            }
 
         } catch (e: ApiException) {
-            Log.e("GoogleLogin", "signInResult:failed code=" + e.statusCode)
-            Toast.makeText(requireContext(), "Google 로그인 실패", Toast.LENGTH_SHORT).show()
+            Log.e("GoogleLogin", "signInResult:failed code=${e.statusCode}", e)
+            Toast.makeText(requireContext(), "Google 로그인 실패: code=${e.statusCode}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun sendGoogleTokenToServer(idToken: String) {
-        // 서버 API 호출: Retrofit, Coroutine 등으로 구현
-        Log.d("GoogleLogin", "서버로 보낼 토큰: $idToken")
+        lifecycleScope.launch {
+            try {
+                val response = authService.loginWithGoogle(GoogleLoginRequest(idToken))
+
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    val result = body?.result
+
+                    if (result != null) {
+                        if (!result.isNewUser && !result.isPending) {
+                            // 이미 회원가입 되어 있음 → 로그인 완료
+                            saveTokens(result.accessToken, result.refreshToken)
+                            Toast.makeText(requireContext(), "로그인 성공!", Toast.LENGTH_SHORT).show()
+
+                            // 메인 화면 이동
+//                        startActivity(Intent(requireContext(), MainActivity::class.java))
+//                        requireActivity().finish()
+
+                        } else {
+                            // 회원가입 또는 추가 정보 입력 필요
+                            // 구글에서 가져온 이메일은 LoginFragment에서 account.email로 전달 가능
+                            val emailFromGoogle = GoogleSignIn.getLastSignedInAccount(requireContext())?.email ?: ""
+
+                            val bundle = Bundle().apply {
+                                putString("email", emailFromGoogle)
+                                putString("googleToken", idToken) // 서버 회원가입용 토큰
+                            }
+
+                            findNavController().navigate(
+                                R.id.action_loginFragment_to_fragment_signup11,
+                                bundle
+                            )
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "서버 로그인 실패: ${body?.message}", Toast.LENGTH_SHORT).show()
+                    }
+
+                } else {
+                    Toast.makeText(requireContext(), "서버 응답 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+
+            } catch (e: Exception) {
+                Log.e("GoogleLogin", "서버 통신 오류", e)
+                Toast.makeText(requireContext(), "서버 통신 오류", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
+
+
+
 
     private fun startKakaoLogin() {
         val context = requireContext()

@@ -29,19 +29,19 @@ class ResetPwdFragment4 : Fragment() {
         resetToken = arguments?.getString("resetToken")
 
         binding.resetBtn.setOnClickListener {
-//            val newPassword = binding.editTextText2.text.toString().trim()
-//            val confirmPassword = binding.editTextText3.text.toString().trim()
-//
-//            if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-//                Toast.makeText(requireContext(), "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show()
-//            } else if (newPassword != confirmPassword) {
-//                Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show()
-//            } else {
-//                resetPassword(newPassword)
-//            }
-            findNavController().navigate(
-                R.id.action_resetPwdFragment4_to_resetPwdFragment5,
-            )
+            val newPassword = binding.editTextText2.text.toString().trim()
+            val confirmPassword = binding.editTextText3.text.toString().trim()
+
+            if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(requireContext(), "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show()
+            } else if (newPassword != confirmPassword) {
+                Toast.makeText(requireContext(), "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show()
+            } else {
+                resetPassword(newPassword)
+            }
+//            findNavController().navigate(
+//                R.id.action_resetPwdFragment4_to_resetPwdFragment5,
+//            )
 
         }
 

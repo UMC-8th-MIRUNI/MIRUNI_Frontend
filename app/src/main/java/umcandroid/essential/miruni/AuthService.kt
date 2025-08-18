@@ -40,8 +40,12 @@ interface AuthService {
 
     @PATCH("/api/auth/password/reset")
     suspend fun completeResetPassword(
-        @Header("Authorization") resetToken: String,
+        @Header("Reset-Token") resetToken: String,
         @Body request: ResetPwdCompleteRequest
     ): Response<ResetPwdCompleteResponse>
 
+    @POST("/api/auth/login/google")
+    suspend fun loginWithGoogle(
+        @Body request: GoogleLoginRequest
+    ): Response<GoogleLoginResponse>
 }
