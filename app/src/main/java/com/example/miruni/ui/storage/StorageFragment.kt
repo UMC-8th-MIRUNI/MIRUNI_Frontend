@@ -2,30 +2,25 @@ package com.example.miruni.ui.storage
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.TokenManager
-import com.example.miruni.api.StorageApi
 import com.example.miruni.data.repository.StorageRepository
 import com.example.miruni.databinding.FragmentStorageBinding
 import com.example.miruni.ui.memoir.MemoirListFragment
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDate
 
 class StorageFragment: Fragment() {
@@ -50,6 +45,7 @@ class StorageFragment: Fragment() {
         /* 상단 topbar 색상 및 View변경 */
         (activity as MainActivity?)?.setTopBarColor(R.color.white)
         (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.VISIBLE
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.VISIBLE
 
         val today = LocalDate.now()
         val year = today.year
@@ -62,59 +58,65 @@ class StorageFragment: Fragment() {
         viewModel = ViewModelProvider(this, factory)[StorageViewModel::class.java]
         viewModel.loadStorage(token, year, month)
 
+
+
         clickBtn() // 버튼 함수
         showPiechart() // 파이차트
 
         viewModel.storageData.observe(viewLifecycleOwner){ data ->
 
+            if(data.result.lockState == "열림"){
+                /* 이번달 리포트 충족: false ==저번달 리포트 보기 | true == 오픈하기  */
+                binding.reportActive.visibility = View.VISIBLE
+                binding.reportInactive.visibility = View.GONE
 
-            if(data.canOpenThisMonth){
-                /* 이번달 리포트 충족 */
-
-                if(data.isOpenButtonVisible){
-                    /* false면 '저번달 리포트 보기' 만 보여주기 / true면 '오픈하기' 버튼 */
-                    binding.reportActive.visibility = View.VISIBLE
-                    binding.reportInactive.visibility = View.GONE
-                }else{
-                    //binding.reportActive.visibility = View.GONE
-                    //binding.reportInactive.visibility = View.VISIBLE
-                }
-
-                if(data.isOpenedThisMonth){
-                    // 이번달 리포트 오픈 API 조회
+                if(data.result.isOpenedThisMonth){  // 이미 리포트 열림
                     binding.openText.text = "이번달 리포트"
-
                     binding.reportLockInactive.visibility = View.GONE
                     binding.reportLockActive.visibility = View.VISIBLE
 
-                    binding.reportOpen.setOnClickListener {
-                    // 이번달 리포트 조회 페이지로 이동
-
+                    binding.reportOpen.setOnClickListener {// 이번달 리포트 버튼 누름
+                        moveFragment()
                     }
                 }
-            }else{
-                /*binding.reportActive.visibility = View.GONE
-                binding.reportInactive.visibility = View.VISIBLE
-
-                binding.reportLockInactive.visibility = View.VISIBLE
-                binding.reportLockActive.visibility = View.GONE*/
+                else if(!data.result.isOpenedThisMonth && data.result.canOpenThisMonth){    // 오픈 조건 충족 && 이번 달 리포트 안열림
+                    binding.reportOpen.setOnClickListener {// 오픈하기 클릭함
+                        // 이번달 리포트 오픈 API 조회
+                        binding.openText.text = "이번달 리포트"
+                        viewModel.loadMonthReport(token, year, month)   // 리포트 오픈 완료 -> 조회가능
+                        binding.reportLockInactive.visibility = View.GONE
+                        binding.reportLockActive.visibility = View.VISIBLE
+                    }
+                }
             }
-
-            if(data.isOpenedThisMonth){
-            // 저번달 리포트 조회 페이지로 이동
-
+            if(data.result.isOpenedThisMonth){
+                // 저번달 리포트 조회 페이지로 이동
+                binding.reportInactive.setOnClickListener {
+                    moveFragment()
+                }
+                binding.reportLastmonth.setOnClickListener {
+                    moveFragment()
+                }
             }
         }
 
     }
+    /* 리포트 조회 페이지로 이동 */
+    fun moveFragment(){
+        val fragment = ReportOpenFragment()
+        val bundle = Bundle()
+        fragment.arguments = bundle
+
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_frm, fragment)
+                addToBackStack(null)
+            commit()
+        }
+    }
 
     /*버튼 함수*/
     fun clickBtn(){
-
-        binding.reportGuide.setOnClickListener {
-            // 팝업 레이아웃 띄우기
-            popupWindow()
-        }
+        binding.reportGuide.setOnClickListener { popupWindow() } // 팝업 레이아웃 띄우기
 
         binding.moveMemoir.setOnClickListener {
             // MemoirListFragment로이동
@@ -186,6 +188,8 @@ class StorageFragment: Fragment() {
                         //setDrawRoundedSlices(true)
                         holeRadius = 60f    //도넛 홀 조정
                         animate()
+
+                        invalidate()
                 }
             }
         }
