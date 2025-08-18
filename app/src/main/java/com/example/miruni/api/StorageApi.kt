@@ -1,10 +1,12 @@
 package com.example.miruni.api
 
+import com.example.miruni.api.model.MonthOpenResponse
 import com.example.miruni.api.model.StorageResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface StorageApi {
@@ -19,6 +21,8 @@ interface StorageApi {
     /* 이번달 리포트 오픈 API */
     @POST("/api/reports/{year}/{month}")
     suspend fun openReport(
-        @Header("Authorization") token: String
-    )
+        @Header("Authorization") token: String,
+        @Path("year") year: Int,
+        @Path("month") month: Int
+    ): Response<MonthOpenResponse>
 }
