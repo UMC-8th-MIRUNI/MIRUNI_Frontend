@@ -7,8 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.CalendarView
+import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.miruni.R
@@ -19,18 +23,25 @@ import com.example.miruni.api.model.MemoirCountResponse
 import com.example.miruni.api.model.ReviewDate
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.repository.MemoirRepository
 import com.example.miruni.databinding.FragmentMemoirListBinding
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
+import java.time.Instant
+import java.time.Instant.*
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
-private lateinit var memoirAdapter: MemoirListRVAdapter
-private lateinit var countResponse: Response<MemoirCountResponse>
 private var body: List<ReviewDate> = emptyList()
-private val api = getRetrofit().create(ApiService::class.java)
 private lateinit var token: String
-private lateinit var db: ScheduleDatabase
+private lateinit var viewModel: MemoirViewModel
+private val repository = MemoirRepository()
+private val factory = MemoirViewModelFactory(repository)
 
 class MemoirListFragment: Fragment() {
     val binding by lazy {
@@ -50,103 +61,92 @@ class MemoirListFragment: Fragment() {
 
         (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE // 상단바 없애기
 
-        lifecycleScope.launch {
-            memoirCountByDate() // 날짜별 회고록 갯수 조회
-        }
+        viewModel = ViewModelProvider(this, factory)[MemoirViewModel::class.java]
 
-        /* 검색하기 */
-        binding.memoirSearch.apply {
-            // 키보드에서 검색 버튼 표시
-            imeOptions = EditorInfo.IME_ACTION_SEARCH
-            inputType = InputType.TYPE_CLASS_DATETIME
+        memoirCountByDate() // 날짜별 회고록 갯수 조회
 
-            // 검색 버튼 클릭 이벤트 처리
-            setOnEditorActionListener { v, actionId, event ->
-                if(actionId == EditorInfo.IME_ACTION_SEARCH){
-                    val query = text.toString().trim()
-                    if(query.isNotEmpty()){
-                        lifecycleScope.launch {
-                            // 검색 함수 호출
-                            memoirSearch(query)
-                        }
-                    }else{
-                        Toast.makeText(requireContext(), "날짜를 입력하세요", Toast.LENGTH_SHORT).show()
-                    }
-                    true
-                }else false
+        searchCalender()    // 날짜 검색
+
+        // 뒤로 가기
+        binding.listBack.setOnClickListener { requireActivity().supportFragmentManager.popBackStack() }
+    }
+
+    /* "yyyy-mm-dd" 형식으로 회고 날짜 검색 API에 넘기기 */
+    private fun searchCalender(){
+        var format : String = ""
+        binding.dateClick.setOnClickListener {
+            // PopupWindow 레이아웃 inflate
+            val calendarView = CalendarView(requireContext())
+
+            val popup = PopupWindow(calendarView,
+                binding.dateClick.width, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+            popup.setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.bg_custom_calendar))
+            popup.isOutsideTouchable = true
+
+
+            // 날짜 선택 이벤트
+            calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                format = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
+                binding.dateClick.setText(format)
+                popup.dismiss()
+
+                memoirSearch(format)
             }
+            // Popup 보여주기
+            popup.showAsDropDown(binding.dateClick)
+
+
         }
     }
 
+    /* 날짜별 회고록 갯수 조회 */
+    private fun memoirCountByDate(){
+        token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+        viewModel.memoirCountByDate(token)
 
-    /* 날짜별 회고록 갯수 조회 API 연동*/
-    private suspend fun memoirCountByDate(){
-        try {
-            token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-            countResponse = api.memoirCountByDate(token)
-            if (countResponse.isSuccessful) {
-                Log.d("날짜 별 회고록 갯수 조회", "연결 성공: ${countResponse}")
-
-                body = countResponse?.body()?.result ?: emptyList()
-                setRecyclerView(body)
-
-            } else {
-                Log.e(
-                    "날짜 별 회고록 갯수 조회",
-                    "실패: ${countResponse.code()} - ${countResponse.message()}"
-                )
-            }
-        } catch (e: Exception) {
-            Log.e("날짜 별 회고록 갯수 조회", "에러: ${e.message}")
+        viewModel.countDate.observe(viewLifecycleOwner) { data ->
+            body = data?.result ?: emptyList()
+            setRecyclerView(body)
         }
     }
 
-    /* 회고 날짜 검색 조회 API 연동 */
-    private suspend fun memoirSearch(query: String){
-        // 회고 날짜 검색 조회
-        Toast.makeText(requireContext(), "검색: $query", Toast.LENGTH_SHORT).show()
-        try {
-            val searchResponse = api.memoirSearch(token, query)
-
-            Log.d("회고 날짜 검색 조회", "연결성공: ${searchResponse}")
-
-            db = ScheduleDatabase.getInstance(requireContext())!!
-            val review = searchResponse.body()?.result ?: throw IllegalStateException("!! 회고날짜 검색 조회 body: null값 !!")
-
-            val list = listOf(review)
-            withContext(Dispatchers.Main) {
-                setRecyclerView(list)
-            }
-        }catch (e: Exception){
-            Log.e("회고 날짜 검색 조회", "에러: ${e.message}")
+    /* 회고 날짜 검색 조회 */
+    private fun memoirSearch(query: String){
+        viewModel.memoirSearch(token, query)
+        viewModel.searchData.observe(viewLifecycleOwner){ data ->
+            val review = listOf( data?.result ?: ReviewDate("", 0) )
+            setRecyclerView(review)
         }
     }
 
     /* 리사이클러뷰 이동 메서드 */
-    private fun setRecyclerView(data: List<ReviewDate>){
-        memoirAdapter = MemoirListRVAdapter(data){ date ->
-            // MemoirAddFragment로 이동
-            val fragment = MemoirAddFragment()
+    private fun setRecyclerView(data: List<ReviewDate>) {
+            val memoirAdapter = MemoirListRVAdapter { date ->
+                // MemoirAddFragment로 이동
+                val fragment = MemoirAddFragment()
 
-            val bundle = Bundle()
-            bundle.putString("date", date)
-            fragment.arguments = bundle
+                val bundle = Bundle()
+                bundle.putString("date", date)
+                fragment.arguments = bundle
 
-            requireActivity().supportFragmentManager.beginTransaction().apply {
-                replace(R.id.main_frm, fragment)
-                addToBackStack(null)
-                commit()
+
+                requireActivity().supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.main_frm, fragment)
+                    addToBackStack(null)
+                    Log.d("보내는 날짜", "${arguments}")
+                    commit()
+                }
+
+            }
+            val spacer = resources.getDimensionPixelSize(R.dimen.recycler_dimen)
+
+            binding.memoirRV.apply {
+                adapter = memoirAdapter
+                layoutManager = GridLayoutManager(requireContext(), 2)
+                if (itemDecorationCount == 0)
+                    addItemDecoration(RVSpacer(spacer))
             }
 
-        }
-        val spacer = resources.getDimensionPixelSize(R.dimen.recycler_dimen)
-
-        binding.memoirRV.apply {
-            adapter = memoirAdapter
-            layoutManager = GridLayoutManager(requireContext(), 2)
-            if(itemDecorationCount == 0)
-                addItemDecoration(RVSpacer(spacer))
-        }
+            memoirAdapter.initRecyclerView(data)
     }
-
 }

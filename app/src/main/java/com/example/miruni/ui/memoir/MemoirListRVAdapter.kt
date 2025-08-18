@@ -1,5 +1,6 @@
 package com.example.miruni.ui.memoir
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,9 +8,10 @@ import com.example.miruni.api.model.ReviewDate
 import com.example.miruni.databinding.ItemMemoitListBinding
 
 class MemoirListRVAdapter(
-    private val item: List<ReviewDate>,
     private val itemClick: (String) -> Unit
+
 ): RecyclerView.Adapter<MemoirListRVAdapter.ViewHolder>() {
+    private val item = ArrayList<ReviewDate>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -20,6 +22,10 @@ class MemoirListRVAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d("날짜 별 회고록 갯수 조회", "날짜: ${item[position].date}")
+        Log.d("날짜 별 회고록 갯수 조회", "날짜: ${item[position].count}")
+
+
         holder.binding.memoirDate.text = item[position].date
         holder.binding.memoirCount.text = item[position].count.toString()
 
@@ -30,4 +36,10 @@ class MemoirListRVAdapter(
     override fun getItemCount() = item.size
 
     inner class ViewHolder(val binding: ItemMemoitListBinding): RecyclerView.ViewHolder(binding.root)
+
+    fun initRecyclerView(updateData: List<ReviewDate>){
+        item.clear()
+        item.addAll(updateData)
+        notifyDataSetChanged()
+    }
 }
