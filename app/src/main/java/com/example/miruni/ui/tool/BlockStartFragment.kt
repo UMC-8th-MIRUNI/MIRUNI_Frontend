@@ -1,0 +1,86 @@
+package com.example.miruni.ui.tool
+
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.NumberPicker
+import androidx.fragment.app.Fragment
+import com.example.miruni.R
+import com.example.miruni.databinding.FragmentBlockStartBinding
+
+class BlockStartFragment: Fragment() {
+
+    val binding by lazy {
+        FragmentBlockStartBinding.inflate(layoutInflater)
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE
+
+        binding.toolTimeSetting.setOnClickListener {
+            /* 시간 설정 */
+            binding.toolTimePicker.visibility = View.VISIBLE
+            timeSetting()
+        }
+        binding.checkStart.setOnClickListener {
+            /* 진행 중 화면으로 이동 */
+        }
+    }
+    private fun timeSetting(){
+        setNumberPickerDividerColor(binding.hourPicker, R.color.selectColor)
+        setNumberPickerDividerColor(binding.minPicker, R.color.selectColor)
+        setNumberPickerDividerColor(binding.secPicker, R.color.selectColor)
+
+        binding.hourPicker.apply {
+            /* 시간 설정 */
+            minValue = 0
+            maxValue = 23
+        }
+
+        binding.minPicker.apply {
+            /* 분 설정 */
+            minValue = 0
+            maxValue = 59
+        }
+
+        binding.secPicker.apply {
+            /* 초 설정 */
+            minValue = 0
+            maxValue = 59
+        }
+
+        binding.timeOk.setOnClickListener {
+            binding.hour.text = binding.hourPicker.value.toString()
+            binding.min.text =  binding.minPicker.value.toString()
+            binding.sec.text =  binding.secPicker.value.toString()
+        }
+
+    }
+    fun setNumberPickerDividerColor(picker: NumberPicker, color: Int) {
+        try {
+            val pickerFields = NumberPicker::class.java.declaredFields
+            for (field in pickerFields) {
+                if (field.name == "mSelectionDivider") {
+                    field.isAccessible = true
+                    val colorDrawable = ColorDrawable(color)
+                    field.set(picker, colorDrawable)
+                    break
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+}
