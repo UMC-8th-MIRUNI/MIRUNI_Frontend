@@ -6,8 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/layout_memoir_top"
-        android:id="@+id/not_memoir_title"/>
+    <include
+        android:id="@+id/not_memoir_title"
+        layout="@layout/layout_memoir_top" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline63"

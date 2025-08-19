@@ -18,9 +18,8 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
 
     private val HomepageDatas = MutableLiveData<uiData>()
     val homepagedatas: LiveData<uiData> = HomepageDatas
-
+    /* 홈페이지 전체 정보 조회 */
     fun loadHomepage(token: String){
-        /* 홈페이지 전체 정보 조회 */
         viewModelScope.launch {
             try {
                 var homepage = repository.getHomepage(token)
@@ -40,11 +39,11 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
 
                         HomepageDatas.value = uiData(
                             username = it.name ?: "",
-                            totalCount = it.totalCount,
-                            scheduledCount = it.scheduledCount,
-                            pausedCount = it.pausedCount,
-                            completedCount = it.completedCount,
-                            achievementRate = it.achievementRate,
+                            totalCount = it.totalCount ?: 0,
+                            scheduledCount = it.scheduledCount ?: 0,
+                            pausedCount = it.pausedCount ?: 0,
+                            completedCount = it.completedCount ?: 0,
+                            achievementRate = it.achievementRate ?: 0,
 
                             paused = paused,
                             finished = finished,
@@ -67,6 +66,7 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
         }
     }
 
+    /* 일정 삭젠데 곧 미루기로 변경 */
     fun deleteTask(token: String, request: DeleteTaskRequest){
         viewModelScope.launch {
             try {
@@ -83,11 +83,11 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
 
     data class uiData(
         val username: String,
-        val totalCount: Int,
-        val scheduledCount: Int,
-        val pausedCount: Int,
-        val completedCount: Int,
-        val achievementRate : Int,
+        val totalCount: Int = 0,
+        val scheduledCount: Int = 0,
+        val pausedCount: Int = 0,
+        val completedCount: Int = 0,
+        val achievementRate : Int = 0,
 
         val paused: List<TaskItem>,
         val finished: List<TaskItem>,
@@ -97,4 +97,6 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
 
         val allTask: List<TaskItem>,
     )
+
+
 }

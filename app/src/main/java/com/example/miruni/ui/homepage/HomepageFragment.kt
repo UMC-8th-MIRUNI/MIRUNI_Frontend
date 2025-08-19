@@ -2,11 +2,13 @@ package com.example.miruni.ui.homepage
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.miruni.MainActivity
@@ -22,6 +24,7 @@ import com.example.miruni.databinding.FragmentHomepageBinding
 import com.example.miruni.databinding.LayoutCheckpopupBinding
 import com.example.miruni.ui.memoir.MemoirCompleteFragment
 import com.example.miruni.ui.memoir.MemoirNotFragment
+import com.example.miruni.ui.tool.BlockGuideFragment
 import kotlin.random.Random
 
 class HomepageFragment: Fragment() {
@@ -37,6 +40,8 @@ class HomepageFragment: Fragment() {
     private lateinit var paused: List<TaskItem> // 중지 일정
     private lateinit var notStarted: List<TaskItem> // 예정 일정
 
+    private var id: Int? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -47,12 +52,14 @@ class HomepageFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as? MainActivity)?.setTopBarColor(R.color.main)   // 상단바 색상 변경
+        (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.VISIBLE
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.VISIBLE
+        db = ScheduleDatabase.getInstance(requireContext()) ?: throw IllegalStateException("DB 생성 실패")
 
         clickEvent()
         connectAdapter()    // 홈페이지 정보 받아서 연결
         wiseSaying()    // 뷰 페이저에 명언 연결
     }
-
 
     // 홈페이지 데이터 매개변수로 받아오기
     private fun connectAdapter() {
@@ -64,7 +71,7 @@ class HomepageFragment: Fragment() {
 
 
         viewModel.homepagedatas.observe(viewLifecycleOwner) { data ->
-            /* 홈페이지 정보 조회 API 연결 */
+            /* 홈페이지 정보 조회  */
             binding.apply {
                 username = data.username  // username
                 taskCount = "${data.totalCount}"  // 오늘 남은 할 일
@@ -72,12 +79,14 @@ class HomepageFragment: Fragment() {
                 pausedCount.text = data.pausedCount.toString() // 중지 개수
                 completedCount.text = data.completedCount.toString()   // 완료 개수
                 achievement = data.achievementRate.toString()  // 성취도
+                binding.progressBar.progress = data.achievementRate
 
                 /* 다가오는 다음 일정 */
-                for(date in data.nextTask){
-                    nextTaskTitle.text = date.title
-                    nextTaskTime.text = "${date.startDate} ${date.startTime}"
-                    nextTaskDescription.text = date.description
+                data.nextTask.lastOrNull().let { date ->
+                    nextTaskTitle.text = date?.title
+                    nextTaskTime.text = "${date?.startDate ?: ""} ${date?.startTime ?: ""}"
+                    nextTaskDescription.text = date?.description
+                    id = date?.planId
                 }
 
                 /* 오늘의 일정 목록 */
@@ -86,19 +95,23 @@ class HomepageFragment: Fragment() {
                 notStarted = data.notStarted
 
                 /* 모든 일정 다 더하기 */
-                allTask = data.allTask as ArrayList<TaskItem>
-
+                allTask = ArrayList(data.allTask)
             }
             clickEvent()   // 오늘의 일정 정렬
 
             adapter.updateData(allTask) // 데이터 RV에 전달
+
+            binding.taskPlay.setOnClickListener {
+                Log.d("클릭클릭클릭", "클릭클릭클릭")
+                moveTimetableFragment(BlockGuideFragment(), id ?: 0)
+            }
         }
 
         /* 오늘의 일정 adapter 연결 */
         val layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.HORIZONTAL, false)
         adapter = HomepageRVAdapter(){ id ->
             /* TimetableFragment로 planId 넘겨서 이동 */
-            moveTimetableFragment(id)
+            moveTimetableFragment(TimetableFragment(), id)
         }
 
         binding.homepageRecyclerView.layoutManager = layoutManager
@@ -107,54 +120,58 @@ class HomepageFragment: Fragment() {
         adapter.setOnClickListener(object : HomepageRVAdapter.onplayClickListener {
             override fun onPlayClick(planId: Int) {
                 /* 실행 중 화면으로 이동 */
-                TODO("Not yet implemented")
+                moveTimetableFragment(BlockGuideFragment(), planId)
             }
 
-            override fun onMemoirClick(reviewId: Int, planId: Int) {
+            override fun onMemoirClick(reviewId: Int, planId: Int, aiPlanId: Int?) {
                 /* 회고 페이지 이동 */
-                moveMemoirFragment(reviewId, planId)
+                moveMemoirFragment(reviewId, planId, aiPlanId)
             }
 
             override fun ondeleteTask(request: DeleteTaskRequest) {
-                /* 삭제*/
+                /* 리스트 숨기기 */
 
             }
         })
 
     }
     /* MemoirFraagment 이동 함수 */
-    private fun moveMemoirFragment(reviewId: Int, planId: Int){
+    private fun moveMemoirFragment(reviewId: Int, planId: Int, aiPlanId: Int?){
         var fragment: Fragment
         val bundle = Bundle()
 
         if(reviewId == 0){  // 회고 미작성 페이지로 이동
             fragment = MemoirNotFragment()
             bundle.putInt("planId", planId)
+            bundle.putInt("aiPlanId", aiPlanId ?: 0)
+            fragment?.arguments = bundle
+
         }
         else{   // 회고 완료 페이지로 이동
             fragment = MemoirCompleteFragment()
             bundle.putInt("reviewId", reviewId)
+            bundle.putInt("aiPlanId", aiPlanId ?: 0)
+            fragment?.arguments = bundle
         }
 
         requireActivity().supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_frm, fragment)
             addToBackStack(null)
-            arguments = bundle
             commit()
         }
 
     }
 
-    /* TimetableFragment 이동 함수 */
-    private fun moveTimetableFragment(planId: Int){
-        val fragment = TimetableFragment()
+    /* TimetableFragment, BlockGuideFragment 이동 함수 */
+    private fun moveTimetableFragment(fragment: Fragment, planId: Int){
+        val fragment = fragment
         val bundle = Bundle()
         bundle.putInt("planId", planId)
+        fragment.arguments = bundle
 
         requireActivity().supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_frm, fragment)
             addToBackStack(null)
-            arguments = bundle
             commit()
         }
 
