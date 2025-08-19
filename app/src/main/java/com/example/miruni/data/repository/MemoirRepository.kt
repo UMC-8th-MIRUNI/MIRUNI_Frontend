@@ -6,6 +6,8 @@ import com.example.miruni.api.model.MemoirCountResponse
 import com.example.miruni.api.model.MemoirDateListResponse
 import com.example.miruni.api.model.MemoirDeliteResponse
 import com.example.miruni.api.model.MemoirDetailResponse
+import com.example.miruni.api.model.MemoirSaveRequest
+import com.example.miruni.api.model.MemoirSaveResponse
 import com.example.miruni.api.model.MemoirSearchResponse
 import retrofit2.Response
 
@@ -39,6 +41,12 @@ class MemoirRepository(
     /* 회고 삭제 API */
     suspend fun getMemoirDelete(token: String, reviewId: Int): Response<MemoirDeliteResponse>{
         val response = api.memoirDelete(token, reviewId)
+        return response
+    }
+
+    /* 회고 작성 후 저장 */
+    suspend fun getMemoirSave(token: String, contentType: String, registerReview: MemoirSaveRequest): Response<MemoirSaveResponse>{
+        val response = api.memoirSave(token, contentType, registerReview)
         return response
     }
 }

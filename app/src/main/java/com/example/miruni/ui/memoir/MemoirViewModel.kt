@@ -9,6 +9,8 @@ import com.example.miruni.api.model.MemoirCountResponse
 import com.example.miruni.api.model.MemoirDateListResponse
 import com.example.miruni.api.model.MemoirDeliteResponse
 import com.example.miruni.api.model.MemoirDetailResponse
+import com.example.miruni.api.model.MemoirSaveRequest
+import com.example.miruni.api.model.MemoirSaveResponse
 import com.example.miruni.api.model.MemoirSearchResponse
 import com.example.miruni.data.repository.MemoirRepository
 import kotlinx.coroutines.launch
@@ -100,5 +102,23 @@ class MemoirViewModel(private val repository: MemoirRepository): ViewModel() {
                 }else {Log.e("회고 삭제", "바디 에러: ${response.code()}")}
             }catch (e: Exception) { Log.e("회고 삭제", "연결에러:  ${e.message}")}
         }
+    }
+
+    private val SaveData = MutableLiveData<MemoirSaveResponse>()
+    val saveData: LiveData<MemoirSaveResponse> = SaveData
+
+    /* 회고 작성 후 저장 */
+    fun getMemoirSave(token: String, contentType: String, registerReview: MemoirSaveRequest){
+        viewModelScope.launch {
+            try {
+                val response = repository.getMemoirSave(token, contentType, registerReview)
+                if(response.isSuccessful && response.body()?.result != null){
+                    SaveData.value = response.body()
+                    Log.d("회고 작성 후 저장", "성공: ${response.body()?.result}")
+
+                }else {Log.e("회고 작성 후 저장", "바디 에러: ${response.code()}")}
+            }catch (e: Exception) { Log.e("회고 작성 후 저장", "연결에러:  ${e.message}")}
+        }
+
     }
 }

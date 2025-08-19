@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.R
 import com.example.miruni.TokenManager
@@ -15,11 +16,12 @@ import com.example.miruni.api.model.MemoirSaveRequest
 import com.example.miruni.data.Mood
 import com.example.miruni.data.Review
 import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.repository.MemoirRepository
 import com.example.miruni.databinding.FragmentMemoirWriteBinding
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
-// 회고 작성 후 저장 api연결
+/* 아무것도 안쓰고 확인 버튼 누르면 강종됨 */
 class MemoirWriteFragment: Fragment() {
     val binding by lazy {
         FragmentMemoirWriteBinding.inflate(layoutInflater)
@@ -46,63 +48,50 @@ class MemoirWriteFragment: Fragment() {
 
     }
     /* 회고 작성 후 저장 API 연동 */
-    private suspend fun memoirSave(){
-        // 등록 요청 fragment
-            try {
-                // 작성 값 저장 - request값 생성
-                val registerReview = setMemoirRequest()
+    private fun memoirSave(){
+        // 작성 값 저장 - request값 생성
+        val registerReview = setMemoirRequest()
+        val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+        val contentType = "application/json"
 
-                val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-                val contentType = "application/json"
-                val api = getRetrofit().create(ApiService::class.java)
-                val response = api.memoirSave(token, contentType, registerReview)
+        val repository = MemoirRepository()
+        val factory = MemoirViewModelFactory(repository)
+        val viewModel = ViewModelProvider(this, factory)[MemoirViewModel::class.java]
+        viewModel.getMemoirSave(token, contentType, registerReview)
+        viewModel.saveData.observe(viewLifecycleOwner){ data ->
+            review = data.result ?: null
 
-                Log.d("회고 작성 후 저장", "성공: $response")
-
-                // 정보 받아서 저장
-                if(response.isSuccessful){
-                    review = response.body()?.result ?: null
-
-                    if(review!= null){
-                        val review = Review(
-                            id = review!!.id,
-                            aiPlanId = review!!.aiPlanId,
-                            planId = review!!.planId,
-                            mood = review?.mood ?: Mood.HAPPY,
-                            title = review?.title ?: "",
-                            description = review?.description ?: "",
-                            achievement = review?.achievement ?: 0,
-                            memo = review?.memo ?: "",
-                            createdAt = review?.createdAt ?: ""
-                        )
-                        binding.writeLayout.memoirTitle.memoirWriteTitle.text = review.title
-                        binding.writeLayout.memoirTitle.memoirDescription.text = review.description
-                        binding.writeLayout.memoirTitle.memoirWriteDate.text = review.createdAt
-                        // 앱 내에 저장
-                        db.reviewDao().insertReview(review)
-                    }
-                    Log.d("회고 작성 후 저장", "저장된 정보: ${response.body()}")
-                }else{
-                    Log.e("회고 작성 후 저장", "reponse실패: ${response.code()} - ${response.message()}")
-                }
-
-                // 회고 작성 완료 페이지(MemoirCompleteFragment)로 이동
-                val bundle = Bundle()
-
-                bundle.putInt("reviewId", review?.id ?: 0)
-
-                val fragment = MemoirCompleteFragment()
-                fragment.arguments = bundle
-                parentFragmentManager.beginTransaction().apply {
-                    replace(R.id.main_frm, fragment)
-                    addToBackStack(null)
-                    commit()
-                }
-
-            }catch (e: Exception){
-                Log.e("회고 작성 후 저장", "에러: ${e.message}")
+            if(review!= null){
+                val review = Review(
+                    id = review!!.id,
+                    aiPlanId = review!!.aiPlanId,
+                    planId = review!!.planId,
+                    mood = review?.mood ?: Mood.HAPPY,
+                    title = review?.title ?: "",
+                    description = review?.description ?: "",
+                    achievement = review?.achievement ?: 0,
+                    memo = review?.memo ?: "",
+                    createdAt = review?.createdAt ?: ""
+                )
+                binding.writeLayout.memoirTitle.memoirWriteTitle.text = review.title
+                binding.writeLayout.memoirTitle.memoirDescription.text = review.description
+                binding.writeLayout.memoirTitle.memoirWriteDate.text = review.createdAt
+                // 앱 내에 저장
+                db.reviewDao().insertReview(review)
             }
+        }
 
+        // 회고 작성 완료 페이지(MemoirCompleteFragment)로 이동
+        val bundle = Bundle()
+        bundle.putInt("reviewId", review?.id ?: 0)
+
+        val fragment = MemoirCompleteFragment()
+        fragment.arguments = bundle
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.main_frm, fragment)
+            addToBackStack(null)
+            commit()
+        }
     }
     /* 클릭 이벤트 버튼 */
     private fun initClickListener(){
@@ -189,10 +178,10 @@ class MemoirWriteFragment: Fragment() {
 
     fun setMemoirRequest() : MemoirSaveRequest {
 
-        // request body 생성
-        // id겂 넘겨 받아야함
-        val aiPlanId = 5
-        val planId = 6
+        var aiPlanId = arguments?.getInt("aiPlanId")
+        if(aiPlanId == 0) aiPlanId=null
+        val planId = arguments?.getInt("planId") ?: 0
+
         val mood = currentMood ?: Mood.ANXIOUS
         val achievement = binding.writeLayout.archievePercent.text.toString().toInt()
         val memo = binding.writeLayout.memoirWriteTxt.text.toString()
