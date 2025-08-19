@@ -54,10 +54,14 @@ class TimetableRVAdapter(private val db: ScheduleDatabase): RecyclerView.Adapter
             tmpTime = task.startTime.split(":")
             val start = tmpTime[0].toInt() * 60 + tmpTime[1].toInt()
 
-            binding.timetableTime.text = if ((end - start) > 60) {
-                String.format("${ (end - start) % 60 }시간 ${(end - start)/60}분")
-            } else {
-                String.format("${end-start}분")
+            binding.timetableTime.apply {
+                if ((end - start) > 60) {
+                    text = String.format("${ (end - start) % 60 }시간 ${(end - start)/60}분")
+                    textSize = 9f
+                } else {
+                    text = String.format("${end-start}분")
+
+                }
             }
 
             binding.timetableTimetaken.text = String.format("${task.startTime.substring(0, 5)}-${task.endTime.substring(0, 5)}")

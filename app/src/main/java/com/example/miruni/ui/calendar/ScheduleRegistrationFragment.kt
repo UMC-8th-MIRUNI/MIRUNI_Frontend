@@ -97,7 +97,7 @@ class ScheduleRegistrationFragment : Fragment() {
      */
     private fun initDate() {
         val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
-        val selectedDate = spf.getString("selectedDate", "").toString()
+        val selectedDate = spf.getString("selectedDate", "").toString() // "yyyy-MM-dd"
         val tmpDate = selectedDate.split("-")
 
         val deadlineCalendar = Calendar.getInstance()
@@ -971,6 +971,7 @@ class ScheduleRegistrationFragment : Fragment() {
                     scheduledStart = resultOfResponse.scheduledStart,
                     isDone = resultOfResponse.isDone,
                 )
+                Log.d("registerSchedule", "title: ${resultOfResponse.title}")
                 scheduleDB.planDao().insert(plan)
                 planId = resultOfResponse.planId
                 Log.d("registerSchedule", planId.toString())
@@ -1033,6 +1034,17 @@ class ScheduleRegistrationFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val resultOfGetSplitSchedule = api.getSchedule(accessToken, planId).body()!!.result
+
+                    val plan = Plan(
+                        id = planId,
+                        title = resultOfGetSplitSchedule.title,
+                        planType = selectedScheduleType.toString(),
+                        category = resultOfGetSplitSchedule.category,
+                        deadline = resultOfGetSplitSchedule.deadline,
+                        taskRange = resultOfGetSplitSchedule.taskRange,
+                        priority = resultOfGetSplitSchedule.priority
+                    )
+                    scheduleDB.planDao().update(plan)
 
                     resultOfGetSplitSchedule.plans.forEach { splitSchedule ->
                         val task = Task(

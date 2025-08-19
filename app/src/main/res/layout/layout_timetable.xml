@@ -8,10 +8,11 @@
 
     <ImageView
         android:id="@+id/timetable_back_iv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/timetable_title_tv"
         app:layout_constraintStart_toStartOf="@+id/timetable_content_start_line"
+        app:layout_constraintEnd_toEndOf="@id/timetable_back_end_line"
         app:layout_constraintTop_toTopOf="@+id/timetable_topbar_top_line"
         app:srcCompat="@drawable/calendar_back_btn" />
 
@@ -28,56 +29,98 @@
 
     <ImageView
         android:id="@+id/timetable_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/timetable_content_end_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@+id/timetable_edit_start_line"
+        app:layout_constraintEnd_toEndOf="@+id/timetable_content_end_line"
         app:layout_constraintTop_toTopOf="@+id/timetable_topbar_top_line"
+        app:layout_constraintBottom_toBottomOf="@id/timetable_topbar_bottom_line"
         app:srcCompat="@drawable/schedule_edit" />
+
+    <View
+        android:id="@+id/timetable_topbar_border"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#BBBBBB"
+        app:layout_constraintTop_toTopOf="@id/timetable_topbar_border_top_line"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/timetable_topbar_top_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.057" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/timetable_topbar_bottom_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.096"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/timetable_topbar_border_top_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.112"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/timetable_back_end_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.125"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/timetable_edit_start_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.897"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/timetable_content_bottom_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.915" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/timetable_content_start_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.03" />
+        app:layout_constraintGuide_percent="0.039" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/timetable_content_end_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.97" />
+        app:layout_constraintGuide_percent="0.953" />
     
     <ImageView
-        android:id="@+id/imageView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/timetable_type_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="@+id/timetable_content_start_line"
         app:layout_constraintTop_toTopOf="@+id/timetable_title_top_line"
+        app:layout_constraintEnd_toEndOf="@id/timetable_back_end_line"
         app:srcCompat="@drawable/schedule_title_icon" />
 
     <TextView
         android:id="@+id/timetable_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ems="10"
+        android:ellipsize="end"
         android:text="TextView"
         android:fontFamily="@font/dmsans_semibold"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView13"
+        app:layout_constraintStart_toEndOf="@+id/timetable_type_iv"
         app:layout_constraintTop_toTopOf="@+id/timetable_title_top_line" />
 
     <TextView
@@ -85,11 +128,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="TextView"
+        android:text="한 줄 소개"
         android:textSize="14sp"
         android:fontFamily="@font/dmsans_regular"
         android:textColor="@color/grey4"
-        app:layout_constraintStart_toEndOf="@+id/imageView13"
+        app:layout_constraintStart_toEndOf="@+id/timetable_type_iv"
         app:layout_constraintTop_toBottomOf="@+id/timetable_title" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -177,11 +220,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="기획안 13페이지 완성"
+            android:gravity="end"
+            android:maxLines="1"
+            android:ems="10"
+            android:ellipsize="end"
             android:fontFamily="@font/dmsans_regular"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.491" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView61"
@@ -289,9 +335,9 @@
             android:id="@+id/timetable_all_checkbox_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             app:layout_constraintBottom_toTopOf="@+id/timetable_table_title_bottom_line"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/timetable_date_title_start_line"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/schedule_checkbox" />
 
@@ -327,8 +373,9 @@
             android:textSize="10sp"
             android:fontFamily="@font/dmsans_regular"
             android:textColor="@color/grey1"
+            app:layout_constraintStart_toStartOf="@id/timetable_duration_title_start_line"
+            app:layout_constraintEnd_toEndOf="@+id/timetable_duration_title_end_line"
             app:layout_constraintBottom_toTopOf="@+id/timetable_table_title_bottom_line"
-            app:layout_constraintEnd_toStartOf="@+id/timetable_duration_title_start_line"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -340,7 +387,7 @@
             android:textColor="@color/grey1"
             android:fontFamily="@font/dmsans_regular"
             app:layout_constraintBottom_toTopOf="@+id/timetable_table_title_bottom_line"
-            app:layout_constraintEnd_toStartOf="@+id/timetable_execute_time_title_start_line"
+            app:layout_constraintEnd_toEndOf="@+id/timetable_execute_time_title_start_line"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -348,28 +395,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.07" />
+            app:layout_constraintGuide_percent="0.102" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/timetable_detail_date_title_start_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.15" />
+            app:layout_constraintGuide_percent="0.216" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/timetable_execute_time_title_start_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
+            app:layout_constraintGuide_percent="0.958" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/timetable_duration_title_start_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.81" />
+            app:layout_constraintGuide_percent="0.658" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/timetable_duration_title_end_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.787" />
 
         <ImageView
             android:id="@+id/imageView65"

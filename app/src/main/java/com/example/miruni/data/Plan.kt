@@ -14,7 +14,7 @@ data class Plan(
     var scheduledStart: String? = null, // "2025-08-14T16:19:13.711Z"
     var scheduledEnd: String? = null, // "2025-08-14T16:19:13.711Z"
     var expectedDuration: String? = null,
-    var priority: String? = null,
+    var priority: String? = null, // "HIGH", "MEDIUM", "LOW"
     var description: String? = null,
     var planType: String? = null,
     var taskRange: String? = null,
