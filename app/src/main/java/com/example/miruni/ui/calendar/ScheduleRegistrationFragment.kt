@@ -24,13 +24,15 @@ import androidx.core.graphics.toColorInt
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
+import com.example.miruni.TimetableFragment
 import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
 import com.example.miruni.api.RegisterScheduleRequest
-import com.example.miruni.api.RegisterScheduleResponse
-import com.example.miruni.api.ResultOfRegisterSchedule
+import com.example.miruni.api.SplitScheduleRequest
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Plan
+import com.example.miruni.data.Priority
+import com.example.miruni.data.Type
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.data.Time
@@ -55,29 +57,22 @@ import java.util.Calendar
 class ScheduleRegistrationFragment : Fragment() {
     private lateinit var binding: FragmentScheduleRegistrationBinding
     private lateinit var scheduleDB: ScheduleDatabase
+    private lateinit var accessToken: String
 
     // 일정 등록하기
+    private lateinit var priorityDropdown: PopupWindow
     private val hoursOnDropdown = (1..12).toList()
     private val minutesOnDropdown = (1..59).toList()
     private val ampmOnDropdown = listOf(ampm.AM, ampm.PM)
-    private var selectedDeadline: Time? = null
-    private var selectedExecutionStartDate: Time? = null
-    private var selectedExecutionEndDate: Time? = null
-
-    private lateinit var priorityDropdown: PopupWindow
     private val priorityItems = arrayListOf("상", "중", "하")
-    private var selectedPriority = ""
-    private var selectedScheduleType = -1
 
-    private val scheduleTypeList = listOf(
-        "몰입형/사고 중심 작업",
-        "창작/표현 작업",
-        "학습/정보 정리 작업",
-        "실무/행정 처리 작업",
-        "반복/루틴형 작업",
-        "협업/의사소통 작업",
-        "준비/계획형 작업"
-    )
+    private var selectedDeadline: Time? = null // 마감 일시
+    private var selectedExecutionStartDate: Time? = null // 시작 일시
+    private var selectedExecutionEndDate: Time? = null // 종료 일시
+    private var selectedPriority = "" // 우선 순위
+    private var selectedScheduleType: Type = Type.IMMERSIVE // 일정 유형
+
+    private var idForTimtable: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +80,7 @@ class ScheduleRegistrationFragment : Fragment() {
     ): View? {
         binding = FragmentScheduleRegistrationBinding.inflate(layoutInflater, container, false)
         scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
+        accessToken = String.format("Bearer ${TokenManager.getToken(requireContext())}")
 
         controlBottomNavigation(context as MainActivity, false)
         controlTopBar(context as MainActivity, false)
@@ -96,9 +92,12 @@ class ScheduleRegistrationFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * 진입 날짜 초기화
+     */
     private fun initDate() {
         val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
-        val selectedDate = spf.getString("selectedDate", "").toString()
+        val selectedDate = spf.getString("selectedDate", "").toString() // "yyyy-MM-dd"
         val tmpDate = selectedDate.split("-")
 
         val deadlineCalendar = Calendar.getInstance()
@@ -203,7 +202,14 @@ class ScheduleRegistrationFragment : Fragment() {
             /** 등록하기 */
             scheduleRegistrationContentBtnRegister.setOnClickListener {
                 lifecycleScope.launch {
-                    registerSchedule()
+                    idForTimtable = registerSchedule()
+
+                    (context as MainActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, CalendarFragment())
+                        .commitAllowingStateLoss()
+
+                    controlTopBar(context as MainActivity, true)
+                    controlBottomNavigation(context as MainActivity, true)
                 }
             }
             /** 쪼개기 */
@@ -285,7 +291,10 @@ class ScheduleRegistrationFragment : Fragment() {
             }
 
             lifecycleScope.launch {
-                delay(2000)
+                delay(1000)
+
+                splitSchedule()
+
                 screenChange(
                     binding.scheduleSplitLoadingInclude.root,
                     binding.scheduleSplitCompleteInclude.root,
@@ -317,7 +326,19 @@ class ScheduleRegistrationFragment : Fragment() {
             }
             /** 확인 */
             scheduleSplitCompleteOkTv.setOnClickListener {
-                Toast.makeText(context as MainActivity, "스케줄표", Toast.LENGTH_SHORT).show()
+
+                val bundle = Bundle()
+                bundle.putInt("idForCheckSplit", idForTimtable)
+                Log.d("idForCheckSplit", idForTimtable.toString())
+
+                val fragment = TimetableFragment().apply {
+                    arguments = bundle
+                }
+
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment, "TimetableFragment")
+                    .addToBackStack("ScheduleRegistration")
+                    .commit()
             }
         }
     }
@@ -703,12 +724,16 @@ class ScheduleRegistrationFragment : Fragment() {
                 priorityDropdown.dismiss()
             }
 
-            if (text == selectedItem) {
-                textView.setTextColor(Color.WHITE)
-                textView.setBackgroundColor("#1AE019".toColorInt())
-            } else {
-                textView.setTextColor(Color.BLACK)
-                Color.TRANSPARENT
+            try{
+                if (text == Priority.valueOf(selectedItem.toString()).localLabel) {
+                    textView.setTextColor(Color.WHITE)
+                    textView.setBackgroundColor("#1AE019".toColorInt())
+                } else {
+                    textView.setTextColor(Color.BLACK)
+                    Color.TRANSPARENT
+                }
+            }catch (e: IllegalArgumentException) {
+                null
             }
         }
 
@@ -814,7 +839,7 @@ class ScheduleRegistrationFragment : Fragment() {
                 anchor.setBackgroundResource(R.drawable.bg_ababab_square_7)
             }
 
-            if (index == selectedScheduleType) {
+            if (index == selectedScheduleType.ordinal) {
                 viewList[index].first.setTextColor(Color.WHITE)
                 viewList[index].second.setColorFilter(Color.WHITE)
                 viewList[index].first.setTextColor(Color.WHITE)
@@ -838,7 +863,8 @@ class ScheduleRegistrationFragment : Fragment() {
      */
     private fun showPriorityDropdown(anchor: View) {
         initPriorityDropdown(anchor, priorityItems, selectedPriority) { selected ->
-            selectedPriority = selected
+            selectedPriority = Priority.fromLocalLabel(selected).toString()
+            Log.d("scheduleRegistration", "showPriorityDropdown: $selectedPriority")
             binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentPriorityTv.text = selected
         }
     }
@@ -848,8 +874,9 @@ class ScheduleRegistrationFragment : Fragment() {
      */
     private fun showScheduleTypeDropdown(anchor: View) {
         initScheduleTypeDropdown(anchor) {selected ->
-            selectedScheduleType = selected
-            binding.scheduleSplitInclude.scheduleSplitTypeTv.text = scheduleTypeList[selected]
+            selectedScheduleType = Type.values()[selected]
+            binding.scheduleSplitInclude.scheduleSplitTypeTv.text = Type.valueOf(selectedScheduleType.toString()).localLabel
+            Log.d("scheduleRegistration", "split type: ${Type.values()[selected]}")
             binding.scheduleSplitInclude.scheduleSplitTypeMoreIv.visibility = View.VISIBLE
         }
     }
@@ -865,17 +892,31 @@ class ScheduleRegistrationFragment : Fragment() {
         Log.d("RegistrationSchedule/title", title)
 
         val deadline =
-            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedDeadline?.minute)}:00.000")
+            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}" +
+                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH))}" +
+                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}" +
+                    "T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}" +
+                    ":${numberFormat.format(selectedDeadline?.minute)}:00.000")
         Log.d("RegistrationSchedule/deadline", deadline)
 
         val scheduledStart =
-            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
+            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}" +
+                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}" +
+                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
+                    "T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}" +
+                    ":${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledStart", scheduledStart)
+
+
         val scheduledEnd =
-            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}:${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
+            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}" +
+                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}" +
+                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
+                    "T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
+                    ":${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
 
-        val priority = convertSchedulePriority(selectedPriority)
+        val priority = selectedPriority
         Log.d("RegistrationSchedule/priority", priority.toString())
 
         val description = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentCommentEt.text.toString()
@@ -910,14 +951,15 @@ class ScheduleRegistrationFragment : Fragment() {
     /**
      * 일정 등록
      */
-    private suspend fun registerSchedule() {
+    private suspend fun registerSchedule(): Int {
+        var planId = -1
+
         try {
-            val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-            val registerScheduleRequest = setRegisterScheduleRequest() ?: return
+            val registerScheduleRequest = setRegisterScheduleRequest() ?: return planId
             Log.d("registerSchedule/Request", "title: ${registerScheduleRequest.title} \ndeadline: ${registerScheduleRequest.deadline} \nscheduledStart: ${registerScheduleRequest.scheduledStart} \nscheduledEnd: ${registerScheduleRequest.scheduledEnd} \npriority: ${registerScheduleRequest.priority} \ndescription: ${registerScheduleRequest.description}")
 
             val api = getRetrofit().create(ApiService::class.java)
-            val response = api.registerSchedule(token, registerScheduleRequest)
+            val response = api.registerSchedule(accessToken, registerScheduleRequest)
 
             if (response.isSuccessful) {
                 val resultOfResponse = response.body()!!.result
@@ -929,21 +971,20 @@ class ScheduleRegistrationFragment : Fragment() {
                     scheduledStart = resultOfResponse.scheduledStart,
                     isDone = resultOfResponse.isDone,
                 )
+                Log.d("registerSchedule", "title: ${resultOfResponse.title}")
                 scheduleDB.planDao().insert(plan)
+                planId = resultOfResponse.planId
+                Log.d("registerSchedule", planId.toString())
                 Log.d("registerSchedule", "저장된 정보: ${response.body()}")
             } else {
                 Log.d("registerSchedule", "실패: ${response.code()} - ${response.message()}")
             }
-
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, CalendarFragment())
-                .commitAllowingStateLoss()
-
-            controlTopBar(context as MainActivity, true)
-            controlBottomNavigation(context as MainActivity, true)
         } catch (e: Exception) {
             Log.e("registerSchedule", "에러: ${e.message}")
         }
+
+        idForTimtable = planId
+        return planId
     }
 
     /**
@@ -965,27 +1006,70 @@ class ScheduleRegistrationFragment : Fragment() {
         }
     }
 
-    private fun convertScheduleType(scheduleTypeIndex: Int): String? {
-        val realScheduleType = when(scheduleTypeIndex) {
-            0 -> "IMMERSIVE"
-            1 -> "CREATIVE"
-            2 -> "STUDY_ORGANIZATION"
-            3 -> "PRACTICAL_ADMIN"
-            4 -> "ROUTINE"
-            5 -> "COLLAB_COMMUNICATION"
-            6 -> "PREPARATION_PLANNING"
-            else -> null
-        }
-        return realScheduleType
-    }
+    private suspend fun splitSchedule() {
+        val taskRange: String
+        val detailRequest: String
 
-    private fun convertSchedulePriority(schedulePrior: String): String? {
-        val realPriority = when(schedulePrior) {
-            "상" -> "HIGH"
-            "중" -> "MEDIUM"
-            "하" -> "LOW"
-            else -> null
+        binding.scheduleSplitInclude.apply {
+            taskRange = scheduleSplitVolumeEt.text.toString()
+            detailRequest = scheduleSplitRequestEt.text.toString()
         }
-        return realPriority
+
+        val request = SplitScheduleRequest(
+            planType = selectedScheduleType.toString(),
+            taskRange = taskRange,
+            detailRequest = detailRequest
+        )
+        Log.d("splitSchedule",
+            "planType: ${request.planType}" +
+                    "\ntaskRange: ${request.taskRange}" +
+                    "\ndetailRequest: ${request.detailRequest}")
+
+        val planId = registerSchedule()
+
+        try {
+            if (planId != -1) { // 일정이 정상적으로 등록됨
+                val api = getRetrofit().create(ApiService::class.java)
+                val response = api.splitSchedule(accessToken, planId, request)
+
+                if (response.isSuccessful) {
+                    val resultOfGetSplitSchedule = api.getSchedule(accessToken, planId).body()!!.result
+
+                    val plan = Plan(
+                        id = planId,
+                        title = resultOfGetSplitSchedule.title,
+                        planType = selectedScheduleType.toString(),
+                        category = resultOfGetSplitSchedule.category,
+                        deadline = resultOfGetSplitSchedule.deadline,
+                        taskRange = resultOfGetSplitSchedule.taskRange,
+                        priority = resultOfGetSplitSchedule.priority
+                    )
+                    scheduleDB.planDao().update(plan)
+
+                    resultOfGetSplitSchedule.plans.forEach { splitSchedule ->
+                        val task = Task(
+                            id = splitSchedule.planId,
+                            scheduleId = planId,
+                            title = splitSchedule.description,
+                            executeDay = splitSchedule.date,
+                            startTime = splitSchedule.startTime,
+                            endTime = splitSchedule.endTime,
+                            status = "undo"
+                        )
+                        scheduleDB.taskDao().insert(task)
+                        Log.d("splitSchedule", "일정 쪼개기 성공")
+                    }
+                } else if (response.code() == 500) {
+                    Toast.makeText(requireContext(), "AI 응답 없음", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.d("splitSchedule", "일정 쪼개기 실패: ${response.code()} / ${response.body()?.message}")
+                }
+            } else { // 일정이 정상적으로 등록되지 않아 기본값 -1이 반환됨
+                Log.e("splitSchedule", "등록 단계에서 오류")
+                throw Exception("정상적으로 등록된 일정이 아닙니다.")
+            }
+        } catch (e: Exception) {
+            Log.e("splitSchedule", "에러: ${e.message}")
+        }
     }
 }

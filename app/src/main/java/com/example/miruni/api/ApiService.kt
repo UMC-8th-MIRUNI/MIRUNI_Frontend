@@ -39,7 +39,7 @@ interface ApiService {
     ): Response<DeleteScheduleResponse>
 
     // AI 일정 쪼개기
-    @POST("/api/schedules/{planId}/aiplans")
+    @POST("/api/schedules/{planId}")
     suspend fun splitSchedule(
         @Header("Authorization") token: String,
         @Path("planId") scheduleId: Int,

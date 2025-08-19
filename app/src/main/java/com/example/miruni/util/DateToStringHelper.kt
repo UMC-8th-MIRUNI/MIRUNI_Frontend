@@ -73,16 +73,22 @@ fun getDateTimeStringHelper(
 /**
  * "yyyy-MM-ddThh:mm:ss.000"의 형식을 yyyy-MM-dd, hh:mm로 쪼개어 추출
  * @param datetimeString - 날짜 및 시간 변수
- * @param get - true: 날짜, false: 시간
+ * @param getDate - true: 날짜, false: 시간
  */
-fun splitDateTimeHelper(datetimeString: String, getDataTime: Boolean): String {
+fun splitDateTimeHelper(datetimeString: String, getDate: Boolean): String {
 
     val dayAndTime = datetimeString.split("T")
     var result = ""
-    if (getDataTime) {
+    if (getDate) {
         result = dayAndTime[0].toString()
     } else {
         result = dayAndTime[1].toString().substring(0, 5)
     }
+    return result
+}
+
+fun convertDateFormat(dateString: String, originDelimiters: String, targetDelimiters: String): String {
+    val str = dateString.split(originDelimiters)
+    val result = String.format("${str[0]}$targetDelimiters${str[1]}$targetDelimiters${str[2]}")
     return result
 }

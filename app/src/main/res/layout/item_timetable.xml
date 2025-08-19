@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/timetable_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,14 +8,14 @@
 
     <TextView
         android:id="@+id/timetable_date"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/dmsans_bold"
-        android:text="5/25"
+        android:text="05/25"
         android:textColor="@color/grey2"
         android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="@+id/item_timetable_date_start_line"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline38"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -27,8 +26,11 @@
         android:text="TextView"
         android:textColor="@color/grey2"
         android:textSize="10sp"
+        android:maxLines="1"
+        android:ems="12"
+        android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline39"
+        app:layout_constraintStart_toStartOf="@+id/item_timetable_plan_start_line"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -39,9 +41,10 @@
         android:text="TextView"
         android:textColor="@color/grey2"
         android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline58"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@id/item_timetable_taken_start_line"
+        app:layout_constraintEnd_toEndOf="@+id/item_timetable_taken_end_line"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/timetable_time"
@@ -52,7 +55,7 @@
         android:textColor="@color/grey2"
         android:textSize="9sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline51"
+        app:layout_constraintEnd_toStartOf="@+id/timetable_time_end_line"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -66,35 +69,41 @@
         app:srcCompat="@drawable/line" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline38"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/item_timetable_date_start_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.07" />
+        app:layout_constraintGuide_percent="0.102" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline39"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/item_timetable_plan_start_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.216" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline51"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/item_timetable_taken_start_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="0.658"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline58"
+        android:id="@+id/item_timetable_taken_end_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.81" />
+        app:layout_constraintGuide_percent="0.787" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/timetable_time_end_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.958" />
 
-    <!-- 수핸시간 설정 버튼 -->
+    <!-- 수행시간 설정 버튼 -->
     <LinearLayout
         android:id="@+id/timetable_time_setting"
         android:layout_width="wrap_content"
@@ -105,7 +114,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline51"
+        app:layout_constraintEnd_toEndOf="@+id/timetable_time_end_line"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
