@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.miruni.R
 import com.example.miruni.databinding.FragmentBlockGuideBinding
@@ -43,11 +44,24 @@ class BlockGuideFragment: Fragment() {
             }
         }
 
+        initClickListener()
+
+
     }
     private fun moveFragment(fragment: Fragment){
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.main_frm, fragment)
             .addToBackStack(null)
             .commit()
+    }
+    private fun initClickListener(){
+        /* 뒤로가기 */
+        binding.toolBackClose1.blockBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+        /* 닫기 */
+        binding.toolBackClose1.blockClose.setOnClickListener {
+            moveFragment(ToolFragment())
+        }
     }
 }

@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.databinding.FragmentToolBinding
+import com.example.miruni.ui.calendar.CalendarFragment
+import com.example.miruni.ui.calendar.ScheduleRegistrationFragment
 
 class ToolFragment: Fragment() {
     val binding by lazy {
@@ -20,8 +22,9 @@ class ToolFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /** 상단바 색상 변경 **/
         (activity as? MainActivity)?.setTopBarColor(R.color.white)
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.VISIBLE
+        (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.VISIBLE
 
         // 클릭 버튼
         initClickListener()
@@ -37,7 +40,8 @@ class ToolFragment: Fragment() {
 
         }
         binding.toolSplit.setOnClickListener {
-            /* 일정 쪼개기 이동*/
+            /* 일정 등록하기 이동 (오류남)*/
+            moveFragment(ScheduleRegistrationFragment())
         }
     }
 

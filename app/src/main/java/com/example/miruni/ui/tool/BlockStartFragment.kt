@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import com.example.miruni.R
 import com.example.miruni.databinding.FragmentBlockStartBinding
 
@@ -22,7 +24,7 @@ class BlockStartFragment: Fragment() {
     ): View? {
         return binding.root
     }
-
+    private var timer = 0L
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE
@@ -33,10 +35,11 @@ class BlockStartFragment: Fragment() {
             binding.toolTimePicker.visibility = View.VISIBLE
             timeSetting()
         }
-        binding.checkStart.setOnClickListener {
-            /* 진행 중 화면으로 이동 */
-        }
+
+        initClickListener()
+
     }
+    /* 시간 설정하고 반환받기 */
     private fun timeSetting(){
         setNumberPickerDividerColor(binding.hourPicker, R.color.selectColor)
         setNumberPickerDividerColor(binding.minPicker, R.color.selectColor)
@@ -64,9 +67,18 @@ class BlockStartFragment: Fragment() {
             binding.hour.text = binding.hourPicker.value.toString()
             binding.min.text =  binding.minPicker.value.toString()
             binding.sec.text =  binding.secPicker.value.toString()
-        }
 
+            val h = binding.hourPicker.value
+            val m = binding.minPicker.value
+            val s = binding.secPicker.value
+
+            timer = (h*3600L) + (m*60L) + s
+
+            binding.toolTimePicker.visibility = View.GONE
+        }
     }
+
+    /* numberPicker 커스텀 */
     fun setNumberPickerDividerColor(picker: NumberPicker, color: Int) {
         try {
             val pickerFields = NumberPicker::class.java.declaredFields
@@ -80,6 +92,28 @@ class BlockStartFragment: Fragment() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun initClickListener(){
+        binding.checkStart.setOnClickListener {
+            if(timer == 0L) { Toast.makeText(requireContext(), "시간을 선택해주세요", Toast.LENGTH_SHORT).show() }
+            else{
+            /* 진행 중 화면으로 이동 + planId 필요 */
+
+            }
+
+        }
+        /* 뒤로가기 */
+        binding.toolBackClose1.blockBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+        /* 닫기 */
+        binding.toolBackClose1.blockClose.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                replace(R.id.main_frm, ToolFragment())
+                commit()
+            }
         }
     }
 

@@ -12,7 +12,7 @@ abstract class ScheduleDatabase: RoomDatabase() {
     abstract fun reviewDao(): ReviewDao
     abstract fun alarmDao(): AlarmDao
     abstract fun planDao(): PlanDao
-    
+
     companion object {
         private var instance: ScheduleDatabase? = null
 
