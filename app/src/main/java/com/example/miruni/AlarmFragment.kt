@@ -31,6 +31,9 @@ class AlarmFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE
+
 
         db = ScheduleDatabase.getInstance(requireContext())!!
         lifecycleScope.launch(Dispatchers.IO) {
@@ -44,6 +47,8 @@ class AlarmFragment: Fragment() {
             binding.alarmRV.addItemDecoration(RVSpacer(spacer))
         }
 
-
+        binding.alarmBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 }

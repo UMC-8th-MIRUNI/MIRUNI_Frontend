@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.data.Alarm
 import com.example.miruni.data.AlarmType
@@ -86,9 +87,10 @@ class MainActivity : AppCompatActivity() {
 
         /** AlarmFragment 이동 **/
         binding.mainIncludeMain.mainTopBarAlarmIv.setOnClickListener {
-            val intent = Intent(this, ProcessingActivity::class.java)
-            intent.putExtra("showFragment", "AlarmFragment")
-            startActivity(intent)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, AlarmFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         /* 알람 테스트 데이터*/
