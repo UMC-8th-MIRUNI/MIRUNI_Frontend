@@ -13,6 +13,7 @@ import com.example.miruni.api.model.DeleteTaskRequest
 import com.example.miruni.api.model.TaskItem
 import com.example.miruni.api.model.Tasks
 import com.example.miruni.data.Review
+import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ListItemBinding
 
@@ -24,11 +25,11 @@ class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Ad
     private var reviewDatas: List<Review> = emptyList()
 
     private var seletedItems = mutableSetOf<DeleteTaskRequest>()
-    //private var seletedItems = mutableSetOf<Int>() // 선택된 task id저장
+    private lateinit var db: ScheduleDatabase
 
     interface onplayClickListener{
         fun onPlayClick(planId: Int) // 진행 화면으로 이동
-        fun onMemoirClick(reviewId: Int, planId: Int, aiPlainId: Int?) // 회고 화면으로 이동
+        fun onMemoirClick(reviewId: Int, aiPlanId: Int, planId: Int) // 회고 화면으로 이동
         fun ondeleteTask(request: DeleteTaskRequest)
     }
 
@@ -55,21 +56,21 @@ class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Ad
 
                 // 버튼 이미지 바꾸고 실행 중 화면으로 이동
                 holder.binding.playBtn.setImageResource(R.drawable.homepage_play)
-                holder.binding.playBtn.setOnClickListener { listener?.onPlayClick(datas[position].planId) }
+                holder.binding.playBtn.setOnClickListener { listener?.onPlayClick(datas[position].aiPlanId) }
             }
             Status.FINISHED.toString() -> {
                 holder.binding.homepageTaskStatus.setImageResource(R.drawable.homepage_completed_status)
                 holder.binding.timeStatus.text = "완료시간:"
                 holder.binding.goalTime.text = datas[position].stoppedAt
 
-                val writed = reviewDatas.any{ it.planId == datas[position].planId }
+                val writed = reviewDatas.any{ it.planId == datas[position].aiPlanId }
 
                 if(datas[position].reviewId != null){ // 버튼 이미지 바꾸고 회고 완료 페이지로 이동
                     holder.binding.playBtn.setImageResource(R.drawable.homepage_review_btn)
-                    holder.binding.playBtn.setOnClickListener { listener?.onMemoirClick(datas[position].reviewId!!, datas[position].planId, datas[position].aiPlanId) }
+                    holder.binding.playBtn.setOnClickListener { listener?.onMemoirClick(datas[position].reviewId!!, datas[position].aiPlanId, datas[position].planId) }
                 }else{  // 버튼 이미지 바꾸고 회고 미작성 페이지로 이동
                     holder.binding.playBtn.setImageResource(R.drawable.homepage_not_write)
-                    holder.binding.playBtn.setOnClickListener { listener?.onMemoirClick(0, datas[position].planId, datas[position].aiPlanId) }
+                    holder.binding.playBtn.setOnClickListener { listener?.onMemoirClick(-1, datas[position].aiPlanId, datas[position].planId) }
                 }
             }
             Status.NOT_STARTED.toString() -> {
@@ -79,7 +80,7 @@ class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Ad
 
                 // 버튼 이미지 바꾸고 실행 중 화면으로 이동
                 holder.binding.playBtn.setImageResource(R.drawable.homepage_play)
-                holder.binding.playBtn.setOnClickListener { listener?.onPlayClick(datas[position].planId) }
+                holder.binding.playBtn.setOnClickListener { listener?.onPlayClick(datas[position].aiPlanId) }
             }
         }
 

@@ -66,6 +66,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline79" />
 
+    <LinearLayout
+        android:id="@+id/check_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:minHeight="40dp"
+        android:background="@drawable/bg_1eff17_square_8"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/guideline74"
+        app:layout_constraintEnd_toStartOf="@+id/guideline73"
+        app:layout_constraintStart_toStartOf="@+id/guideline72"
+        app:layout_constraintTop_toTopOf="@+id/guideline75">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/btnText"
+            android:text="@string/chekck" />
+    </LinearLayout>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/nextLayout"
         android:layout_width="0dp"
@@ -74,48 +96,6 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline73"
         app:layout_constraintStart_toStartOf="@+id/guideline72"
         app:layout_constraintTop_toTopOf="@+id/guideline75">
-
-        <LinearLayout
-            android:id="@+id/skip_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_1eff17_square_8"
-            android:minHeight="40dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline80"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                style="@style/btnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/skip" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/next_btn"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_1eff17_square_8"
-            android:gravity="center"
-            android:minHeight="40dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline81"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                style="@style/btnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/chekck" />
-        </LinearLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline80"

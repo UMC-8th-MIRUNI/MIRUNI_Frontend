@@ -220,7 +220,7 @@ class ScheduleRegistrationFragment : Fragment() {
                     binding.scheduleRegistrationInclude.scheduleRegistrationIncludeTopbar,
                     "쪼개기",
                     true
-                    )
+                )
             }
         }
     }
@@ -820,7 +820,7 @@ class ScheduleRegistrationFragment : Fragment() {
             dropdownView.dropdownScheduleType5,
             dropdownView.dropdownScheduleType6,
             dropdownView.dropdownScheduleType7
-            )
+        )
 
         val viewList = listOf(
             Triple(dropdownView.dropdownScheduleType1Rank, dropdownView.dropdownScheduleType1Iv, dropdownView.dropdownScheduleType1Tv),

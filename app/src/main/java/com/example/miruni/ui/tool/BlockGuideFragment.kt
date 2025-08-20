@@ -1,14 +1,19 @@
 package com.example.miruni.ui.tool
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.miruni.R
 import com.example.miruni.databinding.FragmentBlockGuideBinding
+import com.example.miruni.ui.calendar.ScheduleExecutionFragment
 
+/**
+ *
+ * 홈페이지 에서 오는 방해요소 차단 페이지 */
 class BlockGuideFragment: Fragment() {
     val binding by lazy {
         FragmentBlockGuideBinding.inflate(layoutInflater)
@@ -27,33 +32,41 @@ class BlockGuideFragment: Fragment() {
         (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE
         (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE
 
-        binding.checkLayout.visibility = View.VISIBLE
-        binding.nextLayout.visibility = View.GONE
 
-        binding.checkLayout.setOnClickListener {
-            binding.nextLayout.visibility = View.VISIBLE
-            binding.checkLayout.visibility = View.GONE
+        val aiPlanId = arguments?.getInt("aiPlanId") ?: -1
 
 
-            binding.skipBtn.setOnClickListener {
-                /* 넘어가기 */
-            }
-            binding.nextBtn.setOnClickListener {
-                /* 타이머 설정 화면 */
-                moveFragment(BlockStartFragment())
-            }
+        /* 넘어가기 */
+        binding.skipBtn.setOnClickListener {
+            // 실행 중 화면으로 이동
+            moveFragment(ScheduleExecutionFragment(), aiPlanId, false)
+        }
+        /* 타이머 설정 화면 */
+        binding.nextBtn.setOnClickListener {
+            moveFragment(ScheduleExecutionFragment(), aiPlanId, true)
         }
 
         initClickListener()
 
 
     }
-    private fun moveFragment(fragment: Fragment){
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_frm, fragment)
-            .addToBackStack(null)
-            .commit()
+    private fun moveFragment(fragment: Fragment, aiPlanId: Int, blockCheck: Boolean){
+        val spf = requireContext().getSharedPreferences("executedTask", AppCompatActivity.MODE_PRIVATE)
+        val editor = spf.edit()
+        editor.putInt("taskId", aiPlanId)
+        editor.apply()
+
+        val bundle = Bundle()
+        bundle.putBoolean("blockCheck", blockCheck)
+        fragment.arguments = bundle
+        requireActivity().supportFragmentManager.beginTransaction().apply {
+            replace(R.id.main_frm, fragment)
+            addToBackStack(null)
+            commit()
+        }
     }
+
+
     private fun initClickListener(){
         /* 뒤로가기 */
         binding.toolBackClose1.blockBack.setOnClickListener {
@@ -61,7 +74,7 @@ class BlockGuideFragment: Fragment() {
         }
         /* 닫기 */
         binding.toolBackClose1.blockClose.setOnClickListener {
-            moveFragment(ToolFragment())
+            parentFragmentManager.popBackStack()
         }
     }
 }

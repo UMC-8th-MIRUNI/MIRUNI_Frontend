@@ -40,7 +40,7 @@ class HomepageFragment: Fragment() {
     private lateinit var paused: List<TaskItem> // 중지 일정
     private lateinit var notStarted: List<TaskItem> // 예정 일정
 
-    private var id: Int? = null
+    private var id: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -86,7 +86,8 @@ class HomepageFragment: Fragment() {
                     nextTaskTitle.text = date?.title
                     nextTaskTime.text = "${date?.startDate ?: ""} ${date?.startTime ?: ""}"
                     nextTaskDescription.text = date?.description
-                    id = date?.planId
+
+                    id = date?.aiPlanId ?: -1
                 }
 
                 /* 오늘의 일정 목록 */
@@ -102,8 +103,8 @@ class HomepageFragment: Fragment() {
             adapter.updateData(allTask) // 데이터 RV에 전달
 
             binding.taskPlay.setOnClickListener {
-                Log.d("클릭클릭클릭", "클릭클릭클릭")
-                moveTimetableFragment(BlockGuideFragment(), id ?: 0)
+                Log.d("다가오는 일정", "다가오는 일정aiPlanId: ${id}")
+                moveTimetableFragment(BlockGuideFragment(), id)
             }
         }
 
@@ -118,14 +119,15 @@ class HomepageFragment: Fragment() {
         binding.homepageRecyclerView.adapter = adapter
 
         adapter.setOnClickListener(object : HomepageRVAdapter.onplayClickListener {
-            override fun onPlayClick(planId: Int) {
+            override fun onPlayClick(aiPlanId: Int) {
                 /* 실행 중 화면으로 이동 */
-                moveTimetableFragment(BlockGuideFragment(), planId)
+                Log.d("이동하는 id 확인: ", "콜백id: ${aiPlanId}")
+                moveTimetableFragment(BlockGuideFragment(), aiPlanId)
             }
 
-            override fun onMemoirClick(reviewId: Int, planId: Int, aiPlanId: Int?) {
+            override fun onMemoirClick(reviewId: Int, aiPlanId: Int, planId: Int) {
                 /* 회고 페이지 이동 */
-                moveMemoirFragment(reviewId, planId, aiPlanId)
+                moveMemoirFragment(reviewId, aiPlanId, planId)
             }
 
             override fun ondeleteTask(request: DeleteTaskRequest) {
@@ -136,21 +138,20 @@ class HomepageFragment: Fragment() {
 
     }
     /* MemoirFraagment 이동 함수 */
-    private fun moveMemoirFragment(reviewId: Int, planId: Int, aiPlanId: Int?){
+    private fun moveMemoirFragment(reviewId: Int, aiPlanId: Int, planId: Int){
         var fragment: Fragment
         val bundle = Bundle()
 
-        if(reviewId == 0){  // 회고 미작성 페이지로 이동
+        if(reviewId == -1){  // 회고 미작성 페이지로 이동
             fragment = MemoirNotFragment()
+            bundle.putInt("aiPlanId", aiPlanId)
             bundle.putInt("planId", planId)
-            bundle.putInt("aiPlanId", aiPlanId ?: 0)
             fragment?.arguments = bundle
 
         }
         else{   // 회고 완료 페이지로 이동
             fragment = MemoirCompleteFragment()
             bundle.putInt("reviewId", reviewId)
-            bundle.putInt("aiPlanId", aiPlanId ?: 0)
             fragment?.arguments = bundle
         }
 
@@ -163,10 +164,12 @@ class HomepageFragment: Fragment() {
     }
 
     /* TimetableFragment, BlockGuideFragment 이동 함수 */
-    private fun moveTimetableFragment(fragment: Fragment, planId: Int){
+    private fun moveTimetableFragment(fragment: Fragment, aiPlanId: Int){
         val fragment = fragment
         val bundle = Bundle()
-        bundle.putInt("planId", planId)
+        //bundle.putInt("taskId", planId)
+        bundle.putInt("aiPlanId", aiPlanId)
+        Log.d("이동하는 id 확인: ", "HomeFragment: ${aiPlanId}")
         fragment.arguments = bundle
 
         requireActivity().supportFragmentManager.beginTransaction().apply {
@@ -177,26 +180,26 @@ class HomepageFragment: Fragment() {
 
     }
     private fun clickEvent() {
-        // 중지버튼 눌렀을 때
+        /* 중지버튼 눌렀을 때 */
         binding.homepageFailBtn.setOnClickListener {
             adapter.updateData(paused)
         }
-        // 완료버튼 눌렀을 때
+        /* 완료버튼 눌렀을 때 */
         binding.homepageCompleteBtn.setOnClickListener {
             adapter.updateData(finished)
         }
-        // 예정 버튼 눌렀을 때
+        /* 예정 버튼 눌렀을 때 */
         binding.homepageExpectedBtn.setOnClickListener {
             adapter.updateData(notStarted)
         }
-        // 전체 버튼 눌렀을 때
+        /* 전체 버튼 눌렀을 때 */
         binding.homepageAllBtn.setOnClickListener {
             adapter.updateData(allTask)
         }
 
-        // 다가오는 일정 play 실행
+        /* 다가오는 일정 play 실행 -> 실행 중 화면으로 이동 */
         binding.taskPlay.setOnClickListener {
-            /* 실행 중 화면으로 이동 */
+            moveTimetableFragment(BlockGuideFragment(), id)
         }
 
         // 삭제하기 버튼 눌렀을 때

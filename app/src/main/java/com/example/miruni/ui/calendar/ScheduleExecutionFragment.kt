@@ -1,12 +1,15 @@
 package com.example.miruni.ui.calendar
 
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,15 +21,18 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
+import androidx.fragment.app.replace
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.Stop
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.FragmentScheduleExecutionBinding
 import com.example.miruni.databinding.LayoutPopupScheduleDelayBinding
 import com.example.miruni.databinding.LayoutScheduleDelayAmpmBinding
 import com.example.miruni.databinding.LayoutScheduleDelayCalendarBinding
 import com.example.miruni.ui.homepage.HomepageFragment
+import com.example.miruni.util.FocusService
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
 import com.prolificinteractive.materialcalendarview.CalendarDay
@@ -43,6 +49,8 @@ class ScheduleExecutionFragment : Fragment() {
     private var isRunFirst = true // 처음 실행 여부
     private lateinit var executedTask: Task // 수행할 Task
     var tempTime = 0L // 타이머 일시 정지 시간
+    private lateinit var db : ScheduleDatabase  // db생성
+    private var blockCheck = false  // 방해금지 설정 체크 유무
 
     private val hoursOnDropdown = (1..12).toList()
     private val minutesOnDropdown = (1..59).toList()
@@ -58,18 +66,46 @@ class ScheduleExecutionFragment : Fragment() {
     ): View? {
         binding = FragmentScheduleExecutionBinding.inflate(layoutInflater, container, false)
 
-        initExecution()
+        if(arguments?.getInt("fullBack") == 100) {
+            retoreTimer()
+            Log.d("접속 확인", "포그라운에서 다시 들어옴")
+        }else {
+            initExecution()
+            Log.d("접속 확인", "그냥 들어옴")
+        }
         initExecutionFinish()
 
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         controlTopBar(context as MainActivity, false)
         controlBottomNavigation(context as MainActivity, false)
+
+        db = ScheduleDatabase.getInstance(requireContext())!!
+        blockCheck = arguments?.getBoolean("blockCheck") ?: true
+    }
+
+    /* 되돌아왔을 때 시간 받고 다시 taskId 구분하고 타이머 시작 */
+    private fun retoreTimer(){
+        val endTime = arguments?.getLong("endTime") ?: 0L
+        Log.d("FocusService", "다시 실행중으로 돌아왔을 때 돌아온 시간: ${endTime}")
+        val spf = requireContext().getSharedPreferences("executedTask", MODE_PRIVATE)
+        val taskId = spf.getInt("taskId", -1)
+
+        // FocusService가 가지고있는 시간 기반 남은 시간 계산
+        tempTime = endTime
+        if (taskId != -1) {
+            val scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
+            executedTask = scheduleDB.taskDao().getTask(taskId)
+            Log.d("FocusService", "아이디있는거")
+            startTimer(tempTime)
+        }else{
+            Log.d("FocusService", "아이디없는거")
+            startNoTaskIdTimer(tempTime)
+        }
     }
 
     /**
@@ -80,27 +116,75 @@ class ScheduleExecutionFragment : Fragment() {
         val taskId = spf.getInt("taskId", -1)
 
         val scheduleDB = ScheduleDatabase.getInstance(requireContext())
-        executedTask = scheduleDB!!.taskDao().getTask(taskId)
 
-        startTimer()
+        Log.d("FocusService", "방해금지: ${arguments?.getBoolean("blockCheck")}")
 
+        /* 도구 페이지에서 실행하면 taskId가 없음 */
+        if(taskId == -1){
+            tempTime = arguments?.getLong("timer") ?: 0L
+            tempTime *= 1000L
+            startNoTaskIdTimer(tempTime)
+        }else{
+            executedTask = scheduleDB!!.taskDao().getTask(taskId)
+
+            Log.d("화깅ㄴ", "task_id: ${executedTask.id} | task_scheduleid: ${executedTask.scheduleId}")
+            if(executedTask != null){
+                startTimer(tempTime)
+            }
+        }
+
+
+        /**
+         * 여기서 중지 시간 저장해야됨 taskId랑 String데이터 필요
+         **/
         binding.scheduleExecutionInclude.apply {
             /** 중지 버튼 */
             scheduleExecutionStopTv.setOnClickListener {
-                screenState = "stop"
-                timerStartStop()
-                changeLayout(binding.scheduleExecutionInclude.root, binding.scheduleStopCompleteInclude.root)
-                initExecutionStopnComplete(screenState)
+                if(taskId == -1 ){  // 도구페이지에서 시작
+                    timerStartStop()
+                }else{
+                    screenState = "stop"
+                    timerStartStop()
+                    changeLayout(binding.scheduleExecutionInclude.root, binding.scheduleStopCompleteInclude.root)
+                    initExecutionStopnComplete(screenState)
+                }
             }
             /** 완료 버튼 */
             scheduleExecutionCompleteTv.setOnClickListener {
-                screenState = "complete"
-                timerStartStop()
-                changeLayout(binding.scheduleExecutionInclude.root, binding.scheduleStopCompleteInclude.root)
-                initExecutionStopnComplete(screenState)
+                if(taskId == -1 ){
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_frm, HomepageFragment())
+                        .commit()
+                }else {
+                    screenState = "complete"
+                    timerStartStop()
+                    changeLayout(
+                        binding.scheduleExecutionInclude.root,
+                        binding.scheduleStopCompleteInclude.root
+                    )
+                    initExecutionStopnComplete(screenState)
+                }
             }
         }
     }
+
+    /* 포그라운드 서비스 실행 */
+    private fun startFocusService(executedId: Int) {
+        // blockCheck가 true일 때만 실행
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            // 절대시간(ms) 계산: 현재 시간 + 남은 타이머
+            val endTime = System.currentTimeMillis() + tempTime
+
+            val intent = Intent(requireContext(), FocusService::class.java)
+            intent.putExtra("endTime", endTime)
+            intent.putExtra("executedId", executedId)
+            // apply 밖에서 안전하게 호출
+            requireContext().startForegroundService(intent)
+            Log.d("FocusServiceTest", "FocusService 시작 호출: endTime=$endTime")
+        }
+    }
+
 
     /**
      * 일정 진행중 - 중지 및 완료 화면
@@ -226,6 +310,10 @@ class ScheduleExecutionFragment : Fragment() {
                 }
             }
             popupScheduleDelayOkTv.setOnClickListener {
+                /* Stop 저장하기 */
+                val hour = tempTime / 3600000
+                val min = (tempTime % 3600000) / 6000
+                db.stopDao().insertStop(Stop(executedTask.id, String.format("%02d:%02d", hour, min)))
                 stopPopup.dismiss()
 
                 (context as MainActivity).supportFragmentManager.beginTransaction()
@@ -422,7 +510,7 @@ class ScheduleExecutionFragment : Fragment() {
             stopTimer()
         } else {
             // 타이머 미작동 중
-            startTimer()
+            startTimer(tempTime)
         }
     }
 
@@ -437,7 +525,7 @@ class ScheduleExecutionFragment : Fragment() {
     /**
      * 타이머 실행
      */
-    private fun startTimer() {
+    private fun startTimer(time: Long) {
         if (isRunFirst) {
             val startHourMinuteList = executedTask.startTime.split(":")
             val endHourMinuteList = executedTask.endTime.split(":")
@@ -446,8 +534,7 @@ class ScheduleExecutionFragment : Fragment() {
             val setMinute = endHourMinuteList[1].toLong() - startHourMinuteList[1].toLong()
 
             tempTime = (setHour * 3600000) + (setMinute * 60000) + 1000
-        }
-
+            }
         countDownTimer = object : CountDownTimer(tempTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 tempTime = millisUntilFinished
@@ -458,6 +545,34 @@ class ScheduleExecutionFragment : Fragment() {
 
         timerRunning = true
         isRunFirst = false
+
+        // 포그라운드 서비스 시작
+        if(arguments?.getBoolean("blockCheck") == true)
+            startFocusService(executedId = executedTask.id)
+    }
+
+
+    /*  taskId 없는 타이머 실행  */
+    private fun startNoTaskIdTimer(time: Long) {
+        if (isRunFirst) {
+            tempTime = time
+
+            countDownTimer = object : CountDownTimer(tempTime, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    tempTime = millisUntilFinished
+                    updateTimer()
+                }
+                override fun onFinish() {}
+            }.start()
+
+            timerRunning = true
+            isRunFirst = false
+
+            // 포그라운드 서비스 시작
+            startFocusService(-1)
+        }
+
+
     }
 
     /**
@@ -467,7 +582,7 @@ class ScheduleExecutionFragment : Fragment() {
         val hour = tempTime / 3600000
         val min = tempTime % 3600000 / 60000
 
-        binding.scheduleExecutionInclude.scheduleExecutionTimeTv.text = String.format("${hour}:${min}")
+        binding.scheduleExecutionInclude.scheduleExecutionTimeTv.text = String.format("%02d:%02d",hour,min)
     }
 
     /**

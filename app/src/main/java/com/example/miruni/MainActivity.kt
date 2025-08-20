@@ -31,6 +31,7 @@ import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ActivityMainBinding
 import com.example.miruni.ui.calendar.CalendarFragment
+import com.example.miruni.ui.calendar.ScheduleExecutionFragment
 import com.example.miruni.ui.homepage.HomepageFragment
 import com.example.miruni.ui.storage.StorageFragment
 import com.example.miruni.ui.tool.ToolFragment
@@ -92,44 +93,34 @@ class MainActivity : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
+        val fullBack = intent.getIntExtra("fullBack", -1)
+        if(fullBack == 100){
 
-        /* 알람 테스트 데이터*/
-        lifecycleScope.launch(Dispatchers.IO) {
-            if(scheduleDB.alarmDao().getAllAlarm().isEmpty()){
-                scheduleDB.alarmDao().insertAlarm(
-                    Alarm(
-                        title = "배너 테스트 타이틀",
-                        content = "알람 테스트 내용",
-                        time = "${System.currentTimeMillis()}",
-                        alarmType = AlarmType.BANNER
-                    )
-                )
-                scheduleDB.alarmDao().insertAlarm(
-                    Alarm(
-                        title = "팝업 테스트 타이틀",
-                        content = "팝업 테스트 내용",
-                        time = "${System.currentTimeMillis()}",
-                        alarmType = AlarmType.POPUP
-                    )
-                )
-                scheduleDB.alarmDao().insertAlarm(
-                    Alarm(
-                        title = "배너 테스트 타이틀2",
-                        content = "알람 테스트 내용2",
-                        time = "${System.currentTimeMillis()}",
-                        alarmType = AlarmType.BANNER
-                    )
-                )
-                scheduleDB.alarmDao().insertAlarm(
-                    Alarm(
-                        title = "팝업 테스트 타이틀2",
-                        content = "팝업 테스트 내용2",
-                        time = "${System.currentTimeMillis()}",
-                        alarmType = AlarmType.POPUP
-                    )
-                )
+
+            binding.fullBack.visibility = View.VISIBLE
+            val fragment = ScheduleExecutionFragment()
+            val executedId = intent.getIntExtra("executedId", -1)
+            val endTime = intent.getLongExtra("endTime", 0L)
+            val bundle = Bundle()
+            bundle.putLong("endTime", endTime)
+            bundle.putInt("fullBack", fullBack)
+            fragment.arguments = bundle
+            binding.fullBack.setOnClickListener {
+                val spf = this.getSharedPreferences("executedTask", MODE_PRIVATE)
+                spf.edit().putInt("taskId", executedId).apply()
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment)
+                    .commitAllowingStateLoss()
+
+                binding.fullBack.visibility = View.GONE
+
             }
+            Log.d("FocusService", "MainActivity에서 받은 시간: ${endTime}")
+        }else{
+            binding.fullBack.visibility = View.GONE
         }
+
     }
 
     override fun onNewIntent(intent: Intent) {

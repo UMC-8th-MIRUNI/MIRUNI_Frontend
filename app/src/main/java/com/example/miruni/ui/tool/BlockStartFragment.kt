@@ -2,21 +2,26 @@ package com.example.miruni.ui.tool
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.replace
 import com.example.miruni.R
 import com.example.miruni.databinding.FragmentBlockStartBinding
+import com.example.miruni.ui.calendar.ScheduleExecutionFragment
 
 class BlockStartFragment: Fragment() {
 
     val binding by lazy {
         FragmentBlockStartBinding.inflate(layoutInflater)
     }
+    private var aiPlanId = -1         // -1이면 도구에서 온 거 !=면 홈페이지에서 온 거
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,6 +40,7 @@ class BlockStartFragment: Fragment() {
             binding.toolTimePicker.visibility = View.VISIBLE
             timeSetting()
         }
+        aiPlanId = arguments?.getInt("aiPlanId") ?: -1
 
         initClickListener()
 
@@ -70,9 +76,9 @@ class BlockStartFragment: Fragment() {
 
             val h = binding.hourPicker.value
             val m = binding.minPicker.value
-            val s = binding.secPicker.value
+            //val s = binding.secPicker.value
 
-            timer = (h*3600L) + (m*60L) + s
+            timer = (h*3600L) + (m*60L) //+ s
 
             binding.toolTimePicker.visibility = View.GONE
         }
@@ -96,11 +102,26 @@ class BlockStartFragment: Fragment() {
     }
 
     private fun initClickListener(){
+        /* 시작하기 버튼 -> 진행 중 화면으로 이동 + planId 필요 */
         binding.checkStart.setOnClickListener {
             if(timer == 0L) { Toast.makeText(requireContext(), "시간을 선택해주세요", Toast.LENGTH_SHORT).show() }
             else{
-            /* 진행 중 화면으로 이동 + planId 필요 */
+                val spf = requireContext().getSharedPreferences("executedTask", AppCompatActivity.MODE_PRIVATE)
+                val editor = spf.edit()
+                editor.putInt("taskId", aiPlanId)
+                editor.apply()
 
+                Log.d("이동하는 id 확인: ", "BlockStartFragment: ${aiPlanId}")
+
+                val fragment = ScheduleExecutionFragment()
+                val bundle = Bundle()
+                bundle.putLong("timer",timer)
+                bundle.putBoolean("blockCheck", arguments?.getBoolean("blockCheck")?: true)
+                fragment.arguments = bundle
+                requireActivity().supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.main_frm, fragment)
+                    commit()
+                }
             }
 
         }
@@ -116,5 +137,4 @@ class BlockStartFragment: Fragment() {
             }
         }
     }
-
 }

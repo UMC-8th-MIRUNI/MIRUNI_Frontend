@@ -36,7 +36,7 @@ class ToolFragment: Fragment() {
     private fun initClickListener(){
         binding.toolBlock.setOnClickListener {
             /* 방해 요소 차단 이동*/
-            moveFragment(BlockGuideFragment())
+            moveFragment(GuideFragment())
 
         }
         binding.toolSplit.setOnClickListener {

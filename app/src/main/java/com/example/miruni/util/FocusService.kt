@@ -11,13 +11,16 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import com.example.miruni.FullscreenActivity
+import com.example.miruni.MainActivity
 import com.example.miruni.R
 
 // Service: 백그라운드에서 장기 작업 실행가능
 class FocusService : Service() {
 
-    private var endTime = 0L
+    private var executedId = -1     // 실행중인 아이디 (전달용)
+    private var endTime = 0L        // 시간
     private val channelId = "miruniChannel"
 
     override fun onCreate() {
@@ -26,13 +29,21 @@ class FocusService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d("FocusService", "포그라운드서비스 불러와짐!!")
+
+        executedId = intent?.getIntExtra("executedId", -1) ?: -1
         endTime = intent?.getLongExtra("endTime", 0L) ?: 0L
-        startForeground(1, buildNotification())
-        monitorApp()
+
+        // 왔다갔다 하는 시간 저장
+        //val spf = getSharedPreferences("timerState", MODE_PRIVATE)
+        //spf.edit().putLong("endTime", endTime).apply()
+
+        startForeground(1, buildNotification(executedId))
+        monitorApp(executedId)
         return START_STICKY
     }
 
-    private fun monitorApp() {
+    private fun monitorApp(executedId: Int) {
         val handler = Handler(Looper.getMainLooper())
         val notificationManager = getSystemService(NotificationManager::class.java)
         var firstForeground = false
@@ -47,10 +58,10 @@ class FocusService : Service() {
 
                 if (!isAppInForeground()) {
                     if(!firstForeground){
-                        startForeground(1, buildNotification())
+                        startForeground(1, buildNotification(executedId))
                         firstForeground = true
                     }else {
-                        notificationManager.notify(1, buildNotification())
+                        notificationManager.notify(1, buildNotification(executedId))
                     }
                 }
 
@@ -67,10 +78,15 @@ class FocusService : Service() {
         return runningApp?.processName == packageName
     }
 
-    private fun buildNotification() : Notification{
+    private fun buildNotification(executedId: Int) : Notification{
 
-        val intent = Intent(this, FullscreenActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra("executedId", executedId)
+        intent.putExtra("endTime", endTime - System.currentTimeMillis())
+        Log.d("FocusService", "MainActivity로 이동할 때: ${endTime}")
+        intent.putExtra("fullBack", 100)
+
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = Notification.Builder(this, channelId)
