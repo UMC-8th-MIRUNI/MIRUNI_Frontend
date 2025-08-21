@@ -48,4 +48,10 @@ interface AuthService {
     suspend fun loginWithGoogle(
         @Body request: GoogleLoginRequest
     ): Response<GoogleLoginResponse>
+
+    @PATCH("/api/auth/kakao")
+    suspend fun kakaoSignup(
+        @Header("Authorization") token: String,
+        @Body request: KakaoSignupRequest
+    ): Response<KakaoSignupResponse>
 }

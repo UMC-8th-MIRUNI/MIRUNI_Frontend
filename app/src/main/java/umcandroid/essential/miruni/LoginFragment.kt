@@ -103,8 +103,10 @@ class LoginFragment : Fragment() {
         }
 
         binding.tvFindPassword.setOnClickListener {
-            // NavController로 화면 전환
-            findNavController().navigate(R.id.action_loginFragment_to_resetPwdFragment1)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ResetPwdFragment1())
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -165,10 +167,14 @@ class LoginFragment : Fragment() {
                                 putString("googleToken", idToken) // 서버 회원가입용 토큰
                             }
 
-                            findNavController().navigate(
-                                R.id.action_loginFragment_to_fragment_signup11,
-                                bundle
-                            )
+                            val signupFragment = SignupFragment11().apply {
+                                arguments = bundle
+                            }
+
+                            parentFragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, signupFragment)
+                                .addToBackStack(null)
+                                .commit()
                         }
                     } else {
                         Toast.makeText(requireContext(), "서버 로그인 실패: ${body?.message}", Toast.LENGTH_SHORT).show()
@@ -184,8 +190,6 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
-
 
 
 
@@ -217,48 +221,39 @@ class LoginFragment : Fragment() {
 
     // 로그인 성공 후 사용자 정보 요청
     private fun requestKakaoUserInfo(accessToken: String) {
+        Log.d("KakaoLogin", "🎟️ 카카오 accessToken: ${accessToken}")
+
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 Log.e("KakaoLogin", "사용자 정보 요청 실패", error)
+                Toast.makeText(requireContext(), "사용자 정보 요청 실패", Toast.LENGTH_SHORT).show()
             } else if (user != null) {
                 val email = user.kakaoAccount?.email
-                val nickname = user.kakaoAccount?.profile?.nickname
-                Log.d("KakaoLogin", "사용자 이메일: $email, 닉네임: $nickname")
+                val nickname = user.kakaoAccount?.profile?.nickname ?: "사용자" // 동의 안 하면 기본값
+                val profileImage = user.kakaoAccount?.profile?.profileImageUrl
 
-                // 서버로 토큰 전송
-                sendTokenToServer(accessToken)
-            }
-        }
-    }
+                Log.d("KakaoLogin", "사용자 이메일: $email, 닉네임: $nickname, 프로필 이미지: $profileImage")
 
-    private fun verifyAndSendToken(accessToken: String) {
-        // 카카오 토큰 유효성 체크
-        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if (error != null) {
-                Log.e("KakaoLogin", "❌ 토큰 유효성 검사 실패", error)
-                Toast.makeText(requireContext(), "유효하지 않은 토큰입니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                Log.d("KakaoLogin", "✅ 토큰 유효함: userId=${tokenInfo?.id}")
-                Log.d("KakaoLogin", "📩 카카오에서 받은 accessToken: $accessToken")
-
-                // 카카오 API 직접 호출해서 검증 (프론트에서 한 번 더 체크)
-                lifecycleScope.launch {
-                    try {
-                        val testUrl = "https://kapi.kakao.com/v1/user/access_token_info"
-                        val conn = java.net.URL(testUrl).openConnection() as java.net.HttpURLConnection
-                        conn.requestMethod = "GET"
-                        conn.setRequestProperty("Authorization", "Bearer $accessToken")
-                        val code = conn.responseCode
-                        val body = conn.inputStream.bufferedReader().readText()
-                        Log.d("KakaoLogin", "🔍 카카오 API 직접 검증 응답 코드: $code")
-                        Log.d("KakaoLogin", "🔍 카카오 API 직접 검증 응답 바디: $body")
-                    } catch (e: Exception) {
-                        Log.e("KakaoLogin", "카카오 API 직접 검증 실패", e)
+                if (email != null) {
+                    // 이메일 동의 있음 → 바로 서버 전송
+                    sendTokenToServer(accessToken)
+                } else {
+                    // 이메일 동의 없음 → 추가 회원가입 화면으로 안내
+                    val bundle = Bundle().apply {
+                        putString("nickname", nickname)
+                        putString("profileImage", profileImage)
+                        putString("kakaoToken", accessToken) // 서버 회원가입용 토큰
                     }
-                }
 
-                // 서버로 토큰 전송
-                sendTokenToServer(accessToken)
+                    val signupFragment = SignupFragment11().apply {
+                        arguments = bundle
+                    }
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, signupFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
     }

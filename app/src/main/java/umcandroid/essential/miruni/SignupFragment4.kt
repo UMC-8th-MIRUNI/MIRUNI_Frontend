@@ -33,7 +33,12 @@ class SignupFragment4 : Fragment() {
             }
         viewModel.level.value = level
 
-            findNavController().navigate(R.id.action_signupFragment4_to_signupFragment5)
+            val signupFragment5 = SignupFragment5()
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, signupFragment5) // Activity의 FrameLayout ID
+                .addToBackStack(null) // 뒤로가기 가능
+                .commit()
         }
 
         binding.ivSelectBack.setOnClickListener {

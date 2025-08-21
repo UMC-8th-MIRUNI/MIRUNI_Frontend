@@ -39,7 +39,13 @@ class SignupFragment3 : Fragment() {
             if (binding.checkboxOption5.isChecked) selected.add("TOO_TIRED")
 
             viewModel.situations.value = selected
-            findNavController().navigate(R.id.action_signupFragment3_to_signupFragment4)
+
+            val signupFragment4 = SignupFragment4()
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, signupFragment4) // Activity의 FrameLayout ID
+                .addToBackStack(null) // 뒤로가기 가능
+                .commit()
         }
 
         binding.ivSelectBack.setOnClickListener {

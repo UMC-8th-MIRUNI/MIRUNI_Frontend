@@ -19,7 +19,6 @@ import umcandroid.essential.miruni.databinding.FragmentSignup1Binding
 class SignupFragment1 : Fragment() {
 
     private val viewModel: SignupViewModel by activityViewModels()
-    private var isAgree = false // 체크 상태 저장
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,23 +35,11 @@ class SignupFragment1 : Fragment() {
             binding.etEmail.isEnabled = false
         }
 
-        // 체크박스 클릭 이벤트
-//        binding.ivCheckbox.setOnClickListener {
-//            isAgree = !isAgree
-//            if (isAgree) {
-//                binding.ivCheckbox.setImageResource(R.drawable.checkbox) // 체크된 이미지
-//            } else {
-//                binding.ivCheckbox.setImageResource(R.drawable.img) // 체크 안된 이미지
-//            }
-//        }
 
         binding.ivButton.setOnClickListener {
-//            val name = binding.etName.text.toString()
             val email = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
             val password_check = binding.etPasswordCheck.text.toString()
-//            val phoneNumber = binding.etPhone.text.toString()
-
 
             if (email.isEmpty()) {
                 Toast.makeText(requireContext(), "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -72,18 +59,17 @@ class SignupFragment1 : Fragment() {
                 return@setOnClickListener
             }
 
-//            if (!isAgree) {
-//                Toast.makeText(requireContext(), "약관에 동의해주세요.", Toast.LENGTH_SHORT).show()
-//                return@setOnClickListener
-//            }
-
             // 이동
-            findNavController().navigate(R.id.action_signupFragment1_to_signupFragment11)
+            val signupFragment11 = SignupFragment11()
 
-//            viewModel.name.value = name
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, signupFragment11) // Activity의 FrameLayout ID
+                .addToBackStack(null) // 뒤로가기 가능
+                .commit()
+
+
             viewModel.email.value = email
             viewModel.password.value = password
-//            viewModel.phoneNumber.value = phoneNumber
         }
 
         binding.ivSignupBack.setOnClickListener {

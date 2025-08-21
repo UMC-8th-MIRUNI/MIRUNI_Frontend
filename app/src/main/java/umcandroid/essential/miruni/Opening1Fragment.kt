@@ -24,8 +24,12 @@ class Opening1Fragment : Fragment() {
         binding.naming2.text = nicknameFromServer
 
         binding.ivOpeningButton.setOnClickListener {
-            findNavController().navigate(R.id.action_opening1Fragment_to_signupFragment3)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, SignupFragment3())
+                .addToBackStack(null)
+                .commit()
         }
+
 
         binding.ivSignupBack.setOnClickListener {
             parentFragmentManager.popBackStack()

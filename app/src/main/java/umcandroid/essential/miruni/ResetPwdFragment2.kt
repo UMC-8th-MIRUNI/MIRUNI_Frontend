@@ -21,7 +21,13 @@ class ResetPwdFragment2 : Fragment() {
 
         binding.sendBtn.setOnClickListener {
             val bundle = Bundle().apply { putString("email", email) }
-            findNavController().navigate(R.id.action_resetPwdFragment2_to_resetPwdFragment3, bundle)
+            val resetPwdFragment3 = ResetPwdFragment3()
+            resetPwdFragment3.arguments = bundle
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, resetPwdFragment3) // Activity에 있는 FrameLayout ID
+                .addToBackStack(null) // 뒤로가기 가능
+                .commit()
         }
 
         binding.back2Btn.setOnClickListener {
