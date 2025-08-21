@@ -56,14 +56,6 @@ android:background="@color/memior_background">
         app:srcCompat="@drawable/alarm_back" />
 
     <ImageView
-        android:id="@+id/memoir_add_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/memoirdate_add_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/memeoir_add_rv" />
-
-    <ImageView
         android:id="@+id/imageView60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

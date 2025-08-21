@@ -49,7 +49,7 @@ class BlockStartFragment: Fragment() {
     private fun timeSetting(){
         setNumberPickerDividerColor(binding.hourPicker, R.color.selectColor)
         setNumberPickerDividerColor(binding.minPicker, R.color.selectColor)
-        setNumberPickerDividerColor(binding.secPicker, R.color.selectColor)
+        //setNumberPickerDividerColor(binding.secPicker, R.color.selectColor)
 
         binding.hourPicker.apply {
             /* 시간 설정 */
@@ -63,16 +63,16 @@ class BlockStartFragment: Fragment() {
             maxValue = 59
         }
 
-        binding.secPicker.apply {
-            /* 초 설정 */
+        /*binding.secPicker.apply {
+            *//* 초 설정 *//*
             minValue = 0
             maxValue = 59
-        }
+        }*/
 
         binding.timeOk.setOnClickListener {
             binding.hour.text = binding.hourPicker.value.toString()
             binding.min.text =  binding.minPicker.value.toString()
-            binding.sec.text =  binding.secPicker.value.toString()
+            //binding.sec.text =  binding.secPicker.value.toString()
 
             val h = binding.hourPicker.value
             val m = binding.minPicker.value

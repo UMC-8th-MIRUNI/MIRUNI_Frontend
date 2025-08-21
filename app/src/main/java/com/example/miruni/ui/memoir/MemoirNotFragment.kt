@@ -28,15 +28,15 @@ class MemoirNotFragment: Fragment() {
         (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE
         (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE
 
-        val planId = requireArguments().getInt("planId")
-        val aiPlanId = arguments?.getInt("aiPlanId") ?: 0
+        val planId = arguments?.getInt("planId") ?: -1
+        val aiPlanId = arguments?.getInt("aiPlanId") ?: -1
 
         db = ScheduleDatabase.getInstance(requireContext())!!
 
-        val item = db.planDao().getPlan(planId)
+        /*val item = db.planDao().getPlan(aiPlanId)
         binding.notMemoirTitle.memoirWriteTitle.text = item.title
         binding.notMemoirTitle.memoirWriteDate.text = item.scheduledStart
-        binding.notMemoirTitle.memoirDescription.text = item.description
+        binding.notMemoirTitle.memoirDescription.text = item.description*/
 
         /* 회고 작성 페이지로 이동 */
         binding.moveWrite.setOnClickListener {

@@ -39,10 +39,12 @@ class BlockGuideFragment: Fragment() {
         /* 넘어가기 */
         binding.skipBtn.setOnClickListener {
             // 실행 중 화면으로 이동
+            Log.d("BlockGuideFragment", "포그라운드 서비스 X")
             moveFragment(ScheduleExecutionFragment(), aiPlanId, false)
         }
-        /* 타이머 설정 화면 */
+        /* 진행 중 화면 */
         binding.nextBtn.setOnClickListener {
+            Log.d("BlockGuideFragment", "포그라운드 서비스 O")
             moveFragment(ScheduleExecutionFragment(), aiPlanId, true)
         }
 
@@ -52,10 +54,9 @@ class BlockGuideFragment: Fragment() {
     }
     private fun moveFragment(fragment: Fragment, aiPlanId: Int, blockCheck: Boolean){
         val spf = requireContext().getSharedPreferences("executedTask", AppCompatActivity.MODE_PRIVATE)
-        val editor = spf.edit()
-        editor.putInt("taskId", aiPlanId)
-        editor.apply()
+        spf.edit().putInt("taskId", aiPlanId).apply()
 
+        Log.d("BlockGuideFragment", "보내는 아이디: ${aiPlanId}")
         val bundle = Bundle()
         bundle.putBoolean("blockCheck", blockCheck)
         fragment.arguments = bundle

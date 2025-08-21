@@ -48,6 +48,9 @@ class MemoirCompleteFragment: Fragment() {
     @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE
+
         // 메뉴 이미지 visible전환
         binding.completeLayout.memoirWriteMenu.visibility = View.VISIBLE
         db = ScheduleDatabase.getInstance(requireContext())

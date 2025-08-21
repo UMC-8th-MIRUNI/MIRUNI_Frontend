@@ -179,7 +179,7 @@ class MemoirWriteFragment: Fragment() {
     fun setMemoirRequest() : MemoirSaveRequest {
 
         var aiPlanId = arguments?.getInt("aiPlanId")
-        if(aiPlanId == 0) aiPlanId=null
+        if(aiPlanId == -1) aiPlanId=null
         val planId = arguments?.getInt("planId") ?: 0
 
         val mood = currentMood ?: Mood.ANXIOUS

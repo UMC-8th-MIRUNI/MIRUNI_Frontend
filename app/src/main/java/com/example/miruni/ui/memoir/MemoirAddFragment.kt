@@ -52,11 +52,6 @@ class MemoirAddFragment: Fragment() {
     /* 버튼 클릭 이벤트 함수*/
     private fun initClickListener(){
 
-        binding.memoirAddBtn.setOnClickListener {
-            // 회고 작성 페이지로 이동
-            moveFragment(MemoirWriteFragment())
-        }
-
         binding.backBtn.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack() // 뒤로가기
         }
