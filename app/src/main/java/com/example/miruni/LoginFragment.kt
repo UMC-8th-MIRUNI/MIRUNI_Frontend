@@ -166,6 +166,10 @@ class LoginFragment : Fragment() {
                                 putString("googleToken", idToken) // 서버 회원가입용 토큰
                             }
 
+                            val signupFragment = SignupFragment11().apply {
+                                arguments = bundle
+                            }
+
                             parentFragmentManager.beginTransaction()
                                 .replace(R.id.fragment_container, signupFragment)
                                 .addToBackStack(null)
