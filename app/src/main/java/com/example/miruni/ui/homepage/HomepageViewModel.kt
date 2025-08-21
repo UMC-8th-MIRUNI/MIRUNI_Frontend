@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.miruni.api.GetSplitScheduleResponse
+import com.example.miruni.api.ResultOfGetSplitSchedule
 import com.example.miruni.api.model.DeleteTaskRequest
 import com.example.miruni.api.model.HomepageResponse
 import com.example.miruni.api.model.NextTask
@@ -78,6 +80,22 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
             }catch (e: Exception){
                 Log.e("일정 삭제", "에러: ${e.message}")
             }
+        }
+    }
+
+    /* 일정 전체 조회 */
+    private val ScheduleData = MutableLiveData<ResultOfGetSplitSchedule>()
+    val scheduleData: LiveData<ResultOfGetSplitSchedule> = ScheduleData
+
+    fun getSchedule(token: String, planId: Int){
+        viewModelScope.launch {
+            try {
+                val response = repository.getSchedule(token, planId)
+                if(response.isSuccessful){
+                    ScheduleData.value = response.body()?.result
+                    Log.e("일정 전체 조회", "조회 성공: ${response.raw()}")
+                }else { Log.e("일정 삭제", "응답 에러: ${response.code()}")}
+            }catch (e: Exception) { Log.e("일정 전체 조회", "연결 에러: ${e.message}")}
         }
     }
 

@@ -384,7 +384,8 @@
                 android:padding="15dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/homepage_next_schedule">
+                app:layout_constraintTop_toBottomOf="@+id/homepage_next_schedule"
+                tools:ignore="NotSibling">
 
                 <TextView
                     android:id="@+id/textView9"
@@ -403,6 +404,7 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="15dp"
+                    app:layout_constraintBottom_toTopOf="@id/main_nav"
                     app:layout_constraintTop_toBottomOf="@+id/textView9">
 
                     <ImageView
@@ -442,7 +444,7 @@
 
                     <View
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight="1" />
 
 
@@ -469,12 +471,14 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/homepageRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="440dp"
                     android:layout_marginTop="4dp"
                     android:nestedScrollingEnabled="false"
+                    android:paddingBottom="56dp"
+                    android:clipToPadding="false"
+                    app:layout_constraintBottom_toTopOf="@id/main_nav"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/guideline" />
 
             </LinearLayout>

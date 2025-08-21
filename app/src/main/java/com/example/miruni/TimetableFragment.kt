@@ -7,15 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.api.ApiService
+import com.example.miruni.api.SplitSchedule
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Plan
 import com.example.miruni.data.Priority
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
+import com.example.miruni.data.repository.HomepageRepository
 import com.example.miruni.databinding.LayoutTimetableBinding
+import com.example.miruni.ui.homepage.HTimetableRVAdapter
+import com.example.miruni.ui.homepage.HomepageViewModel
+import com.example.miruni.ui.homepage.HomepageViewModelFactory
 import com.example.miruni.util.convertDateFormat
 import com.example.miruni.util.splitDateTimeHelper
 import kotlinx.coroutines.launch
@@ -40,14 +47,41 @@ class TimetableFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE
+        (activity?.findViewById<View>(R.id.main_top_bar))?.visibility = View.GONE
         Log.d("onViewCreated", "onViewCreated")
 
         // recyclerView 연결
-        val dapter = TimetableRVAdapter(db)
-        binding.timetableRV.adapter = dapter
+        val adapter = TimetableRVAdapter(db)
+        binding.timetableRV.adapter = adapter
         binding.timetableRV.layoutManager = LinearLayoutManager(requireContext())
 
+        /* 홈페이지로부터 옴 */
+        if(arguments?.getString("fromHomepageFragment") == "HomepageFragment"){
+
+            val homePageAdapter = HTimetableRVAdapter()
+            binding.timetableRV.adapter = homePageAdapter
+            binding.timetableRV.layoutManager = LinearLayoutManager(requireContext())
+
+            val repository = HomepageRepository()
+            val factory = HomepageViewModelFactory(repository)
+            val viewModel = ViewModelProvider(this, factory)[HomepageViewModel::class.java]
+
+            val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+            val planId = arguments?.getInt("aiPlanId") ?: 0
+            viewModel.getSchedule(token, planId)
+
+            viewModel.scheduleData.observe(viewLifecycleOwner) { data ->
+                binding.timetableTitle.text = data.title
+                val deadLine = data.deadline.split("T")
+                binding.timetableDeadline.text = deadLine[0]
+                binding.timetableTaskRange.text = data.taskRange
+                binding.timetableLevel.text = data.priority
+
+                homePageAdapter.updateData(data.plans)
+            }
+
+        }
         // 직전 Fragment 확인
         val backStackCount = parentFragmentManager.backStackEntryCount
         if (backStackCount > 0) {
@@ -68,7 +102,7 @@ class TimetableFragment: Fragment() {
                 binding.timetableLevel.text = Priority.valueOf(schedule.priority.toString()).localLabel
 
                 // 타임 테이블 설정
-                dapter.addTasks(scheduleId!!)
+                adapter.addTasks(scheduleId!!)
             }
         }
     }

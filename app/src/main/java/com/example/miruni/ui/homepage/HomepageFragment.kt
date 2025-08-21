@@ -164,12 +164,13 @@ class HomepageFragment: Fragment() {
     }
 
     /* TimetableFragment, BlockGuideFragment 이동 함수 */
-    private fun moveTimetableFragment(fragment: Fragment, aiPlanId: Int){
+    private fun moveTimetableFragment(fragment: Fragment, id: Int){
         val fragment = fragment
         val bundle = Bundle()
         //bundle.putInt("taskId", planId)
-        bundle.putInt("aiPlanId", aiPlanId)
-        Log.d("이동하는 id 확인: ", "HomeFragment: ${aiPlanId}")
+        bundle.putInt("aiPlanId", id)
+        bundle.putString("fromHomepageFragment", "HomepageFragment")
+        Log.d("이동하는 id 확인: ", "HomeFragment: ${id}")
         fragment.arguments = bundle
 
         requireActivity().supportFragmentManager.beginTransaction().apply {
