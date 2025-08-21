@@ -40,10 +40,6 @@ class ResetPwdFragment4 : Fragment() {
             } else {
                 resetPassword(newPassword)
             }
-
-//            findNavController().navigate(
-//                R.id.action_resetPwdFragment4_to_resetPwdFragment5,
-//            )
         }
 
         binding.back4Btn.setOnClickListener {
@@ -77,7 +73,11 @@ class ResetPwdFragment4 : Fragment() {
 
                 if (response.isSuccessful && response.body()?.errorCode == null) {
                     Toast.makeText(requireContext(), "비밀번호 재설정 완료", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack(R.id.loginFragment, false)
+                    val loginFragment = LoginFragment()
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, loginFragment)
+                        .commit()
                 } else {
                     val msg = response.body()?.message ?: "비밀번호 재설정 실패"
                     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()

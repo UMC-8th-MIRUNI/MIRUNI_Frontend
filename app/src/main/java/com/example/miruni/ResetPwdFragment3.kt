@@ -71,10 +71,14 @@ class ResetPwdFragment3 : Fragment() {
                         Toast.makeText(requireContext(), "인증 성공", Toast.LENGTH_SHORT).show()
                         // resetToken 다음 화면으로 전달
                         val bundle = Bundle().apply { putString("resetToken", resetToken) }
-                        findNavController().navigate(
-                            R.id.action_resetPwdFragment3_to_resetPwdFragment4,
-                            bundle
-                        )
+                        val resetPwdFragment4 = ResetPwdFragment4()
+                        resetPwdFragment4.arguments = bundle
+
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, resetPwdFragment4)
+                            .addToBackStack(null)
+                            .commit()
+
                     } else {
                         val msg = body?.message ?: "인증 코드가 올바르지 않습니다."
                         Toast.makeText(requireContext(), "인증 실패: $msg", Toast.LENGTH_SHORT).show()

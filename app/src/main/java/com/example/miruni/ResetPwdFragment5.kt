@@ -20,7 +20,10 @@ class ResetPwdFragment5 : Fragment() {
         val binding = FragmentResetpwd5Binding.inflate(inflater, container, false)
 
         binding.tologinBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_resetPwdFragment5_to_loginFragment)
+            val loginFragment = LoginFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, loginFragment)
+                .commit()
         }
 
         binding.back5Btn.setOnClickListener {
