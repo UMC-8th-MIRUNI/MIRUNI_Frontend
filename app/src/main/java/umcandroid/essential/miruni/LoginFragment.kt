@@ -97,6 +97,13 @@ class LoginFragment : Fragment() {
 //                startActivity(Intent(requireContext(), MainActivity::class.java))
 //                requireActivity().finish()
 
+                //로그아웃, 탈퇴 연동 확인 용
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, DeleteFragment()) // fragment_container는 Activity에 있는 FrameLayout ID
+                    .addToBackStack(null) // 뒤로가기 가능하게 하려면 추가
+                    .commit()
+
+
             }.onFailure { exception ->
                 Toast.makeText(requireContext(), "로그인 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
             }

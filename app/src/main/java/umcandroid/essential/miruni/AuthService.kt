@@ -2,6 +2,7 @@ package umcandroid.essential.miruni
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -54,4 +55,14 @@ interface AuthService {
         @Header("Authorization") token: String,
         @Body request: KakaoSignupRequest
     ): Response<KakaoSignupResponse>
+
+    @POST("/api/auth/logout")
+    suspend fun logout(
+        @Header("Authorization") token: String
+    ): Response<LogoutResponse>
+
+    @DELETE("/api/auth")
+    suspend fun deleteAccount(
+        @Header("Authorization") token: String
+    ): Response<DeleteAccountResponse>
 }
