@@ -15,6 +15,7 @@ class SignupFragment2 : Fragment() {
     private val viewModel: SignupViewModel by activityViewModels()
     private var _binding: FragmentSignup2Binding? = null
     private val binding get() = _binding!!
+
     private var isKakaoLogin: Boolean = false
     private var isAgree: Boolean = false
 
@@ -22,8 +23,9 @@ class SignupFragment2 : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Fragment arguments에서 Kakao 로그인 여부 가져오기
         isKakaoLogin = arguments?.getBoolean("isKakao", false) ?: false
-        Log.d("SignupFragment2", "isKakaoLogin = $isKakaoLogin")
+        Log.d("SignupFragment2", "onCreate: isKakaoLogin = $isKakaoLogin")
     }
 
     override fun onCreateView(
@@ -79,10 +81,15 @@ class SignupFragment2 : Fragment() {
                 return@setOnClickListener
             }
 
-            val kakaoToken = arguments?.getString("kakaoToken") ?: ""
-            Log.d("SignupFragment2", "isKakaoLogin = $isKakaoLogin") // 클릭 시에도 로그
+            // 안전하게 Kakao token 가져오기
+            val kakaoToken = arguments?.getString("kakaoToken")
+            Log.d("SignupFragment2", "버튼 클릭: isKakaoLogin = $isKakaoLogin, kakaoToken = $kakaoToken")
 
             if (isKakaoLogin) {
+                if (kakaoToken.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "카카오 토큰이 없습니다.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 viewModel.kakaoSignup(kakaoToken)
             } else {
                 viewModel.signup()
@@ -108,9 +115,7 @@ class SignupFragment2 : Fragment() {
         surveyViewModel.accessToken.value = accessToken
 
         val nicknameFromViewModel = viewModel.nickname.value ?: ""
-        val bundle = Bundle().apply {
-            putString("nickname", nicknameFromViewModel)
-        }
+        val bundle = Bundle().apply { putString("nickname", nicknameFromViewModel) }
 
         val opening1Fragment = Opening1Fragment()
         opening1Fragment.arguments = bundle
