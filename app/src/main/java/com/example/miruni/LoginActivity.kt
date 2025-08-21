@@ -16,6 +16,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 화면 회전 등으로 이미 Fragment가 있는 경우 중복 추가 방지
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, LoginFragment())
+                .commit()
+        }
     }
 
 }

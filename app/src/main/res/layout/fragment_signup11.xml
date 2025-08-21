@@ -179,7 +179,7 @@
             app:srcCompat="@drawable/line2" />
 
         <ImageView
-            android:id="@+id/imageView14"
+            android:id="@+id/viewContent1"
             android:layout_width="63dp"
             android:layout_height="21dp"
             android:layout_marginTop="132dp"
@@ -189,7 +189,7 @@
             app:srcCompat="@drawable/signuptxt" />
 
         <ImageView
-            android:id="@+id/imageView15"
+            android:id="@+id/viewContent2"
             android:layout_width="63dp"
             android:layout_height="21dp"
             android:layout_marginTop="175dp"
@@ -197,6 +197,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_phone"
             app:srcCompat="@drawable/signuptxt" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

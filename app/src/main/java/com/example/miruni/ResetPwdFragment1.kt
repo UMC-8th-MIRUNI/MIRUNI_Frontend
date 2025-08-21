@@ -52,7 +52,13 @@ class ResetPwdFragment1 : Fragment() {
                 if (response.isSuccessful && response.body()?.errorCode == null) {
                     Toast.makeText(requireContext(), "인증 코드가 발송되었습니다.", Toast.LENGTH_SHORT).show()
                     val bundle = Bundle().apply { putString("email", email) }
-                    findNavController().navigate(R.id.action_resetPwdFragment1_to_resetPwdFragment2, bundle)
+                    val resetPwdFragment2 = ResetPwdFragment2()
+                    resetPwdFragment2.arguments = bundle
+
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, resetPwdFragment2) // Activity에 있는 FrameLayout ID
+                        .addToBackStack(null) // 뒤로가기 가능
+                        .commit()
                 } else {
                     val msg = response.body()?.message ?: "이메일 전송 실패"
                     Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()

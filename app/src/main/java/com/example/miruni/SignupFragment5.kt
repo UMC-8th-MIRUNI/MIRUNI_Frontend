@@ -56,7 +56,12 @@ class SignupFragment5 : Fragment() {
                 // Fragment가 attach 되어 있는지 확인 후 navigate
                 if (isAdded) {
                     try {
-                        findNavController().navigate(R.id.action_signupFragment5_to_opening2Fragment)
+                        val opening2Fragment = Opening2Fragment()
+
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, opening2Fragment) // Activity의 FrameLayout ID
+                            .addToBackStack(null) // 뒤로가기 가능
+                            .commit()
                     } catch (e: Exception) {
                         Log.e("SignupFragment5", "Navigation error: ${e.message}")
                     }
