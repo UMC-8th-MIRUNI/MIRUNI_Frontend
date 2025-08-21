@@ -13,6 +13,7 @@ import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.databinding.FragmentAlarmBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AlarmFragment: Fragment() {
 
@@ -38,13 +39,14 @@ class AlarmFragment: Fragment() {
         db = ScheduleDatabase.getInstance(requireContext())!!
         lifecycleScope.launch(Dispatchers.IO) {
             alarmDatas = db.alarmDao().getAllAlarm()
-
-            val adapter = AlarmRVAdapter(alarmDatas)
-            binding.alarmRV.adapter = adapter
-            val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            binding.alarmRV.layoutManager = layoutManager
-            val spacer = resources.getDimensionPixelSize(R.dimen.recycler_dimen)
-            binding.alarmRV.addItemDecoration(RVSpacer(spacer))
+            withContext(Dispatchers.Main){
+                val adapter = AlarmRVAdapter(alarmDatas)
+                binding.alarmRV.adapter = adapter
+                val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+                binding.alarmRV.layoutManager = layoutManager
+                val spacer = resources.getDimensionPixelSize(R.dimen.recycler_dimen)
+                binding.alarmRV.addItemDecoration(RVSpacer(spacer))
+            }
         }
 
         binding.alarmBack.setOnClickListener {
