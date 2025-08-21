@@ -63,7 +63,7 @@ class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Ad
                 holder.binding.timeStatus.text = "완료시간:"
                 holder.binding.goalTime.text = datas[position].stoppedAt
 
-                val writed = reviewDatas.any{ it.planId == datas[position].aiPlanId }
+                holder.binding.taskBg.setBackgroundResource(R.drawable.bg_f8f8f8_12)
 
                 if(datas[position].reviewId != null){ // 버튼 이미지 바꾸고 회고 완료 페이지로 이동
                     holder.binding.playBtn.setImageResource(R.drawable.homepage_review_btn)

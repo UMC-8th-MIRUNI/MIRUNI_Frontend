@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 
 interface HomepageApi {
     /* 홈페이지 전체 정보 조회 */
@@ -22,4 +23,11 @@ interface HomepageApi {
         @Header("Authorization") token: String,
         @Body request: DeleteTaskRequest
     ): Response<DeleteTaskResponse>
+
+    // 일정별 세부 조회 API
+    @GET("/api/schedules/{planId}")
+    suspend fun getSchedule(
+        @Header("Authorization") token: String,
+        @Path("planId") planId: Int
+    ): Response<GetSplitScheduleResponse>
 }

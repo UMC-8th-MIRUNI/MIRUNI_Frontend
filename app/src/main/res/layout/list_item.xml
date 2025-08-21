@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="7dp"
     android:layout_width="match_parent"
-    android:layout_height="300dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/task_bg"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:scaleType="fitXY"
-        android:paddingTop="7dp"
         android:paddingBottom="7dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/bg_ffffff_12"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/list_back" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/time_status"
@@ -46,6 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
+        android:paddingBottom="7dp"
         app:layout_constraintBottom_toBottomOf="@+id/task_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -90,12 +92,12 @@
 
     <CheckBox
         android:id="@+id/task_checkbox"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:clickable="true"
-        android:duplicateParentState="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:duplicateParentState="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/task_bg"
         app:layout_constraintStart_toStartOf="parent"

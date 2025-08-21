@@ -1,5 +1,6 @@
 package com.example.miruni.data.repository
 
+import com.example.miruni.api.GetSplitScheduleResponse
 import com.example.miruni.api.HomepageApi
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.api.model.DeleteTaskRequest
@@ -16,4 +17,9 @@ class HomepageRepository(private val api: HomepageApi = getRetrofit().create(Hom
         val response = api.deleteTask(token, deleteTaskRequest)
         return response
     }
+    suspend fun getSchedule(token: String, planId: Int): Response<GetSplitScheduleResponse>{
+        val response = api.getSchedule(token, planId)
+        return response
+    }
+
 }

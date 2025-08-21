@@ -1,8 +1,10 @@
 package com.example.miruni
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.miruni.api.SplitSchedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ItemTimetableBinding
@@ -11,6 +13,7 @@ class TimetableRVAdapter(private val db: ScheduleDatabase): RecyclerView.Adapter
     private val tasks = ArrayList<Task>()
     var scheduleId: Int = 0
 
+    private val scheduleList = ArrayList<SplitSchedule>()
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -25,16 +28,22 @@ class TimetableRVAdapter(private val db: ScheduleDatabase): RecyclerView.Adapter
         holder.bind(tasks[position])
 
         // 세부 일정
-        holder.binding.timetablePlan
+        holder.binding.timetablePlan.text = scheduleList[position].description
         // 날짜
-        holder.binding.timetableDate
+        holder.binding.timetableDate.text = scheduleList[position].date
         // 수행 시간
-        holder.binding.timetableTime
+        holder.binding.timetableTime.text = "${scheduleList[position].startTime}-${scheduleList[position].endTime}"
         // 소요 시간
-        holder.binding.timetableTimetaken
+        holder.binding.timetableTimetaken.text = scheduleList[position].expectedDuration.toString()
     }
 
     override fun getItemCount(): Int = tasks.size
+
+    fun updateData(datas: List<SplitSchedule>){
+        scheduleList.clear()
+        scheduleList.addAll(datas)
+        notifyDataSetChanged()
+    }
 
     fun addTasks(scheduleId: Int) {
         this.scheduleId = scheduleId
