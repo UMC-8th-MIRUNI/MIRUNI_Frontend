@@ -105,30 +105,33 @@ class MainActivity : AppCompatActivity() {
         }
         val fullBack = intent.getIntExtra("fullBack", -1)
         if(fullBack == 100){
-
-
-            binding.fullBack.visibility = View.VISIBLE
-            val fragment = ScheduleExecutionFragment()
+            binding.foregroundBack.root.visibility = View.VISIBLE
             val executedId = intent.getIntExtra("executedId", -1)
             val endTime = intent.getLongExtra("endTime", 0L)
-            val bundle = Bundle()
-            bundle.putLong("endTime", endTime)
-            bundle.putInt("fullBack", fullBack)
-            fragment.arguments = bundle
-            binding.fullBack.setOnClickListener {
+
+            val tag = "ScheduleExecutionFragment"
+            var fragment = supportFragmentManager.findFragmentByTag(tag) as? ScheduleExecutionFragment
+
+            if(fragment == null){
+                fragment = ScheduleExecutionFragment().apply {
+                    arguments = Bundle().apply {
+                        putLong("endTime", endTime)
+                        putInt("fullBack", fullBack)
+                    }
+                }
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, fragment, tag)
+                    .commitAllowingStateLoss()
+            }else{
+                fragment.updateData(endTime, executedId)
+            }
+            binding.foregroundBack.foregroundBackBtn.setOnClickListener {
                 val spf = this.getSharedPreferences("executedTask", MODE_PRIVATE)
                 spf.edit().putInt("taskId", executedId).apply()
 
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, fragment)
-                    .commitAllowingStateLoss()
-
-                binding.fullBack.visibility = View.GONE
+                binding.foregroundBack.root.visibility = View.GONE
 
             }
-            Log.d("FocusService", "MainActivity에서 받은 시간: ${endTime}")
-        }else{
-            binding.fullBack.visibility = View.GONE
         }
 
     }

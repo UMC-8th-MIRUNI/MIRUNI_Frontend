@@ -88,6 +88,17 @@ class MemoirModifyFragment: Fragment(){
         binding.modifyLayout.memoirWriteTxt.setSelection(binding.modifyLayout.memoirWriteTxt.text.length)
         binding.modifyLayout.memoirTitle.memoirWriteDate.text = arguments?.getString("createdAt")
         binding.modifyLayout.memoirTitle.memoirDescription.text = arguments?.getString("description")
+
+        val mood: Mood = when(requireArguments().getString("mood")){
+            Mood.SAD.toString() -> Mood.SAD
+            Mood.HAPPY.toString() -> Mood.HAPPY
+            Mood.ANGRY.toString() -> Mood.ANGRY
+            Mood.RELAXED.toString() -> Mood.RELAXED
+            Mood.ANXIOUS.toString() -> Mood.ANXIOUS
+            else -> Mood.NOTHING
+        }
+
+        showMood(mood)
     }
     fun showMood(mood: Mood): Mood? {
         val activeIcons = mapOf(
@@ -121,7 +132,8 @@ class MemoirModifyFragment: Fragment(){
         activeIcons[mood]?.visibility = View.VISIBLE
         inactiveIcons[mood]?.visibility = View.INVISIBLE
 
-        return mood
+        currentMood = mood
+        return currentMood
     }
 
     fun moodClick() : Mood{
@@ -134,6 +146,7 @@ class MemoirModifyFragment: Fragment(){
                 Mood.HAPPY -> binding.modifyLayout.happyMiruniInactive
                 Mood.ANGRY -> binding.modifyLayout.angryMiruniInactive
                 Mood.ANXIOUS -> binding.modifyLayout.disappointedMiruniInactive
+                else -> binding.modifyLayout.inactiveMood
             }
 
             inactiveView.setOnClickListener {
@@ -147,13 +160,14 @@ class MemoirModifyFragment: Fragment(){
                 Mood.HAPPY -> binding.modifyLayout.happyMiruniActive
                 Mood.ANGRY -> binding.modifyLayout.angryMiruniActive
                 Mood.ANXIOUS -> binding.modifyLayout.disappointedMiruniActive
+                else -> binding.modifyLayout.activeMood
             }
 
             activeView.setOnClickListener {
                 currentMood = showMood(mood)
             }
         }
-        return currentMood ?: Mood.ANXIOUS
+        return currentMood ?: Mood.NOTHING
     }
 }
 

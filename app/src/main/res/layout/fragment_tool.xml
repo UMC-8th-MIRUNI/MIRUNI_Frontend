@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.500684" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tool_split"
@@ -101,7 +101,8 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline71"
         app:layout_constraintEnd_toStartOf="@+id/guideline69"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline68">
+        app:layout_constraintStart_toStartOf="@+id/guideline68"
+        app:layout_constraintTop_toBottomOf="@+id/tool_split">
 
         <TextView
             android:id="@+id/textView61"

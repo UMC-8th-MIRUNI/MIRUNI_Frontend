@@ -63,3 +63,10 @@ enum class Category{
     AI,
     BASIC
 }
+
+/* 일정 미루기 */
+data class HiddenResponse(
+    var errorCode: String?,     // 성공이면 null 반환
+    var message: String,        // 성공이면 OK 반환
+    var result: Any
+)

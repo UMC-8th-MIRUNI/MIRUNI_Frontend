@@ -12,7 +12,6 @@
         android:id="@+id/memoir_title"
         layout="@layout/layout_memoir_top" />
 
-
     <LinearLayout
         android:id="@+id/memoir_write_ok"
         android:layout_width="0dp"
@@ -258,6 +257,7 @@
                 android:background="@drawable/bg_f6f5f6_15"
                 android:ems="10"
                 android:inputType="text"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -335,7 +335,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.019151846" />
+        app:layout_constraintGuide_percent="0.045" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline13"

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,8 +17,11 @@ import com.example.miruni.api.model.MemoirSaveRequest
 import com.example.miruni.data.Mood
 import com.example.miruni.data.Review
 import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.repository.HomepageRepository
 import com.example.miruni.data.repository.MemoirRepository
 import com.example.miruni.databinding.FragmentMemoirWriteBinding
+import com.example.miruni.ui.homepage.HomepageViewModel
+import com.example.miruni.ui.homepage.HomepageViewModelFactory
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
@@ -37,14 +41,38 @@ class MemoirWriteFragment: Fragment() {
     private lateinit var db: ScheduleDatabase
     private var review : Review? = null
 
+    private var aiPlanId: Int? = null
+    private var planId = -1
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         // 표정 클릭
         moodClick()
 
         db = ScheduleDatabase.getInstance(requireContext()) ?: throw IllegalStateException("DB 생성 실패")
+        val item = db.planDao().getPlan(arguments?.getInt("aiPlanId") ?: -1)
+
+        aiPlanId = arguments?.getInt("aiPlanId")
+        if(aiPlanId == -1) aiPlanId=null
+        planId = requireArguments().getInt("planId")
+
+        val repository = HomepageRepository()
+        val factory = HomepageViewModelFactory(repository)
+        val viewModel = ViewModelProvider(requireActivity(), factory)[HomepageViewModel::class.java]
+        val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+
+        viewModel.getSchedule(token, planId)
+        viewModel.scheduleData.observe(viewLifecycleOwner) { data ->
+            for(i in data.plans){
+                if(aiPlanId == i.planId){
+                    binding.writeLayout.memoirTitle.memoirWriteTitle.text = i.description
+                    val startTime = i.startTime.split(":")
+                    binding.writeLayout.memoirTitle.memoirWriteDate.text = "${i.date} ${startTime[0]}:${startTime[1]}"
+                }
+            }
+        }
 
         initClickListener()
+        //binding.writeLayout.memoirTitle
 
     }
     /* 회고 작성 후 저장 API 연동 */
@@ -89,7 +117,6 @@ class MemoirWriteFragment: Fragment() {
         fragment.arguments = bundle
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.main_frm, fragment)
-            addToBackStack(null)
             commit()
         }
     }
@@ -99,7 +126,9 @@ class MemoirWriteFragment: Fragment() {
         binding.writeLayout.memoirWriteOk.setOnClickListener {
             // 회고 작성 후 저장 버튼
             lifecycleScope.launch {
-                memoirSave()
+                if(checkData()){
+                    memoirSave()
+                }
             }
         }
 
@@ -154,6 +183,7 @@ class MemoirWriteFragment: Fragment() {
                 Mood.HAPPY -> binding.writeLayout.happyMiruniInactive
                 Mood.ANGRY -> binding.writeLayout.angryMiruniInactive
                 Mood.ANXIOUS -> binding.writeLayout.disappointedMiruniInactive
+                else -> binding.writeLayout.inactiveMood
             }
 
             inactiveView.setOnClickListener {
@@ -167,6 +197,7 @@ class MemoirWriteFragment: Fragment() {
                 Mood.HAPPY-> binding.writeLayout.happyMiruniActive
                 Mood.ANGRY -> binding.writeLayout.angryMiruniActive
                 Mood.ANXIOUS -> binding.writeLayout.disappointedMiruniActive
+                else -> binding.writeLayout.activeMood
             }
 
             activeView.setOnClickListener {
@@ -176,24 +207,32 @@ class MemoirWriteFragment: Fragment() {
         return currentMood ?: Mood.ANXIOUS
     }
 
-    fun setMemoirRequest() : MemoirSaveRequest {
-
-        var aiPlanId = arguments?.getInt("aiPlanId")
-        if(aiPlanId == -1) aiPlanId=null
-        val planId = arguments?.getInt("planId") ?: 0
-
-        val mood = currentMood ?: Mood.ANXIOUS
+    /* 데이터 맞는지 확인 */
+    fun checkData() : Boolean {
+        val mood = currentMood ?: Mood.NOTHING
         val achievement = binding.writeLayout.archievePercent.text.toString().toInt()
         val memo = binding.writeLayout.memoirWriteTxt.text.toString()
 
-        Log.d("회고 작성 후 저장", Gson().toJson(MemoirSaveRequest(
-            aiPlanId = aiPlanId,
-            planId = planId,
-            mood = currentMood ?: Mood.ANXIOUS,
-            achievement = binding.writeLayout.archievePercent.text.toString().toInt(),
-            memo = binding.writeLayout.memoirWriteTxt.text.toString()
-            )
-        ))
+        if(mood == Mood.NOTHING) {
+            Toast.makeText(requireContext(), "감정을 선택해주세요!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else if(achievement == null) {
+            Toast.makeText(requireContext(), "성취도를 입력해주세요!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        else if(memo == null) {
+            Toast.makeText(requireContext(), "메모를 입력해주세요!", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        return true
+    }
+    /* request 응답 생성 */
+    fun setMemoirRequest() : MemoirSaveRequest {
+        val mood = currentMood ?: Mood.NOTHING
+        val achievement = binding.writeLayout.archievePercent.text.toString().toInt()
+        val memo = binding.writeLayout.memoirWriteTxt.text.toString()
 
         return MemoirSaveRequest(aiPlanId = aiPlanId, planId = planId, mood = mood, achievement = achievement, memo = memo)
     }
