@@ -48,12 +48,13 @@ class SignupFragment11 : Fragment() {
                 return@setOnClickListener
             }
 
-            // 이동
-//            findNavController().navigate(R.id.action_signupFragment11_to_signupFragment2)
+            // arguments에서 카카오 로그인 여부 가져오기 (기본 false)
+            val isKakao = arguments?.getBoolean("isKakao", false) ?: false
             val kakaoToken = arguments?.getString("kakaoToken") ?: ""
+
             val signupFragment2 = SignupFragment2().apply {
                 arguments = Bundle().apply {
-                    putBoolean("isKakao", true)
+                    putBoolean("isKakao", isKakao)  // 실제 값 전달
                     putString("kakaoToken", kakaoToken)
                 }
             }
