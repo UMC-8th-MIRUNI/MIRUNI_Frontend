@@ -56,7 +56,7 @@ class ScheduleExecutionFragment : Fragment() {
     private var taskId = -1
 
     private val hoursOnDropdown = (1..12).toList()
-    private val minutesOnDropdown = (1..59).toList()
+    private val minutesOnDropdown = (0..59).toList()
     private val ampmOnDropdown = listOf("오전", "오후")
     private var selectedHour: Int? = null
     private var selectedMinute: Int? = null
@@ -286,7 +286,7 @@ class ScheduleExecutionFragment : Fragment() {
         val textData: String = binding.scheduleStopCompleteInclude.scheduleExecutionScTxt2Tv.text.toString()
         val spannableStringBuilder = SpannableStringBuilder(textData)
 
-        val startIdx: Int = textData.indexOf("n")
+        val startIdx: Int = textData.indexOf("1")
         val endIdx: Int = textData.indexOf("개")
         val colorSpan = ForegroundColorSpan("#06B600".toColorInt())
         spannableStringBuilder.setSpan(colorSpan, startIdx, endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
