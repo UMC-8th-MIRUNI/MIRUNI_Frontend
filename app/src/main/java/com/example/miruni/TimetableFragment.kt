@@ -56,6 +56,38 @@ class TimetableFragment: Fragment() {
         binding.timetableRV.adapter = adapter
         binding.timetableRV.layoutManager = LinearLayoutManager(requireContext())
 
+        /* 홈페이지로부터 옴 */
+        if(arguments?.getString("fromHomepageFragment") == "HomepageFragment"){
+
+            binding.timetableOkTv.visibility = View.GONE
+            binding.timetableResplitTv.visibility = View.GONE
+
+            val homePageAdapter = HTimetableRVAdapter()
+            binding.timetableRV.adapter = homePageAdapter
+            binding.timetableRV.layoutManager = LinearLayoutManager(requireContext())
+
+            val repository = HomepageRepository()
+            val factory = HomepageViewModelFactory(repository)
+            val viewModel = ViewModelProvider(this, factory)[HomepageViewModel::class.java]
+
+            val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+            val planId = arguments?.getInt("planId") ?: 0
+            val aiPlanId = arguments?.getInt("aiPlanId") ?: 0
+            viewModel.getSchedule(token, planId)
+
+            viewModel.scheduleData.observe(viewLifecycleOwner) { data ->
+                binding.timetableTitle.text = data.title
+                val deadLine = data.deadline.split("T")
+                binding.timetableDeadline.text = deadLine[0]
+                binding.timetableTaskRange.text = data.taskRange
+                binding.timetableLevel.text = data.priority
+
+                homePageAdapter.updateData(data.plans, aiPlanId)
+            }
+            binding.timetableBackIv.setOnClickListener {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
         // 직전 Fragment 확인
         val backStackCount = parentFragmentManager.backStackEntryCount
         if (backStackCount > 0) {
@@ -78,34 +110,6 @@ class TimetableFragment: Fragment() {
                 // 타임 테이블 설정
                 adapter.addTasks(scheduleId!!)
             }
-            /* 홈페이지로부터 옴 */
-            else if (prevEntry.name == "HomepageFragment") {
-                if (arguments?.getString("fromHomepageFragment") == "HomepageFragment") {
-
-                    val homePageAdapter = HTimetableRVAdapter()
-                    binding.timetableRV.adapter = homePageAdapter
-                    binding.timetableRV.layoutManager = LinearLayoutManager(requireContext())
-
-                    val repository = HomepageRepository()
-                    val factory = HomepageViewModelFactory(repository)
-                    val viewModel = ViewModelProvider(this, factory)[HomepageViewModel::class.java]
-
-                    val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-                    val planId = arguments?.getInt("aiPlanId") ?: 0
-                    viewModel.getSchedule(token, planId)
-
-                    viewModel.scheduleData.observe(viewLifecycleOwner) { data ->
-                        binding.timetableTitle.text = data.title
-                        val deadLine = data.deadline.split("T")
-                        binding.timetableDeadline.text = deadLine[0]
-                        binding.timetableTaskRange.text = data.taskRange
-                        binding.timetableLevel.text = data.priority
-
-                        homePageAdapter.updateData(data.plans)
-                    }
-                }
-            }
-
         }
     }
 
