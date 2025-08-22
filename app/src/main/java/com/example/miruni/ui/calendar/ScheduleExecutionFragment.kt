@@ -71,9 +71,10 @@ class ScheduleExecutionFragment : Fragment() {
 
         if(arguments?.getInt("fullBack") == 100) {
             retoreTimer()
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .remove(ScheduleExecutionFragment())
-                .commitNow()
+            /*requireActivity().supportFragmentManager.beginTransaction()
+                .remove(this@ScheduleExecutionFragment)
+                .commit()*/
+//            requireActivity().supportFragmentManager.popBackStack()
             Log.d("접속 확인", "포그라운에서 다시 들어옴")
         }else {
             initExecution()
