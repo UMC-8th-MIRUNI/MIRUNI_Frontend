@@ -104,19 +104,19 @@ class ScheduleRegistrationFragment : Fragment() {
         val deadlineCalendar = Calendar.getInstance()
         deadlineCalendar.set(
             tmpDate[0].toInt(),
-            tmpDate[1].toInt(),
+            tmpDate[1].toInt() - 1,
             tmpDate[2].toInt()
         )
         val startCalendar = Calendar.getInstance()
         startCalendar.set(
             tmpDate[0].toInt(),
-            tmpDate[1].toInt(),
+            tmpDate[1].toInt() - 1,
             tmpDate[2].toInt()
         )
         val endCalendar = Calendar.getInstance()
         endCalendar.set(
             tmpDate[0].toInt(),
-            tmpDate[1].toInt(),
+            tmpDate[1].toInt() - 1,
             tmpDate[2].toInt()
         )
         selectedDeadline = Time(
@@ -140,9 +140,9 @@ class ScheduleRegistrationFragment : Fragment() {
         endCalendar.add(Calendar.DAY_OF_MONTH, 1)
 
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDeadlineTv.text =
-            String.format("${selectedDeadline!!.date.get(Calendar.YEAR)}.${selectedDeadline!!.date.get(Calendar.MONTH)}.${selectedDeadline!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedDeadline!!.ampm == ampm.AM) "오전" else "오후"} ${selectedDeadline!!.hour}:${selectedDeadline!!.minute}")
+            String.format("${selectedDeadline!!.date.get(Calendar.YEAR)}.${selectedDeadline!!.date.get(Calendar.MONTH) + 1}.${selectedDeadline!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedDeadline!!.ampm == ampm.AM) "오전" else "오후"} ${selectedDeadline!!.hour}:${selectedDeadline!!.minute}")
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDateTv.text =
-            String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH)}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH)}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
+            String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH) + 1}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH)}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
     }
 
     /**
@@ -177,7 +177,7 @@ class ScheduleRegistrationFragment : Fragment() {
                 showDeadlinePopup(it, selectedDeadline) {
                     selectedDeadline = it
                     scheduleRegistrationContentDeadlineTv.text =
-                        String.format("${it.date.get(Calendar.YEAR)}.${it.date.get(Calendar.MONTH)}.${it.date.get(Calendar.DAY_OF_MONTH)}. ${if (it.ampm == ampm.AM) "오전" else "오후"} ${it.hour}:${it.minute}")
+                        String.format("${it.date.get(Calendar.YEAR)}.${it.date.get(Calendar.MONTH) + 1}.${it.date.get(Calendar.DAY_OF_MONTH)}. ${if (it.ampm == ampm.AM) "오전" else "오후"} ${it.hour}:${it.minute}")
                 }
             }
             /** 일정 수행 날짜 설정 */
@@ -190,7 +190,7 @@ class ScheduleRegistrationFragment : Fragment() {
                     resultEndTime = { resultEnd -> selectedExecutionEndDate = resultEnd}
                 ) {
                     scheduleRegistrationContentDateTv.text =
-                        String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH)}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH)}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
+                        String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH) + 1}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH) + 1}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
                 }
             }
             /** 우선 순위 설정 */
@@ -450,7 +450,7 @@ class ScheduleRegistrationFragment : Fragment() {
             scheduleDelayCalendarCalendar.setOnDateChangedListener { widget, date, selected ->
                 selectedTime.date.set(
                     date.year,
-                    date.month,
+                    date.month - 1,
                     date.day
                 )
             }
@@ -567,20 +567,20 @@ class ScheduleRegistrationFragment : Fragment() {
             // 날짜 선택
             scheduleRegistrationCalendar.setOnDateChangedListener { widget, date, selected ->
                 if (selected) {
-                    selectedStartTime.date.set(date.year, date.month, date.day)
-                    selectedEndTime.date.set(date.year, date.month, date.day)
+                    selectedStartTime.date.set(date.year, date.month - 1, date.day)
+                    selectedEndTime.date.set(date.year, date.month - 1, date.day)
                 }
             }
 
             scheduleRegistrationCalendar.setOnRangeSelectedListener { widget, dates ->
                 selectedStartTime.date.set(
                     dates[0].year,
-                    dates[0].month,
+                    dates[0].month - 1,
                     dates[0].day
                 )
                 selectedEndTime.date.set(
                     dates[dates.size - 1].year,
-                    dates[dates.size - 1].month,
+                    dates[dates.size - 1].month - 1,
                     dates[dates.size - 1].day
                 )
             }
@@ -904,7 +904,7 @@ class ScheduleRegistrationFragment : Fragment() {
 
         val deadline =
             String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}" +
-                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH))}" +
+                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH)!! + 1)}" +
                     "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}" +
                     "T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}" +
                     ":${numberFormat.format(selectedDeadline?.minute)}:00.000")
@@ -912,7 +912,7 @@ class ScheduleRegistrationFragment : Fragment() {
 
         val scheduledStart =
             String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}" +
-                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}" +
+                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH)!! + 1)}" +
                     "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
                     "T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedExecutionStartDate?.ampm == ampm.AM) 0 else 12))}" +
                     ":${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
@@ -921,7 +921,7 @@ class ScheduleRegistrationFragment : Fragment() {
 
         val scheduledEnd =
             String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}" +
-                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}" +
+                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH)!! + 1)}" +
                     "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
                     "T${numberFormat.format(selectedExecutionEndDate?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
                     ":${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
