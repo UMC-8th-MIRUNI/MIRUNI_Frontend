@@ -3,6 +3,7 @@ package com.example.miruni.data
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 
@@ -11,6 +12,9 @@ interface TaskDao {
 
     @Insert
     fun insert(task: Task)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun replace(task: Task)
 
     @Update
     fun update(task: Task)

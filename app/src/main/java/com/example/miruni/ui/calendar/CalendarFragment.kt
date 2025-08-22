@@ -2,7 +2,6 @@ package com.example.miruni.ui.calendar
 
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Color
-import android.icu.text.DecimalFormat
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.databinding.FragmentCalendarBinding
@@ -30,7 +30,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
-import com.example.miruni.api.FinishedScheduleRequest
+import com.example.miruni.api.InProgressScheduleRequest
 import com.example.miruni.api.Monthly
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Plan
@@ -311,20 +311,25 @@ class CalendarFragment : Fragment() {
      */
     private fun initTaskOnDateRVAdapter() {
         taskOnDateRVAdapter = TaskOnDateRVAdapter() {clickItem ->
-            val spf = (requireContext()).getSharedPreferences("executedTask", MODE_PRIVATE)
-            spf.edit() {
-                putInt("taskId", clickItem.id)
-//                getScheduleOrTask(clickItem.id)
+            lifecycleScope.launch{
+                taskInProgress(clickItem)
+                Log.d("FLOW", "Done-taskInProgress")
+
+                val spf = (requireContext()).getSharedPreferences("executedTask", MODE_PRIVATE)
+                spf.edit() {
+                    putInt("taskId", clickItem.id)
+                }
+                Log.d("FLOW", "Done-TaskOnDateRVAdapter:spf")
+
+                (context as MainActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, ScheduleExecutionFragment())
+                    .commitAllowingStateLoss()
+                Log.d("FLOW", "Done-ScreenChange")
+                controlTopBar(context as MainActivity, false)
+                controlBottomNavigation(context as MainActivity, false)
+
             }
 
-//            taskInProgress()
-
-            (context as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, ScheduleExecutionFragment())
-                .commitAllowingStateLoss()
-
-            controlTopBar(context as MainActivity, false)
-            controlBottomNavigation(context as MainActivity, false)
         }
         binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.calendarIncludeTaskOnDate.taskOnDateTaskRv.adapter = taskOnDateRVAdapter
@@ -423,57 +428,80 @@ class CalendarFragment : Fragment() {
     /**
      * AI일정인지, BASIC 일정인지 검사
      */
-//    private fun getScheduleOrTask(planId: Int) {
-//        // parentTitle이 null인지 아닌지
-//        if ()
-//
-//        // schedule이면 -> category: BASIC -> 조회
-//        // task이면 -> category: AI -> 조회
-//    }
+    private fun isAI(plan: Plan): Boolean {
+        // parentTitle이 null인지 아닌지
+        if (plan.parentTitle == null) {
+            plan.category = "BASIC"
+            return false
+        } else {
+            plan.category = "AI"
+            return true
+        }
+    }
 
-//    private suspend fun taskInProgress(planId: Int) {
-//        try {
-//            val api = getRetrofit().create(ApiService::class.java)
-//
-//            val request = FinishedScheduleRequest(
-//                category =
-//            )
-//
-//            val response = api.inProgressSchedule(accessToken, planId, )
-//
-//            if (response.isSuccessful) {
-//                planList.clear()
-//                val result = response.body()!!.result
-//
-//                result.schedules.forEach { schedule ->
-//
-//                    Log.d("Calendar", "schedule: ${schedule.id}" +
-//                            "\n${schedule.parentTitle}" +
-//                            "\n${schedule.title}" +
-//                            "\n${schedule.startTime}" +
-//                            "\n${schedule.endTime}" +
-//                            "\n${schedule.priority}" +
-//                            "\n${schedule.category}")
-//                    val plan = Plan(
-//                        id = schedule.id,
-//                        parentTitle = schedule.parentTitle,
-//                        title = schedule.title,
-//                        scheduledStart = getDateTimeStringHelper(timeString = schedule.startTime).toString(),
-//                        scheduledEnd = getDateTimeStringHelper(timeString = schedule.endTime).toString(),
-//                        priority = schedule.priority,
-//                        category = schedule.category
-//                    )
-//                    planList.add(plan)
-//                    Log.d("Calendar", "저장된 값: ${plan}")
-//                }
-//                Log.d("Calendar", "저장된 갯수: ${planList.size}")
-//                taskOnDateRVAdapter.addTask(ArrayList(planList))
-//                binding.calendarIncludeTaskOnDate.taskOnDateCountTv.text = String.format("일정 갯수 : ${planList.size}개")
-//            } else {
-//                Log.d("Calendar", "실패: ${response.code()} / ${response.message()}")
-//            }
-//        } catch (e: Exception) {
-//            Log.e("Calendar", "에러: ${e.message}")
-//        }
-//    }
+    private suspend fun taskInProgress(plan: Plan) {
+        try {
+            val scheduleId: Int
+            val taskId: Int
+            var status: String = "NOT_STARTED"
+            Log.d("Calendar/in-progress", plan.id.toString())
+
+            val api = getRetrofit().create(ApiService::class.java)
+            val request: InProgressScheduleRequest = if (isAI(plan)) {
+                InProgressScheduleRequest(category = "AI")
+            } else {
+                InProgressScheduleRequest(category = "BASIC")
+            }
+            val response = api.inProgressSchedule(accessToken, plan.id, request)
+
+            if (response.isSuccessful) {
+                val result = response.body()!!.result
+
+                Log.d("Calendar/in-progress",
+                    "result: ${result.planId}" +
+                            "\n${result.aiPlanId}" +
+                            "\n${result.status}")
+                scheduleId = result.planId
+                taskId = result.aiPlanId
+                status = result.status
+
+                val responseGetSchedule = api.getSchedule(accessToken, scheduleId)
+
+                if (responseGetSchedule.isSuccessful){
+                    val resultGetSchedule = responseGetSchedule.body()!!.result
+                    var flag = 0
+                    var cnt = 0
+
+                    for ((index, aiPlan) in resultGetSchedule.plans.withIndex()) {
+                        val task = Task(
+                            id = taskId,
+                            scheduleId = scheduleId,
+                            title = aiPlan.description,
+                            executeDay = aiPlan.date,
+                            startTime = aiPlan.startTime,
+                            endTime = aiPlan.endTime,
+                            status = status
+                        )
+                        Log.d("Calendar/in-progress",
+                            "task: ${task.id}" +
+                                    "\n${task.scheduleId}" +
+                                    "\n${task.title}" +
+                                    "\n${task.executeDay}" +
+                                    "\n${task.startTime}" +
+                                    "\n${task.endTime}" +
+                                    "\n${task.status}")
+
+                        scheduleDB.taskDao().replace(task)
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "해당 일정을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Log.d("Calendar", "in-progress 실패: ${response.code()} / ${response.message()}")
+            }
+
+        } catch (e: Exception) {
+            Log.e("Calendar", "in-progress 에러: ${e.message}")
+        }
+    }
 }
