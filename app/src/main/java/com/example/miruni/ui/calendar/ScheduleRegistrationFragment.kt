@@ -914,7 +914,7 @@ class ScheduleRegistrationFragment : Fragment() {
             String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}" +
                     "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH))}" +
                     "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
-                    "T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}" +
+                    "T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedExecutionStartDate?.ampm == ampm.AM) 0 else 12))}" +
                     ":${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledStart", scheduledStart)
 
