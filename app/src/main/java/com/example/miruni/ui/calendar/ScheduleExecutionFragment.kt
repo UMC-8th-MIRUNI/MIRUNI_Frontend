@@ -297,7 +297,10 @@ class ScheduleExecutionFragment : Fragment() {
 
         val dropdownView = LayoutPopupScheduleDelayBinding.inflate(layoutInflater)
         dropdownView.popupScheduleDelaySelectTv.text =
-            String.format("${nowTime.get(Calendar.YEAR)}.${nowTime.get(Calendar.MONTH)}.${nowTime.get(Calendar.DAY_OF_MONTH)}. ${nowTime.get(Calendar.HOUR)}:${nowTime.get(Calendar.MINUTE)}")
+            String.format("${nowTime.get(Calendar.YEAR)}." +
+                    "${nowTime.get(Calendar.MONTH)}." +
+                    "${nowTime.get(Calendar.DAY_OF_MONTH)}. " +
+                    "${nowTime.get(Calendar.HOUR)}:${nowTime.get(Calendar.MINUTE)}")
 
         val stopPopup = PopupWindow(
             dropdownView.root,
@@ -316,7 +319,10 @@ class ScheduleExecutionFragment : Fragment() {
             }
             popupScheduleDelaySelectFrm.setOnClickListener {
                 showScheduleDelayCalendarPopup(it) {
-                    popupScheduleDelaySelectTv.text = String.format("${it.get(Calendar.YEAR)}.${it.get(Calendar.MONTH)}.${it.get(Calendar.DAY_OF_MONTH)}. ${it.get(Calendar.HOUR)}:${it.get(Calendar.MINUTE)} ${selectedAmPm}")
+                    popupScheduleDelaySelectTv.text = String.format("${it.get(Calendar.YEAR)}." +
+                            "${it.get(Calendar.MONTH + 1)}." +
+                            "${it.get(Calendar.DAY_OF_MONTH)}. " +
+                            "${it.get(Calendar.HOUR)}:${it.get(Calendar.MINUTE)} ${selectedAmPm}")
                 }
             }
             popupScheduleDelayOkTv.setOnClickListener {
