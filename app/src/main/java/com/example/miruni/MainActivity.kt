@@ -89,10 +89,10 @@ class MainActivity : AppCompatActivity() {
         initBottomNavigation()
         /** Task 초기화 */
         initTasks()
-        tasksList.forEach { task ->
-            callPopupAlarm(this, task)
-            callBannerAlarm(this, task)
-        }
+//        tasksList.forEach { task ->
+//            callPopupAlarm(this, task)
+//            callBannerAlarm(this, task)
+//        }
         /** 랜덤 팝업 */
         randomDailyPopup(this)
 
@@ -171,10 +171,8 @@ class MainActivity : AppCompatActivity() {
         tasksList.addAll(scheduleDB.taskDao().getTasks())
         tasksList.toSet().toList()
 
-        tasksList.forEach { task ->
-            callPopupAlarm(this, task)
-            callBannerAlarm(this, task)
-        }
+        callPopupAlarm(this, tasksList[tasksList.size-1])
+        callBannerAlarm(this, tasksList[tasksList.size-1])
 
     }
 
@@ -334,18 +332,9 @@ class MainActivity : AppCompatActivity() {
     // 시연용
     @RequiresApi(Build.VERSION_CODES.S)
     private fun callPopupAlarm(context: Context, task: Task) {
-        val calendar = Calendar.getInstance().apply {
-            val hour = timeStringToIntConverter(task.startTime) / 100
-            val minute = timeStringToIntConverter(task.startTime) % 100
+        val triggerTime = System.currentTimeMillis() + 20_000
 
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 10)
-            if (before(Calendar.getInstance())) add(Calendar.DATE, 1)
-        }
-
-        Log.d("callAlarm/POPUP", "H: ${calendar.get(Calendar.HOUR_OF_DAY)}  S: ${calendar.get(Calendar.SECOND)}")
-        AlarmHelper.setAlarm(context, calendar.timeInMillis, task, AlarmHelper.AlarmType.POPUP)
+        AlarmHelper.setAlarm(context, triggerTime, task, AlarmHelper.AlarmType.POPUP)
     }
 
     /**
@@ -381,33 +370,10 @@ class MainActivity : AppCompatActivity() {
     // 시연용
     @RequiresApi(Build.VERSION_CODES.S)
     private fun callBannerAlarm(context: Context, task: Task) {
-        val hour = timeStringToIntConverter(task.startTime) / 100
-        val minute = timeStringToIntConverter(task.startTime) % 100
 
-        val baseTime = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 59)
-            if (before(Calendar.getInstance())) add(Calendar.DATE, 1)
-        }
+        val triggerTime = System.currentTimeMillis() + 30_000 // 20초 뒤
 
-        val oneHourBefore = baseTime.clone() as Calendar
-        oneHourBefore.add(Calendar.MINUTE, -1)
-        oneHourBefore.add(Calendar.SECOND, -15)
-
-        val tenMinuteBefore = baseTime.clone() as Calendar
-        tenMinuteBefore.add(Calendar.MINUTE, -1)
-        tenMinuteBefore.add(Calendar.SECOND, -5)
-
-        Log.d("callAlarm/Banner", "H: ${baseTime.get(Calendar.HOUR_OF_DAY)}  S: ${baseTime.get(Calendar.SECOND)}")
-        Log.d("callAlarm/Banner", "H: ${baseTime.get(Calendar.HOUR_OF_DAY)}  S: ${baseTime.get(Calendar.SECOND)}")
-
-        if (oneHourBefore.after(Calendar.getInstance())) {
-            AlarmHelper.setAlarm(context, oneHourBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_1H)
-        }
-        if (tenMinuteBefore.after(Calendar.getInstance())) {
-            AlarmHelper.setAlarm(context, tenMinuteBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_10M)
-        }
+        AlarmHelper.setAlarm(context, triggerTime, task, AlarmHelper.AlarmType.BANNER_1H)
     }
 
     /**

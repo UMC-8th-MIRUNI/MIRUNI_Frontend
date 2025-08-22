@@ -47,8 +47,9 @@ class   AlarmReceiver : BroadcastReceiver() {
                     val title = intent.getStringExtra("title") ?: ""
 
                     val content = when (AlarmHelper.AlarmType.valueOf(type)) {
-                        AlarmHelper.AlarmType.BANNER_1H -> String.format("1시간 뒤에 <${title}>가 예정되어 있어!")
-                        AlarmHelper.AlarmType.BANNER_10M -> String.format("10분 뒤에 <${title}>가 예정되어 있어!")
+                        AlarmHelper.AlarmType.BANNER_1H -> String.format("잠시 후에 일정이 예정되어 있어!")
+//                        AlarmHelper.AlarmType.BANNER_1H -> String.format("1시간 뒤에 <${title}>가 예정되어 있어!")
+//                        AlarmHelper.AlarmType.BANNER_10M -> String.format("10분 뒤에 <${title}>가 예정되어 있어!")
                         else -> ""
                     }
 

@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="main">#1EC718</color>
+    <color name="alarm">#A6DD93</color>
 
     <color name="selectColor">#07D500</color>
     <color name="unselectColor">#484C52</color>
