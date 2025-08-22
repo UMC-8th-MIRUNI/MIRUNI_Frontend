@@ -29,15 +29,6 @@ class ProcessingActivity : AppCompatActivity() {
     private fun initProcessing() {
         val show = intent.getStringExtra("showFragment")
         when (show) {
-            "StartFragment" -> {
-                transitionFragment(StartFragment())
-            }
-            "GrowFragment" -> {
-                transitionFragment(GrowFragment())
-            }
-            "LockFragment" -> {
-                transitionFragment(LockFragment())
-            }
             "HomepageFragment" ->{
                 transitionFragment(HomepageFragment())
             }
