@@ -20,9 +20,14 @@ import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.data.repository.HomepageRepository
 import com.example.miruni.databinding.LayoutTimetableBinding
+import com.example.miruni.ui.calendar.CalendarFragment
+import com.example.miruni.ui.calendar.ScheduleRegistrationFragment
 import com.example.miruni.ui.homepage.HTimetableRVAdapter
+import com.example.miruni.ui.homepage.HomepageFragment
 import com.example.miruni.ui.homepage.HomepageViewModel
 import com.example.miruni.ui.homepage.HomepageViewModelFactory
+import com.example.miruni.util.controlBottomNavigation
+import com.example.miruni.util.controlTopBar
 import com.example.miruni.util.convertDateFormat
 import com.example.miruni.util.splitDateTimeHelper
 import kotlinx.coroutines.launch
@@ -41,6 +46,8 @@ class TimetableFragment: Fragment() {
     ): View? {
         db = ScheduleDatabase.getInstance(requireContext())!!
         accessToken = TokenManager.getToken(requireContext())!!
+
+        initClickListener()
 
         return binding.root
     }
@@ -113,6 +120,34 @@ class TimetableFragment: Fragment() {
         }
     }
 
+    /**
+     * 클릭 이벤트
+     */
+    private fun initClickListener() {
+        binding.timetableOkTv.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, CalendarFragment())
+                .commitAllowingStateLoss()
+
+            controlTopBar(context as MainActivity, true)
+            controlBottomNavigation(context as MainActivity, true)
+        }
+        binding.timetableResplitTv.setOnClickListener {
+
+        }
+        binding.timetableBackIv.setOnClickListener {
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frm, ScheduleRegistrationFragment())
+                .commitAllowingStateLoss()
+
+            controlTopBar(context as MainActivity, true)
+            controlBottomNavigation(context as MainActivity, true)
+        }
+    }
+
+    /**
+     * 일정 유형 맞춰서 아이콘 매칭
+     */
     private fun matchTypeToIcon(schedule: Plan) {
         val type = schedule.planType
         Log.d("Timetable", "matchTypeToIcon-type: ${type}")
