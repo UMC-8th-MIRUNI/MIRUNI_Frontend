@@ -109,7 +109,7 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
             try {
                 val response = repository.getHidden(token, planId)
                 if(response.isSuccessful){
-                    //HiddenData.value = response.body()?.result
+                    HiddenData.value = response.body()
                     Log.e("일정 전체 조회", "조회 성공: ${response.raw()}")
                 }else { Log.e("일정 삭제", "응답 에러: ${response.code()}")}
             }catch (e: Exception) { Log.e("일정 전체 조회", "연결 에러: ${e.message}")}

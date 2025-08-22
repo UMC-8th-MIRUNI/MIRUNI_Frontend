@@ -43,6 +43,11 @@ class FocusService : Service() {
         return START_STICKY
     }
 
+    fun stopServiceManually() {
+        stopForeground(true) // 알림 제거
+        stopSelf()           // 서비스 종료
+    }
+
     private fun monitorApp(executedId: Int) {
         val handler = Handler(Looper.getMainLooper())
         val notificationManager = getSystemService(NotificationManager::class.java)

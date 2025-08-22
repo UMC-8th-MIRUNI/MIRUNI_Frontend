@@ -68,5 +68,5 @@ enum class Category{
 data class HiddenResponse(
     var errorCode: String?,     // 성공이면 null 반환
     var message: String,        // 성공이면 OK 반환
-    var result: Any
+    var result: String?
 )

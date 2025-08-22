@@ -71,6 +71,9 @@ class ScheduleExecutionFragment : Fragment() {
 
         if(arguments?.getInt("fullBack") == 100) {
             retoreTimer()
+            (context as MainActivity).supportFragmentManager.beginTransaction()
+                .remove(ScheduleExecutionFragment())
+                .commitNow()
             Log.d("접속 확인", "포그라운에서 다시 들어옴")
         }else {
             initExecution()
@@ -174,6 +177,11 @@ class ScheduleExecutionFragment : Fragment() {
                     )
                     initExecutionStopnComplete(screenState)
                 }
+
+                /*  포그라운드 서비스 중지  */
+                val intent = Intent(requireContext(), FocusService::class.java)
+                requireContext().startForegroundService(intent)
+                requireContext().stopService(intent)
             }
         }
     }
