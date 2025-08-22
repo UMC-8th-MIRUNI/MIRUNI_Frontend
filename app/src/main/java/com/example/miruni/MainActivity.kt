@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
         val fullBack = intent.getIntExtra("fullBack", -1)
-        if(fullBack == 100){
+        if(fullBack == 100){ // 다시 돌아왔을 때
             binding.foregroundBack.root.visibility = View.VISIBLE
             val executedId = intent.getIntExtra("executedId", -1)
             val endTime = intent.getLongExtra("endTime", 0L)
