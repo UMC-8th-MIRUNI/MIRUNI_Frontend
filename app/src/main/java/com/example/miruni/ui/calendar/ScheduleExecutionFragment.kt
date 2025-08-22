@@ -307,7 +307,7 @@ class ScheduleExecutionFragment : Fragment() {
         val dropdownView = LayoutPopupScheduleDelayBinding.inflate(layoutInflater)
         dropdownView.popupScheduleDelaySelectTv.text =
             String.format("${nowTime.get(Calendar.YEAR)}." +
-                    "${nowTime.get(Calendar.MONTH)}." +
+                    "${nowTime.get(Calendar.MONTH) + 1}." +
                     "${nowTime.get(Calendar.DAY_OF_MONTH)}. " +
                     "${nowTime.get(Calendar.HOUR)}:${nowTime.get(Calendar.MINUTE)}")
 
@@ -329,7 +329,7 @@ class ScheduleExecutionFragment : Fragment() {
             popupScheduleDelaySelectFrm.setOnClickListener {
                 showScheduleDelayCalendarPopup(it) {
                     popupScheduleDelaySelectTv.text = String.format("${it.get(Calendar.YEAR)}." +
-                            "${it.get(Calendar.MONTH + 1)}." +
+                            "${it.get(Calendar.MONTH) + 1}." +
                             "${it.get(Calendar.DAY_OF_MONTH)}. " +
                             "${it.get(Calendar.HOUR)}:${it.get(Calendar.MINUTE)} ${selectedAmPm}")
                 }
@@ -402,20 +402,24 @@ class ScheduleExecutionFragment : Fragment() {
             }
             scheduleDelayCalendarCalendar.setOnDateChangedListener { widget, date, selected ->
                 selectedDate = date
+                Log.d("selected", selectedDate.toString())
             }
             scheduleDelayCalendarOkTv.setOnClickListener {
-                val calendar = Calendar.getInstance()
-
                 if (selectedDate != null && selectedHour != null && selectedMinute != null && selectedAmPm != null) {
+                    val calendar = Calendar.getInstance()
                     calendar.set(
                         selectedDate!!.year,
-                        selectedDate!!.month,
+                        selectedDate!!.month - 1,
                         selectedDate!!.day,
                         selectedHour!!,
                         selectedMinute!!
                     )
+                    onItemSelected(calendar)
+                } else {
+                    // 기본값 세팅 (현재 시간)
+                    val calendar = Calendar.getInstance()
+                    onItemSelected(calendar)
                 }
-                onItemSelected(calendar)
 
                 calendarPopup.dismiss()
             }
