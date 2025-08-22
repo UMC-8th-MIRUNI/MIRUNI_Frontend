@@ -30,6 +30,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.TokenManager
 import com.example.miruni.api.ApiService
+import com.example.miruni.api.FinishedScheduleRequest
 import com.example.miruni.api.Monthly
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Plan
@@ -313,7 +314,10 @@ class CalendarFragment : Fragment() {
             val spf = (requireContext()).getSharedPreferences("executedTask", MODE_PRIVATE)
             spf.edit() {
                 putInt("taskId", clickItem.id)
+//                getScheduleOrTask(clickItem.id)
             }
+
+//            taskInProgress()
 
             (context as MainActivity).supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frm, ScheduleExecutionFragment())
@@ -415,4 +419,61 @@ class CalendarFragment : Fragment() {
             Log.e("Calendar", "에러: ${e.message}")
         }
     }
+
+    /**
+     * AI일정인지, BASIC 일정인지 검사
+     */
+//    private fun getScheduleOrTask(planId: Int) {
+//        // parentTitle이 null인지 아닌지
+//        if ()
+//
+//        // schedule이면 -> category: BASIC -> 조회
+//        // task이면 -> category: AI -> 조회
+//    }
+
+//    private suspend fun taskInProgress(planId: Int) {
+//        try {
+//            val api = getRetrofit().create(ApiService::class.java)
+//
+//            val request = FinishedScheduleRequest(
+//                category =
+//            )
+//
+//            val response = api.inProgressSchedule(accessToken, planId, )
+//
+//            if (response.isSuccessful) {
+//                planList.clear()
+//                val result = response.body()!!.result
+//
+//                result.schedules.forEach { schedule ->
+//
+//                    Log.d("Calendar", "schedule: ${schedule.id}" +
+//                            "\n${schedule.parentTitle}" +
+//                            "\n${schedule.title}" +
+//                            "\n${schedule.startTime}" +
+//                            "\n${schedule.endTime}" +
+//                            "\n${schedule.priority}" +
+//                            "\n${schedule.category}")
+//                    val plan = Plan(
+//                        id = schedule.id,
+//                        parentTitle = schedule.parentTitle,
+//                        title = schedule.title,
+//                        scheduledStart = getDateTimeStringHelper(timeString = schedule.startTime).toString(),
+//                        scheduledEnd = getDateTimeStringHelper(timeString = schedule.endTime).toString(),
+//                        priority = schedule.priority,
+//                        category = schedule.category
+//                    )
+//                    planList.add(plan)
+//                    Log.d("Calendar", "저장된 값: ${plan}")
+//                }
+//                Log.d("Calendar", "저장된 갯수: ${planList.size}")
+//                taskOnDateRVAdapter.addTask(ArrayList(planList))
+//                binding.calendarIncludeTaskOnDate.taskOnDateCountTv.text = String.format("일정 갯수 : ${planList.size}개")
+//            } else {
+//                Log.d("Calendar", "실패: ${response.code()} / ${response.message()}")
+//            }
+//        } catch (e: Exception) {
+//            Log.e("Calendar", "에러: ${e.message}")
+//        }
+//    }
 }

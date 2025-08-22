@@ -26,9 +26,6 @@
         android:text="TextView"
         android:textColor="@color/grey2"
         android:textSize="10sp"
-        android:maxLines="1"
-        android:ems="12"
-        android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/item_timetable_plan_start_line"
         app:layout_constraintTop_toTopOf="parent" />

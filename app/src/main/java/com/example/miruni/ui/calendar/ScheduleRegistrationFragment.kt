@@ -989,7 +989,7 @@ class ScheduleRegistrationFragment : Fragment() {
                     executeDay = splitDateTimeHelper(registerScheduleRequest.scheduledStart, true),
                     startTime = splitDateTimeHelper(registerScheduleRequest.scheduledStart, false),
                     endTime = splitDateTimeHelper(registerScheduleRequest.scheduledEnd, false),
-                    status = "undo"
+                    status = "NOT_STARTED"
                 )
 
                 scheduleDB.taskDao().insert(task)
@@ -1077,7 +1077,7 @@ class ScheduleRegistrationFragment : Fragment() {
                             executeDay = splitSchedule.date,
                             startTime = splitSchedule.startTime,
                             endTime = splitSchedule.endTime,
-                            status = "undo"
+                            status = "NOT_STARTED"
                         )
                         scheduleDB.taskDao().insert(task)
                         Log.d("splitSchedule", "일정 쪼개기 성공")
