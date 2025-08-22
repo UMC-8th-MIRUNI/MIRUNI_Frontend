@@ -21,11 +21,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
+import com.example.miruni.api.ApiService
+import com.example.miruni.api.getRetrofit
 import com.example.miruni.data.Alarm
 import com.example.miruni.data.AlarmType
+import com.example.miruni.data.Plan
 import com.example.miruni.data.Schedule
 import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
@@ -36,6 +42,8 @@ import com.example.miruni.ui.homepage.HomepageFragment
 import com.example.miruni.ui.storage.StorageFragment
 import com.example.miruni.ui.tool.ToolFragment
 import com.example.miruni.util.AlarmHelper
+import com.example.miruni.util.calendarToDateStringHelper
+import com.example.miruni.util.getDateTimeStringHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -45,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     // 뷰 바인딩
     private lateinit var binding : ActivityMainBinding
     private var pageState = "home"
+    private lateinit var accessToken: String
     // 팝업 알람 관련 변수
     private var isReturningFromPermissionGrant = false // 권한 허용 상태인지
     private val overlayPermissionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -68,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
+        accessToken = String.format("Bearer ${TokenManager.getToken(this)}")
         setContentView(binding.root)
 
         /** 각 권한 확인 및 권한 설정 */
@@ -127,9 +137,6 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         intent.let {
             when(it.getStringExtra("showFragment")) {
-                "ScheduleFragment" -> {
-                    transitionFragment(ScheduleFragment())
-                }
                 "CalendarFragment" -> {
                     transitionFragment(CalendarFragment())
                 }
@@ -234,257 +241,6 @@ class MainActivity : AppCompatActivity() {
         /** task 테이블 초기화 */
         if (tasks.isNotEmpty()) return
 
-        scheduleDB.taskDao().insert(
-            Task(
-                1,
-                1,
-                "title1",
-                "2025-07-04",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                2,
-                1,
-                "title2",
-                "2025-07-04",
-                "15:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                3,
-                1,
-                "title3",
-                "2025-07-04",
-                "16:00",
-                "17:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                4,
-                1,
-                "title4",
-                "2025-07-09",
-                "16:00",
-                "17:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                5,
-                1,
-                "title5",
-                "2025-07-09",
-                "16:00",
-                "17:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                6,
-                1,
-                "title6",
-                "2025-07-09",
-                "16:00",
-                "17:00",
-                "완료"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                7,
-                2,
-                "titleA",
-                "2025-07-09",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                8,
-                2,
-                "titleB",
-                "2025-07-09",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                9,
-                2,
-                "titleC",
-                "2025-07-09",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                10,
-                3,
-                "titleㄱ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                11,
-                3,
-                "titleㄴ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                12,
-                3,
-                "titleㄷ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                13,
-                3,
-                "titleㄹ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                14,
-                3,
-                "titleㅁ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                15,
-                3,
-                "titleㅂ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                16,
-                3,
-                "titleㅅ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                17,
-                3,
-                "titleㅇ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                18,
-                3,
-                "titleㅈ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                19,
-                3,
-                "titleㅊ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-        scheduleDB.taskDao().insert(
-            Task(
-                20,
-                3,
-                "titleㅋ",
-                "2025-07-18",
-                "14:00",
-                "16:00",
-                "예정"
-            )
-        )
-
-
-        /** schedule 테이블 초기화 */
-        if (schedules.isNotEmpty()) return
-        scheduleDB.scheduleDao().insert(
-            Schedule(
-                "토익 LC 공부하기",
-                " ",
-                "2025-07-04",
-                "2025-07-15",
-                "상"
-            )
-        )
-        scheduleDB.scheduleDao().insert(
-            Schedule(
-                "토익 RC 공부하기",
-                " ",
-                "2025-07-09",
-                "2025-07-21",
-                "상"
-            )
-        )
-        scheduleDB.scheduleDao().insert(
-            Schedule(
-                "토익 공부하기",
-                " ",
-                "2025-07-18",
-                "2025-07-29",
-                "상"
-            )
-        )
     }
 
     /**
@@ -493,28 +249,119 @@ class MainActivity : AppCompatActivity() {
     private fun initTasks() {
         scheduleDB = ScheduleDatabase.getInstance(this)!!
         tasksList.addAll(scheduleDB.taskDao().getTasks())
+
+        lifecycleScope.launch {
+            val calendar = Calendar.getInstance()
+            loadTaskOnDate(calendarToDateStringHelper(calendar))
+        }
+    }
+
+    private suspend fun loadTaskOnDate(date: String) {
+        try {
+            val api = getRetrofit().create(ApiService::class.java)
+            Log.d("Calendar", date)
+            val response = api.getDailySchedule(accessToken, date)
+
+            if (response.isSuccessful) {
+                val result = response.body()!!.result
+
+                result.schedules.forEach { schedule ->
+
+                    Log.d("Calendar", "schedule: ${schedule.id}" +
+                            "\n${schedule.parentTitle}" +
+                            "\n${schedule.title}" +
+                            "\n${schedule.startTime}" +
+                            "\n${schedule.endTime}" +
+                            "\n${schedule.priority}" +
+                            "\n${schedule.category}")
+                    val task = Task(
+                        id = schedule.id,
+                        scheduleId = null,
+                        title = schedule.title,
+                        executeDay = date,
+                        startTime = schedule.startTime,
+                        endTime = schedule.endTime,
+                        status = "undo"
+                    )
+                    Log.d("Calendar", "저장된 값: ${task}")
+
+                    tasksList.add(task)
+                }
+            } else {
+                Log.d("Calendar", "실패: ${response.code()} / ${response.message()}")
+            }
+        } catch (e: Exception) {
+            Log.e("Calendar", "에러: ${e.message}")
+        }
     }
 
     /**
      * 세부 일정 시작 시간 5분 초과 시 팝업 알람
      */
+    // 실제 수행용
+//    @RequiresApi(Build.VERSION_CODES.S)
+//    private fun callPopupAlarm(context: Context, task: Task) {
+//        val calendar = Calendar.getInstance().apply {
+//            val hour = timeStringToIntConverter(task.startTime) / 100
+//            val minute = timeStringToIntConverter(task.startTime) % 100 + 5
+//
+//            set(Calendar.HOUR_OF_DAY, hour)
+//            set(Calendar.MINUTE, minute)
+//            set(Calendar.SECOND, 0)
+//            if (before(Calendar.getInstance())) add(Calendar.DATE, 1)
+//        }
+//
+//        AlarmHelper.setAlarm(context, calendar.timeInMillis, task, AlarmHelper.AlarmType.POPUP)
+//    }
+
+    // 시연용
     @RequiresApi(Build.VERSION_CODES.S)
     private fun callPopupAlarm(context: Context, task: Task) {
         val calendar = Calendar.getInstance().apply {
             val hour = timeStringToIntConverter(task.startTime) / 100
-            val minute = timeStringToIntConverter(task.startTime) % 100 + 5
+            val minute = timeStringToIntConverter(task.startTime) % 100
+
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 0)
+            set(Calendar.SECOND, 10)
             if (before(Calendar.getInstance())) add(Calendar.DATE, 1)
         }
 
+        Log.d("callAlarm/POPUP", "H: ${calendar.get(Calendar.HOUR_OF_DAY)}  S: ${calendar.get(Calendar.SECOND)}")
         AlarmHelper.setAlarm(context, calendar.timeInMillis, task, AlarmHelper.AlarmType.POPUP)
     }
 
     /**
      * 세부 일정 시작 1시간, 10분 전 배너 알람 (헤드업, 상태 표시줄)
      */
+    // 실제 수행용
+//    @RequiresApi(Build.VERSION_CODES.S)
+//    private fun callBannerAlarm(context: Context, task: Task) {
+//        val hour = timeStringToIntConverter(task.startTime) / 100
+//        val minute = timeStringToIntConverter(task.startTime) % 100
+//
+//        val baseTime = Calendar.getInstance().apply {
+//            set(Calendar.HOUR_OF_DAY, hour)
+//            set(Calendar.MINUTE, minute)
+//            set(Calendar.SECOND, 0)
+//            if (before(Calendar.getInstance())) add(Calendar.DATE, 1)
+//        }
+//
+//        val oneHourBefore = baseTime.clone() as Calendar
+//        oneHourBefore.add(Calendar.HOUR_OF_DAY, -1)
+//
+//        val tenMinuteBefore = baseTime.clone() as Calendar
+//        tenMinuteBefore.add(Calendar.MINUTE, -10)
+//
+//        if (oneHourBefore.after(Calendar.getInstance())) {
+//            AlarmHelper.setAlarm(context, oneHourBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_1H)
+//        }
+//        if (tenMinuteBefore.after(Calendar.getInstance())) {
+//            AlarmHelper.setAlarm(context, tenMinuteBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_10M)
+//        }
+//    }
+
+    // 시연용
     @RequiresApi(Build.VERSION_CODES.S)
     private fun callBannerAlarm(context: Context, task: Task) {
         val hour = timeStringToIntConverter(task.startTime) / 100
@@ -523,15 +370,20 @@ class MainActivity : AppCompatActivity() {
         val baseTime = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, hour)
             set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 0)
+            set(Calendar.SECOND, 59)
             if (before(Calendar.getInstance())) add(Calendar.DATE, 1)
         }
 
         val oneHourBefore = baseTime.clone() as Calendar
-        oneHourBefore.add(Calendar.HOUR_OF_DAY, -1)
+        oneHourBefore.add(Calendar.MINUTE, -1)
+        oneHourBefore.add(Calendar.SECOND, -15)
 
         val tenMinuteBefore = baseTime.clone() as Calendar
-        tenMinuteBefore.add(Calendar.MINUTE, -10)
+        tenMinuteBefore.add(Calendar.MINUTE, -1)
+        tenMinuteBefore.add(Calendar.SECOND, -5)
+
+        Log.d("callAlarm/Banner", "H: ${baseTime.get(Calendar.HOUR_OF_DAY)}  S: ${baseTime.get(Calendar.SECOND)}")
+        Log.d("callAlarm/Banner", "H: ${baseTime.get(Calendar.HOUR_OF_DAY)}  S: ${baseTime.get(Calendar.SECOND)}")
 
         if (oneHourBefore.after(Calendar.getInstance())) {
             AlarmHelper.setAlarm(context, oneHourBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_1H)
@@ -539,7 +391,6 @@ class MainActivity : AppCompatActivity() {
         if (tenMinuteBefore.after(Calendar.getInstance())) {
             AlarmHelper.setAlarm(context, tenMinuteBefore.timeInMillis, task, AlarmHelper.AlarmType.BANNER_10M)
         }
-
     }
 
     /**
@@ -560,6 +411,13 @@ class MainActivity : AppCompatActivity() {
         val targetHeight = (screenHeight * 0.075).toInt()
         binding.mainIncludeMain.mainNav.layoutParams = binding.mainIncludeMain.mainNav.layoutParams.apply {
             height = targetHeight
+        }
+
+        // 시스템 바 인셋 적용
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainIncludeMain.mainNav) { view, insets ->
+            val systemBarInsets = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(bottom = systemBarInsets.bottom) // 시스템 네비게이션 바 높이만큼 padding
+            insets
         }
 
         // 랜딩 페이지: 홈

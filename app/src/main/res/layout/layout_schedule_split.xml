@@ -53,112 +53,124 @@
             app:layout_constraintTop_toTopOf="parent"
             android:visibility="visible"/>
 
-        <TextView
-            android:id="@+id/schedule_split_type_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1. 일정 유형 선택"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="14sp"
-            android:textColor="#1E1E1E"
-            app:layout_constraintTop_toTopOf="@id/schedule_split_type_title_top_line"
-            app:layout_constraintStart_toStartOf="parent" />
-        <FrameLayout
-            android:id="@+id/schedule_split_type_frm"
+        <ScrollView
+            android:id="@+id/schedule_split_scroll_frm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="56sp"
-            android:background="@drawable/bg_ababab_square_7"
-            app:layout_constraintTop_toBottomOf="@id/schedule_split_type_title_tv">
+            app:layout_constraintTop_toTopOf="@id/schedule_split_type_title_top_line">
 
-            <TextView
-                android:id="@+id/schedule_split_type_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="290sp"
-                android:fontFamily="@font/poppins_regular"
-                android:textSize="15sp"
-                android:textColor="#ABABAB"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="21sp"/>
-            <ImageView
-                android:id="@+id/schedule_split_type_more_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/dropdown_down_arrow"
-                android:layout_gravity="center_vertical|right"
-                android:layout_marginEnd="15sp"/>
-        </FrameLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/schedule_split_volume_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2. 일정 범위"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="14sp"
-            android:textColor="#1E1E1E"
-            android:layout_marginTop="17sp"
-            app:layout_constraintTop_toBottomOf="@id/schedule_split_type_frm"
-            app:layout_constraintStart_toStartOf="parent" />
-        <EditText
-            android:id="@+id/schedule_split_volume_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="56sp"
-            android:background="@drawable/bg_ababab_square_7"
-            android:hint="예) p.30 - p.60, 얼만큼"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="15sp"
-            android:paddingHorizontal="21sp"
-            android:paddingVertical="16sp"
-            app:layout_constraintTop_toBottomOf="@id/schedule_split_volume_title_tv"/>
+                <TextView
+                    android:id="@+id/schedule_split_type_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. 일정 유형 선택"
+                    android:fontFamily="@font/notosanskr_bold"
+                    android:textSize="14sp"
+                    android:textColor="#1E1E1E"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <FrameLayout
+                    android:id="@+id/schedule_split_type_frm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="56sp"
+                    android:background="@drawable/bg_ababab_square_7"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_split_type_title_tv">
 
-        <TextView
-            android:id="@+id/schedule_split_request_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3. 세부 요청 사항"
-            android:fontFamily="@font/notosanskr_bold"
-            android:textSize="14sp"
-            android:textColor="#1E1E1E"
-            android:layout_marginTop="17sp"
-            app:layout_constraintTop_toBottomOf="@id/schedule_split_volume_et"
-            app:layout_constraintStart_toStartOf="parent" />
-        <EditText
-            android:id="@+id/schedule_split_request_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="77dp"
-            android:maxLines="2"
-            android:scrollbars="vertical"
-            android:background="@drawable/bg_ababab_square_7"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="15sp"
-            android:paddingHorizontal="21sp"
-            android:paddingVertical="16sp"
-            app:layout_constraintTop_toBottomOf="@id/schedule_split_request_title_tv"/>
+                    <TextView
+                        android:id="@+id/schedule_split_type_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="290sp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="15sp"
+                        android:textColor="#ABABAB"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="21sp"/>
+                    <ImageView
+                        android:id="@+id/schedule_split_type_more_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/dropdown_down_arrow"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginEnd="15sp"/>
+                </FrameLayout>
 
-        <TextView
-            android:id="@+id/schedule_split_split_guide_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="쪼개기 가이드"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="11sp"
-            android:layout_marginEnd="5sp"
-            app:layout_constraintEnd_toStartOf="@id/schedule_split_split_guide_iv"
-            app:layout_constraintTop_toTopOf="@id/schedule_split_split_guide_iv"
-            app:layout_constraintBottom_toBottomOf="@id/schedule_split_split_guide_iv"/>
-        <ImageView
-            android:id="@+id/schedule_split_split_guide_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/schedule_split_more_arrow"
-            android:layout_marginTop="24sp"
-            android:layout_marginEnd="13sp"
-            app:layout_constraintTop_toBottomOf="@id/schedule_split_request_et"
-            app:layout_constraintEnd_toEndOf="@id/schedule_split_request_et"/>
+                <TextView
+                    android:id="@+id/schedule_split_volume_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2. 일정 범위"
+                    android:fontFamily="@font/notosanskr_bold"
+                    android:textSize="14sp"
+                    android:textColor="#1E1E1E"
+                    android:layout_marginTop="17sp"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_split_type_frm"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <EditText
+                    android:id="@+id/schedule_split_volume_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="56sp"
+                    android:background="@drawable/bg_ababab_square_7"
+                    android:hint="예) p.30 - p.60, 얼만큼"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="15sp"
+                    android:paddingHorizontal="21sp"
+                    android:paddingVertical="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_split_volume_title_tv"/>
+
+                <TextView
+                    android:id="@+id/schedule_split_request_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3. 세부 요청 사항"
+                    android:fontFamily="@font/notosanskr_bold"
+                    android:textSize="14sp"
+                    android:textColor="#1E1E1E"
+                    android:layout_marginTop="17sp"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_split_volume_et"
+                    app:layout_constraintStart_toStartOf="parent" />
+                <EditText
+                    android:id="@+id/schedule_split_request_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="77dp"
+                    android:maxLines="2"
+                    android:scrollbars="vertical"
+                    android:background="@drawable/bg_ababab_square_7"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="15sp"
+                    android:paddingHorizontal="21sp"
+                    android:paddingVertical="16sp"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_split_request_title_tv"/>
+
+                <TextView
+                    android:id="@+id/schedule_split_split_guide_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="쪼개기 가이드"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="5sp"
+                    app:layout_constraintEnd_toStartOf="@id/schedule_split_split_guide_iv"
+                    app:layout_constraintTop_toTopOf="@id/schedule_split_split_guide_iv"
+                    app:layout_constraintBottom_toBottomOf="@id/schedule_split_split_guide_iv"/>
+                <ImageView
+                    android:id="@+id/schedule_split_split_guide_iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/schedule_split_more_arrow"
+                    android:layout_marginTop="24sp"
+                    android:layout_marginEnd="13sp"
+                    app:layout_constraintTop_toBottomOf="@id/schedule_split_request_et"
+                    app:layout_constraintEnd_toEndOf="@id/schedule_split_request_et"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <TextView
             android:id="@+id/schedule_split_split_btn"
