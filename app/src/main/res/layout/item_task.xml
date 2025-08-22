@@ -53,6 +53,12 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.07"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/item_task_item_horizon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"/>
         <ImageView
             android:id="@+id/item_task_item_iv"
             android:layout_width="0dp"
@@ -61,7 +67,8 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/item_task_item_end_line"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/item_task_item_horizon"/>
         <TextView
             android:id="@+id/item_schedule_title_tv"
             android:layout_width="wrap_content"
@@ -71,8 +78,8 @@
             android:textSize="14sp"
             android:layout_marginStart="6sp"
             app:layout_constraintTop_toTopOf="@id/item_task_item_iv"
-            app:layout_constraintBottom_toBottomOf="@id/item_task_item_iv"
-            app:layout_constraintStart_toEndOf="@id/item_task_item_iv"/>
+            app:layout_constraintBottom_toBottomOf="@id/item_task_item_horizon"
+            app:layout_constraintStart_toStartOf="@id/item_task_item_end_line"/>
 
         <ImageView
             android:id="@+id/item_task_check_iv"
@@ -81,7 +88,7 @@
             android:src="@drawable/task_on_date_check"
             app:layout_constraintDimensionRatio="1:1"
             android:layout_marginStart="8sp"
-            app:layout_constraintTop_toBottomOf="@id/item_task_item_iv"
+            app:layout_constraintTop_toTopOf="@id/item_task_item_horizon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/item_task_item_end_line"/>
 
@@ -93,9 +100,8 @@
             android:fontFamily="@font/dmsans_medium"
             android:textSize="12sp"
             android:textColor="#767E75"
-            app:layout_constraintTop_toTopOf="@id/item_task_check_iv"
-            app:layout_constraintBottom_toBottomOf="@id/item_task_check_iv"
-            app:layout_constraintStart_toEndOf="@id/item_task_check_iv"/>
+            app:layout_constraintTop_toTopOf="@id/item_task_item_horizon"
+            app:layout_constraintStart_toStartOf="@id/item_task_item_end_line"/>
 
         <TextView
             android:id="@+id/item_schedule_priority_tv"

@@ -165,6 +165,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
+    override fun onStop() {
+        super.onStop()
+
+        tasksList.addAll(scheduleDB.taskDao().getTasks())
+        tasksList.toSet().toList()
+
+        tasksList.forEach { task ->
+            callPopupAlarm(this, task)
+            callBannerAlarm(this, task)
+        }
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun callGetPermissionScreen() {
         val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
