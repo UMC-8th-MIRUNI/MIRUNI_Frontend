@@ -27,14 +27,14 @@ class TimetableRVAdapter(private val db: ScheduleDatabase): RecyclerView.Adapter
 
         holder.bind(tasks[position])
 
-        // 세부 일정
-        holder.binding.timetablePlan.text = scheduleList[position].description
-        // 날짜
-        holder.binding.timetableDate.text = scheduleList[position].date
-        // 수행 시간
-        holder.binding.timetableTime.text = "${scheduleList[position].startTime}-${scheduleList[position].endTime}"
-        // 소요 시간
-        holder.binding.timetableTimetaken.text = scheduleList[position].expectedDuration.toString()
+//        // 세부 일정
+//        holder.binding.timetablePlan.text = scheduleList[position].description
+//        // 날짜
+//        holder.binding.timetableDate.text = scheduleList[position].date
+//        // 수행 시간
+//        holder.binding.timetableTime.text = "${scheduleList[position].startTime}-${scheduleList[position].endTime}"
+//        // 소요 시간
+//        holder.binding.timetableTimetaken.text = scheduleList[position].expectedDuration.toString()
     }
 
     override fun getItemCount(): Int = tasks.size

@@ -185,8 +185,8 @@ class HomepageFragment: Fragment() {
         fragment.arguments = bundle
 
         requireActivity().supportFragmentManager.beginTransaction().apply {
-            replace(R.id.main_frm, fragment)
-            addToBackStack(null)
+            replace(R.id.main_frm, fragment, "TimetableFragment")
+            addToBackStack("HomepageFragment")
             commit()
         }
 

@@ -923,7 +923,7 @@ class ScheduleRegistrationFragment : Fragment() {
             String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}" +
                     "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}" +
                     "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
-                    "T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
+                    "T${numberFormat.format(selectedExecutionEndDate?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
                     ":${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
 
@@ -989,7 +989,7 @@ class ScheduleRegistrationFragment : Fragment() {
                     executeDay = splitDateTimeHelper(registerScheduleRequest.scheduledStart, true),
                     startTime = splitDateTimeHelper(registerScheduleRequest.scheduledStart, false),
                     endTime = splitDateTimeHelper(registerScheduleRequest.scheduledEnd, false),
-                    status = "undo"
+                    status = "NOT_STARTED"
                 )
 
                 scheduleDB.taskDao().insert(task)
@@ -1077,7 +1077,7 @@ class ScheduleRegistrationFragment : Fragment() {
                             executeDay = splitSchedule.date,
                             startTime = splitSchedule.startTime,
                             endTime = splitSchedule.endTime,
-                            status = "undo"
+                            status = "NOT_STARTED"
                         )
                         scheduleDB.taskDao().insert(task)
                         Log.d("splitSchedule", "일정 쪼개기 성공")

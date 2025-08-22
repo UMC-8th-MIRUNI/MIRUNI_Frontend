@@ -137,7 +137,7 @@ class ScheduleExecutionFragment : Fragment() {
         }else{
             executedTask = scheduleDB!!.taskDao().getTask(taskId)
 
-            Log.d("화깅ㄴ", "task_id: ${executedTask.id} | task_scheduleid: ${executedTask.scheduleId}")
+            Log.d("확인", "task_id: ${executedTask.id} | task_scheduleid: ${executedTask.scheduleId}")
             if(executedTask != null){
                 startTimer(tempTime)
             }

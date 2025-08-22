@@ -179,6 +179,11 @@ data class ResultOfDelaySchedule(
  * inProgressSchedule
  */
 data class InProgressScheduleResponse(
+    val errorCode: String?,
+    val message: String,
+    val result: ResultInProgressSchedule
+)
+data class ResultInProgressSchedule(
     val planId: Int,
     val aiPlanId: Int,
     val status: String

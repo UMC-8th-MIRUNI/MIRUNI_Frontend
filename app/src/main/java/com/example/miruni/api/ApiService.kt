@@ -70,7 +70,7 @@ interface ApiService {
         @Body request: DelayScheduleRequest
     ): Response<DelayScheduleResponse>
 
-    @PATCH("/api/schedules/{planId}/status/in-progress")
+    @PATCH("/api/schedules/{planId}/in-progress")
     suspend fun inProgressSchedule(
         @Header("Authorization") token: String,
         @Path("planId") scheduleId: Int,
