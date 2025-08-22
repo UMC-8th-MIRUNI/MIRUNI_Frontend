@@ -163,9 +163,8 @@ class CalendarFragment : Fragment() {
             calendarDropdownIv.setOnClickListener {
                 showDateSelectDropdown(binding.calendarIncludeCalendarCalendar.calendarDropdownIv)
             }
-            /** 날짜 선택 시 */
-            calendarCalendar.setOnDateChangedListener { widget, date, selected ->
 
+            calendarCalendar.setOnMonthChangedListener { widget, date ->
                 // 달력 헤더 날짜 수정
                 calendarYearTv.text = String.format("${date.year}년")
                 calendarMonthTv.text = String.format("${date.month}월")
@@ -174,6 +173,9 @@ class CalendarFragment : Fragment() {
                 lifecycleScope.launch {
                     loadTasks(date.year, date.month)
                 }
+            }
+            /** 날짜 선택 시 */
+            calendarCalendar.setOnDateChangedListener { widget, date, selected ->
 
                 // 날짜 첫 클릭
                 if (dateSelectState != "selected" || selectedDate != date) {
