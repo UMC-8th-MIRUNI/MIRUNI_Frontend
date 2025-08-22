@@ -59,6 +59,9 @@ class TimetableFragment: Fragment() {
         /* 홈페이지로부터 옴 */
         if(arguments?.getString("fromHomepageFragment") == "HomepageFragment"){
 
+            binding.timetableOkTv.visibility = View.GONE
+            binding.timetableResplitTv.visibility = View.GONE
+
             val homePageAdapter = HTimetableRVAdapter()
             binding.timetableRV.adapter = homePageAdapter
             binding.timetableRV.layoutManager = LinearLayoutManager(requireContext())
@@ -68,7 +71,8 @@ class TimetableFragment: Fragment() {
             val viewModel = ViewModelProvider(this, factory)[HomepageViewModel::class.java]
 
             val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
-            val planId = arguments?.getInt("aiPlanId") ?: 0
+            val planId = arguments?.getInt("planId") ?: 0
+            val aiPlanId = arguments?.getInt("aiPlanId") ?: 0
             viewModel.getSchedule(token, planId)
 
             viewModel.scheduleData.observe(viewLifecycleOwner) { data ->
@@ -78,9 +82,11 @@ class TimetableFragment: Fragment() {
                 binding.timetableTaskRange.text = data.taskRange
                 binding.timetableLevel.text = data.priority
 
-                homePageAdapter.updateData(data.plans)
+                homePageAdapter.updateData(data.plans, aiPlanId)
             }
-
+            binding.timetableBackIv.setOnClickListener {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
         }
         // 직전 Fragment 확인
         val backStackCount = parentFragmentManager.backStackEntryCount

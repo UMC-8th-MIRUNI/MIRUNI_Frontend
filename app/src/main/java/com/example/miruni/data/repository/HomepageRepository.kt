@@ -5,6 +5,7 @@ import com.example.miruni.api.HomepageApi
 import com.example.miruni.api.getRetrofit
 import com.example.miruni.api.model.DeleteTaskRequest
 import com.example.miruni.api.model.DeleteTaskResponse
+import com.example.miruni.api.model.HiddenResponse
 import com.example.miruni.api.model.HomepageResponse
 import retrofit2.Response
 
@@ -19,6 +20,10 @@ class HomepageRepository(private val api: HomepageApi = getRetrofit().create(Hom
     }
     suspend fun getSchedule(token: String, planId: Int): Response<GetSplitScheduleResponse>{
         val response = api.getSchedule(token, planId)
+        return response
+    }
+    suspend fun getHidden(token: String, planId: Int): Response<HiddenResponse>{
+        val response = api.getHidden(token, planId)
         return response
     }
 

@@ -26,8 +26,8 @@ class   AlarmReceiver : BroadcastReceiver() {
                     context.startForegroundService(serviceIntent)
                 }
                 /* NotificationHelper - fun notificationForPopup()에서 받아옴 */
-                val title = intent?.getStringExtra("title") ?: "팝업 타이틀 없다"
-                val content = intent?.getStringExtra("content") ?: "팝업 내용 없다"
+                val title = intent?.getStringExtra("title") ?: ""
+                val content = intent?.getStringExtra("content") ?: ""
 
                 /* 알람 데이터 삽입 */
                 GlobalScope.launch(Dispatchers.IO) {
@@ -44,7 +44,7 @@ class   AlarmReceiver : BroadcastReceiver() {
             }
             AlarmHelper.AlarmType.BANNER_1H, AlarmHelper.AlarmType.BANNER_10M -> { // 배너 알람의 경우
                 if (!isAppInForeground(context)) {
-                    val title = intent.getStringExtra("title") ?: "일정 알림"
+                    val title = intent.getStringExtra("title") ?: ""
 
                     val content = when (AlarmHelper.AlarmType.valueOf(type)) {
                         AlarmHelper.AlarmType.BANNER_1H -> String.format("1시간 뒤에 <${title}>가 예정되어 있어!")

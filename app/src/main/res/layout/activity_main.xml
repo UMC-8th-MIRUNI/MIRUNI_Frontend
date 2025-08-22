@@ -15,14 +15,9 @@
         layout="@layout/layout_get_permission"
         android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/fullBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include
+        android:id="@+id/foregroundBack"
+        layout="@layout/layout_foreground_service_back"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

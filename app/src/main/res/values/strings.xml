@@ -2,13 +2,17 @@
     <string name="app_name" translatable="false">MIRUNI</string>
 
     <string name="title" translatable="false">MIRUNI</string>
-    
+
+    <!-- 포그라운드 서비스 감지 -->
+    <string name="foreground_comment">앱으로 돌아가\n성장을 이어가보세요!</string>
+
     <!-- 방해 요소 차단 -->
     <string name="block_title">방해요소 차단</string>
     <string name="block_comment">핸드폰을 잠그고 할 일에 더 집중해보세요!</string>
     <string name="chekck">확인</string>
     <string name="skip">넘어가기</string>
     <string name="bolck_setting_comment">방해요소를 차단할 시간을 설정하세요!</string>
+
     <!-- 리포트 가이드 -->
     <string name="report_guide_title">리포트란?</string>
     <string name="report_guide_content">한달 간 일정 수행한 것을 토대로\n제작되는 행동 패턴 분석 리포트에요!\n나의 습관이 어떤지 파악하고 개선할 수\n있어요!</string>

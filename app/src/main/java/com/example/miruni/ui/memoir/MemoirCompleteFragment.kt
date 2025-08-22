@@ -55,7 +55,7 @@ class MemoirCompleteFragment: Fragment() {
         binding.completeLayout.memoirWriteMenu.visibility = View.VISIBLE
         db = ScheduleDatabase.getInstance(requireContext())
 
-        viewModel = ViewModelProvider(this, factory)[MemoirViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity(), factory)[MemoirViewModel::class.java]
 
         token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
         reviewId = requireArguments().getInt("reviewId")
@@ -73,7 +73,7 @@ class MemoirCompleteFragment: Fragment() {
                 val achievement = data?.result?.achievement ?: 0
                 updateView(archievePercent, achievement)    // archievePercent style 수정
             }
-            val mood = data?.result?.mood ?: Mood.ANXIOUS
+            val mood = data?.result?.mood ?: Mood.NOTHING
 
             moodUpdate(mood)
             // 메뉴
@@ -134,6 +134,18 @@ class MemoirCompleteFragment: Fragment() {
     private fun moodUpdate(mood: Mood){
         val check = mood.name
 
+        binding.completeLayout.happyMiruniActive.visibility = View.INVISIBLE
+        binding.completeLayout.sadMiruniActive.visibility = View.INVISIBLE
+        binding.completeLayout.angryMiruniActive.visibility = View.INVISIBLE
+        binding.completeLayout.surprisedMiruniActive.visibility = View.INVISIBLE
+        binding.completeLayout.disappointedMiruniActive.visibility = View.INVISIBLE
+
+        binding.completeLayout.happyMiruniInactive.visibility = View.VISIBLE
+        binding.completeLayout.sadMiruniInactive.visibility = View.VISIBLE
+        binding.completeLayout.angryMiruniInactive.visibility = View.VISIBLE
+        binding.completeLayout.surprisedMiruniInactive.visibility = View.VISIBLE
+        binding.completeLayout.disappointedMiruniInactive.visibility = View.VISIBLE
+
         when(check){
             "HAPPY" -> {
                 binding.completeLayout.happyMiruniInactive.visibility = View.INVISIBLE
@@ -148,12 +160,12 @@ class MemoirCompleteFragment: Fragment() {
                 binding.completeLayout.angryMiruniActive.visibility = View.VISIBLE
             }
             "RELAXED" -> {
-                binding.completeLayout.disappointedMiruniInactive.visibility = View.INVISIBLE
-                binding.completeLayout.disappointedMiruniActive.visibility = View.VISIBLE
-            }
-            else -> {
                 binding.completeLayout.surprisedMiruniInactive.visibility = View.INVISIBLE
                 binding.completeLayout.surprisedMiruniActive.visibility = View.VISIBLE
+            }
+            "ANXIOUS" -> {
+                binding.completeLayout.disappointedMiruniInactive.visibility = View.INVISIBLE
+                binding.completeLayout.disappointedMiruniActive.visibility = View.VISIBLE
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.miruni.api.GetSplitScheduleResponse
 import com.example.miruni.api.ResultOfGetSplitSchedule
 import com.example.miruni.api.model.DeleteTaskRequest
+import com.example.miruni.api.model.HiddenResponse
 import com.example.miruni.api.model.HomepageResponse
 import com.example.miruni.api.model.NextTask
 import com.example.miruni.api.model.TaskItem
@@ -93,6 +94,22 @@ class HomepageViewModel(private val repository: HomepageRepository): ViewModel()
                 val response = repository.getSchedule(token, planId)
                 if(response.isSuccessful){
                     ScheduleData.value = response.body()?.result
+                    Log.e("일정 전체 조회", "조회 성공: ${response.raw()}")
+                }else { Log.e("일정 삭제", "응답 에러: ${response.code()}")}
+            }catch (e: Exception) { Log.e("일정 전체 조회", "연결 에러: ${e.message}")}
+        }
+    }
+
+    /* 일정 숨기기 */
+    private val HiddenData = MutableLiveData<HiddenResponse>()
+    val hiddenData: LiveData<HiddenResponse> = HiddenData
+
+    fun getHidden(token: String, planId: Int){
+        viewModelScope.launch {
+            try {
+                val response = repository.getHidden(token, planId)
+                if(response.isSuccessful){
+                    //HiddenData.value = response.body()?.result
                     Log.e("일정 전체 조회", "조회 성공: ${response.raw()}")
                 }else { Log.e("일정 삭제", "응답 에러: ${response.code()}")}
             }catch (e: Exception) { Log.e("일정 전체 조회", "연결 에러: ${e.message}")}

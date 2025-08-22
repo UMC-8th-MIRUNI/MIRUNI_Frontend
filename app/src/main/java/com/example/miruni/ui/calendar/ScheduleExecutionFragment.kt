@@ -52,6 +52,9 @@ class ScheduleExecutionFragment : Fragment() {
     private lateinit var db : ScheduleDatabase  // db생성
     private var blockCheck = false  // 방해금지 설정 체크 유무
 
+    private var endTime = 0L
+    private var taskId = -1
+
     private val hoursOnDropdown = (1..12).toList()
     private val minutesOnDropdown = (1..59).toList()
     private val ampmOnDropdown = listOf("오전", "오후")
@@ -88,12 +91,19 @@ class ScheduleExecutionFragment : Fragment() {
         blockCheck = arguments?.getBoolean("blockCheck") ?: true
     }
 
+    fun updateData(endTime: Long, executedId: Int) {
+        this.endTime = endTime
+        taskId = executedId
+
+        retoreTimer()
+    }
+
     /* 되돌아왔을 때 시간 받고 다시 taskId 구분하고 타이머 시작 */
     private fun retoreTimer(){
-        val endTime = arguments?.getLong("endTime") ?: 0L
+        endTime = arguments?.getLong("endTime") ?: 0L
         Log.d("FocusService", "다시 실행중으로 돌아왔을 때 돌아온 시간: ${endTime}")
         val spf = requireContext().getSharedPreferences("executedTask", MODE_PRIVATE)
-        val taskId = spf.getInt("taskId", -1)
+        taskId = spf.getInt("taskId", -1)
 
         // FocusService가 가지고있는 시간 기반 남은 시간 계산
         tempTime = endTime
@@ -581,8 +591,11 @@ class ScheduleExecutionFragment : Fragment() {
     private fun updateTimer() {
         val hour = tempTime / 3600000
         val min = tempTime % 3600000 / 60000
-
-        binding.scheduleExecutionInclude.scheduleExecutionTimeTv.text = String.format("%02d:%02d",hour,min)
+        val sec = tempTime % 60000 / 1000
+        if(hour < 1){
+            binding.scheduleExecutionInclude.scheduleExecutionTimeTv.text = String.format("%02d:%02d",min,sec)
+        }else
+            binding.scheduleExecutionInclude.scheduleExecutionTimeTv.text = String.format("%02d:%02d",hour,min)
     }
 
     /**

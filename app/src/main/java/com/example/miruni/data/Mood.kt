@@ -5,5 +5,6 @@ enum class Mood {
     SAD,
     ANGRY,
     RELAXED,
-    ANXIOUS
+    ANXIOUS,
+    NOTHING
 }

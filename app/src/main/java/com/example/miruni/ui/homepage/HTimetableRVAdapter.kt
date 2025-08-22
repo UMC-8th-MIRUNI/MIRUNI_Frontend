@@ -3,6 +3,7 @@ package com.example.miruni.ui.homepage
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.miruni.R
 import com.example.miruni.TimetableRVAdapter
 import com.example.miruni.api.SplitSchedule
 import com.example.miruni.data.Task
@@ -10,6 +11,8 @@ import com.example.miruni.databinding.ItemTimetableBinding
 
 class HTimetableRVAdapter: RecyclerView.Adapter<HTimetableRVAdapter.ViewHolder>() {
     private val scheduleList = ArrayList<SplitSchedule>()
+    private var aiPlanId = 0
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -32,11 +35,16 @@ class HTimetableRVAdapter: RecyclerView.Adapter<HTimetableRVAdapter.ViewHolder>(
         holder.binding.timetableTime.text = "${startTime[0]}:${startTime[1]}-${endTime[0]}:${endTime[1]}"
         // 소요 시간
         holder.binding.timetableTimetaken.text = "${scheduleList[position].expectedDuration}분"
+
+        if(scheduleList[position].planId == aiPlanId){
+            holder.binding.timetableList.setBackgroundResource(R.color.select_item)
+        }
     }
 
     override fun getItemCount(): Int = scheduleList.size
 
-    fun updateData(datas: List<SplitSchedule>){
+    fun updateData(datas: List<SplitSchedule>, aiPlanId: Int){
+        this.aiPlanId = aiPlanId
         scheduleList.clear()
         scheduleList.addAll(datas)
         notifyDataSetChanged()

@@ -17,14 +17,14 @@ import com.example.miruni.data.ScheduleDatabase
 import com.example.miruni.data.Task
 import com.example.miruni.databinding.ListItemBinding
 
-class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Adapter<HomepageRVAdapter.ViewHolder>() {
+class HomepageRVAdapter(private val clickItem: (Int, Int) -> Unit ) : RecyclerView.Adapter<HomepageRVAdapter.ViewHolder>() {
 
     private val datas = ArrayList<TaskItem>()
 
     var deleteMode = false
     private var reviewDatas: List<Review> = emptyList()
 
-    private var seletedItems = mutableSetOf<DeleteTaskRequest>()
+    private var seletedItems = mutableListOf<Int>()
     private lateinit var db: ScheduleDatabase
 
     interface onplayClickListener{
@@ -85,7 +85,7 @@ class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Ad
         }
 
         /* 리스트 클릭 시 TimetableFragment로 콜 백 */
-        holder.binding.taskBg.setOnClickListener { clickItem(datas[position].planId) }
+        holder.binding.taskBg.setOnClickListener { clickItem(datas[position].planId, datas[position].aiPlanId) }
 
 
         // 체크박스 활성화
@@ -98,23 +98,9 @@ class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Ad
             val isChecked = holder.binding.taskCheckbox.isChecked
 
             val list = listOf(datas[position].aiPlanId)
-            if(isChecked) {
-                seletedItems.add(
-                    DeleteTaskRequest(
-                        datas[position].category,
-                        datas[position].planId,
-                        list
-                    )
-                )
+            if(isChecked) { seletedItems.add( (datas[position].planId ) )
             }
-            else {
-                seletedItems.remove(
-                    DeleteTaskRequest(
-                        datas[position].category,
-                        datas[position].planId,
-                        list
-                    )
-                )
+            else { seletedItems.remove(datas[position].planId)
             }
 
             Log.d("삭제 리스트 콜백", "삭제 리스트 콜백: ${seletedItems.toList()}")
@@ -123,11 +109,11 @@ class HomepageRVAdapter(private val clickItem: (Int) -> Unit ) : RecyclerView.Ad
     }
     override fun getItemCount(): Int = datas.size
 
-    fun deleteItem(state: Boolean){
+    fun hiddenItem(state: Boolean){
         deleteMode = state
         notifyDataSetChanged()
     }
-    fun getSelectedItems(): Set<DeleteTaskRequest>{
+    fun getSelectedItems(): List<Int>{
         return seletedItems
     }
     fun updateData(updateList: List<TaskItem>){

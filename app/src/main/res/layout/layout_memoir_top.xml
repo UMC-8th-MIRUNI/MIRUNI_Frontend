@@ -5,7 +5,7 @@
     android:id="@+id/memoir_top"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="160dp">
+    android:minHeight="180dp">
 
     <ImageView
         android:id="@+id/imageView54"
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.43" />
+        app:layout_constraintGuide_percent="0.4385965" />
 
     <TextView
         android:id="@+id/memoir_write_title"
@@ -111,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.16" />
+        app:layout_constraintGuide_percent="0.22222222" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline88"

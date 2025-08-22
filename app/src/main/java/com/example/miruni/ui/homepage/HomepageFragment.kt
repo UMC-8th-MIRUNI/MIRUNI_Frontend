@@ -110,9 +110,20 @@ class HomepageFragment: Fragment() {
 
         /* 오늘의 일정 adapter 연결 */
         val layoutManager = GridLayoutManager(requireContext(), 5, GridLayoutManager.HORIZONTAL, false)
-        adapter = HomepageRVAdapter(){ id ->
+        adapter = HomepageRVAdapter(){ planId, aiPlanId ->
             /* TimetableFragment로 planId 넘겨서 이동 */
-            moveTimetableFragment(TimetableFragment(), id)
+            val fragment = TimetableFragment()
+            val bundle = Bundle()
+            bundle.putInt("planId", planId)
+            bundle.putInt("aiPlanId", aiPlanId)
+            bundle.putString("fromHomepageFragment", "HomepageFragment")
+            fragment.arguments = bundle
+
+            requireActivity().supportFragmentManager.beginTransaction().apply {
+                replace(R.id.main_frm, fragment)
+                addToBackStack(null)
+                commit()
+            }
         }
 
         binding.homepageRecyclerView.layoutManager = layoutManager
@@ -208,7 +219,7 @@ class HomepageFragment: Fragment() {
             binding.taskDeleteCompleteBtn.visibility = VISIBLE
             binding.taskDeleteBtn.visibility = View.GONE
 
-            adapter.deleteItem(true)
+            adapter.hiddenItem(true)
 
         }
         // 삭제완료 버튼 눌렀을 때
@@ -223,7 +234,7 @@ class HomepageFragment: Fragment() {
 
             /* 내부 저장해서 보내기..*/
             for(data in list){
-                viewModel.deleteTask(token, data)
+                viewModel.getHidden(token, data)
             }
             // 삭제 재확인 Dialog 띄우기
             val popupBinding = LayoutCheckpopupBinding.inflate(LayoutInflater.from(requireContext()))
@@ -233,15 +244,13 @@ class HomepageFragment: Fragment() {
 
             popupBinding.deleteNo.setOnClickListener {
                 dialog.hide()
-                adapter.deleteItem(false)
+                adapter.hiddenItem(false)
             }
             popupBinding.deleteYes.setOnClickListener {
-                for(task in deleteTaskId){
-                    // rv안에서만 안보이게
-                }
+                /* 숨기기 api연결 요청 */
 
                 dialog.hide()
-                adapter.deleteItem(false)
+                adapter.hiddenItem(true)
             }
 
         }
