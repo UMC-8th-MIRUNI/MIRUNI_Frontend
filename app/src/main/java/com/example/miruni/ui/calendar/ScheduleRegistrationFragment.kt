@@ -542,7 +542,7 @@ class ScheduleRegistrationFragment : Fragment() {
             scheduleRegistrationStartTimeAmpm.setOnClickListener {
                 initAmpmSelectDropdown(it) { idx ->
                     selectedEndTime.ampm = ampmOnDropdown[idx]
-                    scheduleRegistrationEndTimeAmpmTv.text = if (selectedEndTime.ampm == ampm.AM) "오전" else "오후"
+                    scheduleRegistrationStartTimeAmpmTv.text = if (selectedEndTime.ampm == ampm.AM) "오전" else "오후"
                 }
             }
             scheduleRegistrationEndTimeHour.setOnClickListener {
@@ -560,7 +560,7 @@ class ScheduleRegistrationFragment : Fragment() {
             scheduleRegistrationEndTimeAmpm.setOnClickListener {
                 initAmpmSelectDropdown(it) { idx ->
                     selectedStartTime.ampm = ampmOnDropdown[idx]
-                    scheduleRegistrationStartTimeAmpmTv.text = if (selectedStartTime.ampm == ampm.AM) "오전" else "오후"
+                    scheduleRegistrationEndTimeAmpmTv.text = if (selectedStartTime.ampm == ampm.AM) "오전" else "오후"
                 }
             }
 
