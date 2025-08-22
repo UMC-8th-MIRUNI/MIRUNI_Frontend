@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class Task(
     @PrimaryKey
     var id: Int,
-    var scheduleId: Int,
+    var scheduleId: Int? = null,
     var title: String,
     var executeDay: String, // yyyy-MM-dd
     var startTime: String, // hh:mm:ss

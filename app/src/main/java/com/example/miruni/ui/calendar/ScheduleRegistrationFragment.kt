@@ -48,6 +48,7 @@ import com.example.miruni.databinding.LayoutScheduleDelayCalendarBinding
 import com.example.miruni.databinding.LayoutScheduleRegistrationTopbarBinding
 import com.example.miruni.util.controlBottomNavigation
 import com.example.miruni.util.controlTopBar
+import com.example.miruni.util.splitDateTimeHelper
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.format.TitleFormatter
 import kotlinx.coroutines.delay
@@ -61,8 +62,8 @@ class ScheduleRegistrationFragment : Fragment() {
 
     // 일정 등록하기
     private lateinit var priorityDropdown: PopupWindow
-    private val hoursOnDropdown = (1..12).toList()
-    private val minutesOnDropdown = (1..59).toList()
+    private val hoursOnDropdown = (0..12).toList()
+    private val minutesOnDropdown = (0..59).toList()
     private val ampmOnDropdown = listOf(ampm.AM, ampm.PM)
     private val priorityItems = arrayListOf("상", "중", "하")
 
@@ -562,6 +563,15 @@ class ScheduleRegistrationFragment : Fragment() {
                     scheduleRegistrationStartTimeAmpmTv.text = if (selectedStartTime.ampm == ampm.AM) "오전" else "오후"
                 }
             }
+
+            // 날짜 선택
+            scheduleRegistrationCalendar.setOnDateChangedListener { widget, date, selected ->
+                if (selected) {
+                    selectedStartTime.date.set(date.year, date.month, date.day)
+                    selectedEndTime.date.set(date.year, date.month, date.day)
+                }
+            }
+
             scheduleRegistrationCalendar.setOnRangeSelectedListener { widget, dates ->
                 selectedStartTime.date.set(
                     dates[0].year,
@@ -613,6 +623,7 @@ class ScheduleRegistrationFragment : Fragment() {
                 val textView = TextView(context as MainActivity).apply {
                     text = "$item"
                     textSize = 10f
+                    setPadding(24, 16, 24 ,16)
                     setTypeface(
                         ResourcesCompat.getFont(context as MainActivity,
                             R.font.poppins_regular
@@ -971,6 +982,17 @@ class ScheduleRegistrationFragment : Fragment() {
                     scheduledStart = resultOfResponse.scheduledStart,
                     isDone = resultOfResponse.isDone,
                 )
+
+                val task = Task(
+                    id = resultOfResponse.planId,
+                    title = resultOfResponse.title,
+                    executeDay = splitDateTimeHelper(registerScheduleRequest.scheduledStart, true),
+                    startTime = splitDateTimeHelper(registerScheduleRequest.scheduledStart, false),
+                    endTime = splitDateTimeHelper(registerScheduleRequest.scheduledEnd, false),
+                    status = "undo"
+                )
+
+                scheduleDB.taskDao().insert(task)
                 Log.d("registerSchedule", "title: ${resultOfResponse.title}")
                 scheduleDB.planDao().insert(plan)
                 planId = resultOfResponse.planId
@@ -1026,6 +1048,7 @@ class ScheduleRegistrationFragment : Fragment() {
                     "\ndetailRequest: ${request.detailRequest}")
 
         val planId = registerSchedule()
+        scheduleDB.taskDao().deleteTaskById(planId)
 
         try {
             if (planId != -1) { // 일정이 정상적으로 등록됨
