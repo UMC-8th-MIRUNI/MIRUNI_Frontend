@@ -923,7 +923,7 @@ class ScheduleRegistrationFragment : Fragment() {
             String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}" +
                     "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH))}" +
                     "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
-                    "T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
+                    "T${numberFormat.format(selectedExecutionEndDate?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
                     ":${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
         Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
 
