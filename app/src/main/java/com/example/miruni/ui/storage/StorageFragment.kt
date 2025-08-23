@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.MainActivity
 import com.example.miruni.R
+import com.example.miruni.ResetPwdFragment1
 import com.example.miruni.TokenManager
 import com.example.miruni.data.repository.StorageRepository
 import com.example.miruni.databinding.FragmentStorageBinding
@@ -35,6 +36,14 @@ class StorageFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        binding.reportInactive.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ReportOpenFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
         return binding.root
     }
 
