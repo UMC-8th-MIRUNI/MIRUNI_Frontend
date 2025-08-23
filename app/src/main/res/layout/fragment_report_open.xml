@@ -317,7 +317,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_marginTop="12dp">
 
                 <!-- 도넛 차트 (MPAndroidChart 라이브러리 PieChart) -->
@@ -376,9 +376,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:padding="12dp"
-                android:gravity="center"
+
                 android:background="#E8F5E9"
-                android:text="평균 성취도   82% / 100%"
+                android:text="평균 성취도                                                    82% / 100%"
                 android:textStyle="bold"
                 android:textColor="#388E3C"
                 android:textSize="14sp"/>
