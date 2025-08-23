@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.15"/>
+            app:layout_constraintGuide_percent="0.18"/>
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendar_calendar"
@@ -37,7 +37,9 @@
             app:mcv_selectionColor="@color/white"
             app:mcv_firstDayOfWeek="sunday"
             app:mcv_showOtherDates="all"
-            app:mcv_weekDayTextAppearance="@style/CalendarViewWeekCustom"/>
+            app:mcv_weekDayTextAppearance="@style/CalendarViewWeekCustom"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/calendar_header"
@@ -59,7 +61,6 @@
                 android:textColor="#313131"
                 android:includeFontPadding="true"
                 android:layout_marginStart="8sp"
-                app:layout_constraintVertical_bias="0.5"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -131,7 +132,7 @@
         android:fontFamily="@font/dmsans_semibold"
         android:textSize="17sp"
         android:textColor="@color/white"
-        android:background="@color/main"
+        android:background="@drawable/bg_main_square_7"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="@id/calendar_register_tv_top_line"
         app:layout_constraintBottom_toBottomOf="@id/calendar_register_tv_bottom_line"
