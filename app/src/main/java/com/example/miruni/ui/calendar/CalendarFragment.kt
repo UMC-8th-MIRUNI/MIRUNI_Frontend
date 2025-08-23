@@ -148,7 +148,7 @@ class CalendarFragment : Fragment() {
         /** 캘린더 페이지 */
         binding.calendarIncludeCalendarCalendar.apply {
             /** 등록하기 */
-            calendarRegisterFrm.setOnClickListener {
+            calendarRegisterTv.setOnClickListener {
                 val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
                 val editor = spf.edit()
 
