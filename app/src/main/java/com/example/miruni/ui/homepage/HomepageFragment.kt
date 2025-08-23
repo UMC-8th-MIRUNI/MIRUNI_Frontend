@@ -1,23 +1,31 @@
 package com.example.miruni.ui.homepage
 
 import android.app.Dialog
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.TimetableFragment
 import com.example.miruni.TokenManager
+import com.example.miruni.api.ApiService
+import com.example.miruni.api.InProgressScheduleRequest
+import com.example.miruni.api.getRetrofit
 import com.example.miruni.api.model.DeleteTaskRequest
 import com.example.miruni.api.model.TaskItem
+import com.example.miruni.data.Plan
 import com.example.miruni.data.ScheduleDatabase
+import com.example.miruni.data.Task
 import com.example.miruni.data.WiseSaying
 import com.example.miruni.data.repository.HomepageRepository
 import com.example.miruni.databinding.FragmentHomepageBinding
@@ -25,6 +33,7 @@ import com.example.miruni.databinding.LayoutCheckpopupBinding
 import com.example.miruni.ui.memoir.MemoirCompleteFragment
 import com.example.miruni.ui.memoir.MemoirNotFragment
 import com.example.miruni.ui.tool.BlockGuideFragment
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class HomepageFragment: Fragment() {
@@ -33,6 +42,7 @@ class HomepageFragment: Fragment() {
     private lateinit var db: ScheduleDatabase
     private lateinit var adapter: HomepageRVAdapter
     private lateinit var viewModel: HomepageViewModel
+    private lateinit var accessToken: String
 
     private var deleteTaskId: List<Int> = emptyList()
 
@@ -46,6 +56,8 @@ class HomepageFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomepageBinding.inflate(inflater, container, false)
+
+        accessToken = String.format("Bearer ${TokenManager.getToken(requireContext())}")
         return binding.root
     }
 
@@ -104,6 +116,10 @@ class HomepageFragment: Fragment() {
 
             binding.taskPlay.setOnClickListener {
                 Log.d("다가오는 일정", "다가오는 일정aiPlanId: ${id}")
+                lifecycleScope.launch {
+                    taskInProgress()
+                }
+
                 moveTimetableFragment(BlockGuideFragment(), id)
             }
         }
@@ -277,6 +293,67 @@ class HomepageFragment: Fragment() {
         binding.dotsIndicator.attachTo(binding.helloViewpager)
     }
 
+    private fun getSchedule() {
+
+    }
+
+    /**
+     * AI일정인지, BASIC 일정인지 검사
+     */
+    private fun isAI(plan: Plan): Boolean {
+        // parentTitle이 null인지 아닌지
+        if (plan.parentTitle == null) {
+            plan.category = "BASIC"
+            return false
+        } else {
+            plan.category = "AI"
+            return true
+        }
+    }
+
+    private suspend fun taskInProgress() {
+        try {
+            val scheduleId: Int = 40
+            var status: String = "NOT_STARTED"
+            Log.d("Calendar/in-progress", id.toString())
+
+            val api = getRetrofit().create(ApiService::class.java)
+
+            val responseGetSchedule = api.getSchedule(accessToken, scheduleId)
+
+            if (responseGetSchedule.isSuccessful){
+                val resultGetSchedule = responseGetSchedule.body()!!.result
+                var flag = 0
+                var cnt = 0
+
+                for ((index, aiPlan) in resultGetSchedule.plans.withIndex()) {
+                    val task = Task(
+                        id = aiPlan.planId,
+                        scheduleId = scheduleId,
+                        title = aiPlan.description,
+                        executeDay = aiPlan.date,
+                        startTime = aiPlan.startTime,
+                        endTime = aiPlan.endTime,
+                        status = status
+                    )
+                    Log.d("Calendar/in-progress",
+                        "task: ${task.id}" +
+                                "\n${task.scheduleId}" +
+                                "\n${task.title}" +
+                                "\n${task.executeDay}" +
+                                "\n${task.startTime}" +
+                                "\n${task.endTime}" +
+                                "\n${task.status}")
+
+                    db.taskDao().replace(task)
+                }
+            } else {
+                Toast.makeText(requireContext(), "해당 일정을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.e("Calendar", "in-progress 에러: ${e.message}")
+        }
+    }
 
 }
 

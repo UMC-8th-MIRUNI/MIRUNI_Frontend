@@ -69,6 +69,18 @@ class ScheduleExecutionFragment : Fragment() {
     ): View? {
         binding = FragmentScheduleExecutionBinding.inflate(layoutInflater, container, false)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        controlTopBar(context as MainActivity, false)
+        controlBottomNavigation(context as MainActivity, false)
+
+        db = ScheduleDatabase.getInstance(requireContext())!!
+        blockCheck = arguments?.getBoolean("blockCheck") ?: true
+
         if(arguments?.getInt("fullBack") == 100) {
             retoreTimer()
             /*requireActivity().supportFragmentManager.beginTransaction()
@@ -81,18 +93,6 @@ class ScheduleExecutionFragment : Fragment() {
             Log.d("접속 확인", "그냥 들어옴")
         }
         initExecutionFinish()
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        controlTopBar(context as MainActivity, false)
-        controlBottomNavigation(context as MainActivity, false)
-
-        db = ScheduleDatabase.getInstance(requireContext())!!
-        blockCheck = arguments?.getBoolean("blockCheck") ?: true
     }
 
     fun updateData(endTime: Long, executedId: Int) {
@@ -135,10 +135,13 @@ class ScheduleExecutionFragment : Fragment() {
 
         /* 도구 페이지에서 실행하면 taskId가 없음 */
         if(taskId == -1){
+            Log.d("FLOW/Execution", "taskId == -1")
             tempTime = arguments?.getLong("timer") ?: 0L
             tempTime *= 1000L
             startNoTaskIdTimer(tempTime)
         }else{
+            Log.d("ScheduleExecutionFragment", "taskId: ${taskId}")
+            Log.d("ScheduleExecutionFragment", "${scheduleDB!!.taskDao().getTask(taskId)}")
             executedTask = scheduleDB!!.taskDao().getTask(taskId)
 
             Log.d("확인", "task_id: ${executedTask.id} | task_scheduleid: ${executedTask.scheduleId}")
@@ -303,13 +306,15 @@ class ScheduleExecutionFragment : Fragment() {
         val screenHeight = displayMetrics.heightPixels
 
         val nowTime = Calendar.getInstance()
+        val initAmpm = if (nowTime.get(Calendar.HOUR_OF_DAY) > 11) "오후" else "오전"
 
         val dropdownView = LayoutPopupScheduleDelayBinding.inflate(layoutInflater)
         dropdownView.popupScheduleDelaySelectTv.text =
             String.format("${nowTime.get(Calendar.YEAR)}." +
                     "${nowTime.get(Calendar.MONTH) + 1}." +
                     "${nowTime.get(Calendar.DAY_OF_MONTH)}. " +
-                    "${nowTime.get(Calendar.HOUR)}:${nowTime.get(Calendar.MINUTE)}")
+                    "${nowTime.get(Calendar.HOUR)}:${nowTime.get(Calendar.MINUTE)} " +
+                    "$initAmpm")
 
         val stopPopup = PopupWindow(
             dropdownView.root,
@@ -331,7 +336,8 @@ class ScheduleExecutionFragment : Fragment() {
                     popupScheduleDelaySelectTv.text = String.format("${it.get(Calendar.YEAR)}." +
                             "${it.get(Calendar.MONTH) + 1}." +
                             "${it.get(Calendar.DAY_OF_MONTH)}. " +
-                            "${it.get(Calendar.HOUR)}:${it.get(Calendar.MINUTE)} ${selectedAmPm}")
+                            "${it.get(Calendar.HOUR)}:${it.get(Calendar.MINUTE)} " +
+                            "${selectedAmPm ?: initAmpm}")
                 }
             }
             popupScheduleDelayOkTv.setOnClickListener {
@@ -457,8 +463,8 @@ class ScheduleExecutionFragment : Fragment() {
                     textSize = 10f
                     setTypeface(
                         ResourcesCompat.getFont(context as MainActivity,
-                        R.font.poppins_regular
-                    ))
+                            R.font.poppins_regular
+                        ))
                     setBackgroundColor(if (isSelected) "#F1F5F9".toColorInt() else Color.TRANSPARENT)
                     setOnClickListener {
                         onClick(item)
@@ -563,7 +569,7 @@ class ScheduleExecutionFragment : Fragment() {
             val setMinute = endHourMinuteList[1].toLong() - startHourMinuteList[1].toLong()
 
             tempTime = (setHour * 3600000) + (setMinute * 60000) + 1000
-            }
+        }
         countDownTimer = object : CountDownTimer(tempTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 tempTime = millisUntilFinished

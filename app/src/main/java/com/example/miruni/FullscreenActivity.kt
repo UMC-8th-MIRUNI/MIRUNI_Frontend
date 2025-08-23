@@ -15,7 +15,6 @@ class FullscreenActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         binding.fullBack.setOnClickListener {
-            val fragment = ScheduleExecutionFragment()
             val id = intent.getIntExtra("executedId", -1)
 
             val spf = this.getSharedPreferences("executedTask", MODE_PRIVATE)
@@ -23,8 +22,12 @@ class FullscreenActivity: AppCompatActivity() {
             editor.putInt("taskId", id)
             editor.apply()
 
+            val tag = "ScheduleExecutionFragment"
+            val fragment = supportFragmentManager.findFragmentByTag(tag)
+                    as? ScheduleExecutionFragment ?: ScheduleExecutionFragment()
+
             supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frm, fragment)
+                .replace(R.id.main_frm, fragment, tag)
                 .commitAllowingStateLoss()
         }
     }

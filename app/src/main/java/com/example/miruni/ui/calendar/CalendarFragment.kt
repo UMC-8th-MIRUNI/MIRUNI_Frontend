@@ -148,7 +148,7 @@ class CalendarFragment : Fragment() {
         /** 캘린더 페이지 */
         binding.calendarIncludeCalendarCalendar.apply {
             /** 등록하기 */
-            calendarRegisterFrm.setOnClickListener {
+            calendarRegisterTv.setOnClickListener {
                 val spf = (requireContext()).getSharedPreferences("Date", MODE_PRIVATE)
                 val editor = spf.edit()
 
@@ -323,8 +323,12 @@ class CalendarFragment : Fragment() {
                 }
                 Log.d("FLOW", "Done-TaskOnDateRVAdapter:spf")
 
+                val fragment = ScheduleExecutionFragment()
+                val bundle = Bundle()
+                    bundle.putBoolean("blockCheck", true)
+                fragment.arguments = bundle
                 (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ScheduleExecutionFragment())
+                    .replace(R.id.main_frm, fragment)
                     .commitAllowingStateLoss()
                 Log.d("FLOW", "Done-ScreenChange")
                 controlTopBar(context as MainActivity, false)

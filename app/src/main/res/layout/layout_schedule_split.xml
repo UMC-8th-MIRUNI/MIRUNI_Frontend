@@ -57,7 +57,8 @@
             android:id="@+id/schedule_split_scroll_frm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/schedule_split_type_title_top_line">
+            app:layout_constraintTop_toTopOf="@id/schedule_split_type_title_top_line"
+            app:layout_constraintBottom_toTopOf="@id/schedule_split_split_btn">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -115,6 +116,7 @@
                     android:id="@+id/schedule_split_volume_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text=""
                     android:minHeight="56sp"
                     android:background="@drawable/bg_ababab_square_7"
                     android:hint="예) p.30 - p.60, 얼만큼"
@@ -139,6 +141,7 @@
                     android:id="@+id/schedule_split_request_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="매일 1과목씩이나 30쪽씩"
                     android:minHeight="77dp"
                     android:maxLines="2"
                     android:scrollbars="vertical"
@@ -147,7 +150,8 @@
                     android:textSize="15sp"
                     android:paddingHorizontal="21sp"
                     android:paddingVertical="16sp"
-                    app:layout_constraintTop_toBottomOf="@id/schedule_split_request_title_tv"/>
+                    app:layout_constraintTop_toBottomOf="@id/schedule_split_request_title_tv"
+                    app:layout_constraintBottom_toTopOf="@id/schedule_split_split_guide_tv"/>
 
                 <TextView
                     android:id="@+id/schedule_split_split_guide_tv"
@@ -168,6 +172,7 @@
                     android:layout_marginTop="24sp"
                     android:layout_marginEnd="13sp"
                     app:layout_constraintTop_toBottomOf="@id/schedule_split_request_et"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/schedule_split_request_et"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
@@ -183,6 +188,7 @@
             android:textColor="@color/white"
             android:gravity="center"
             android:paddingVertical="11sp"
+            app:layout_constraintTop_toBottomOf="@id/schedule_split_scroll_frm"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

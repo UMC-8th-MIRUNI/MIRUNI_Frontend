@@ -139,10 +139,14 @@ class ScheduleRegistrationFragment : Fragment() {
         )
         endCalendar.add(Calendar.DAY_OF_MONTH, 1)
 
+//        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDeadlineTv.text =
+//            String.format("${selectedDeadline!!.date.get(Calendar.YEAR)}.${selectedDeadline!!.date.get(Calendar.MONTH) + 1}.${selectedDeadline!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedDeadline!!.ampm == ampm.AM) "오전" else "오후"} ${selectedDeadline!!.hour}:${selectedDeadline!!.minute}")
+//        binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDateTv.text =
+//            String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH) + 1}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH) + 1}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDeadlineTv.text =
-            String.format("${selectedDeadline!!.date.get(Calendar.YEAR)}.${selectedDeadline!!.date.get(Calendar.MONTH) + 1}.${selectedDeadline!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedDeadline!!.ampm == ampm.AM) "오전" else "오후"} ${selectedDeadline!!.hour}:${selectedDeadline!!.minute}")
+            String.format("2025.08.31. 10:00 오전")
         binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentDateTv.text =
-            String.format("${selectedExecutionStartDate!!.date.get(Calendar.YEAR)}.${selectedExecutionStartDate!!.date.get(Calendar.MONTH) + 1}.${selectedExecutionStartDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionStartDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionStartDate!!.hour}:${selectedExecutionStartDate!!.minute} - ${selectedExecutionEndDate!!.date.get(Calendar.YEAR)}.${selectedExecutionEndDate!!.date.get(Calendar.MONTH) + 1}.${selectedExecutionEndDate!!.date.get(Calendar.DAY_OF_MONTH)}. ${if (selectedExecutionEndDate!!.ampm == ampm.AM) "오전" else "오후"} ${selectedExecutionEndDate!!.hour}:${selectedExecutionEndDate!!.minute}")
+            String.format("2025.08.24. 10:00 오전 - 2025.08.30. 10:00 오후")
     }
 
     /**
@@ -902,32 +906,36 @@ class ScheduleRegistrationFragment : Fragment() {
         val title = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentTitleEt.text.toString()
         Log.d("RegistrationSchedule/title", title)
 
-        val deadline =
-            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}" +
-                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH)!! + 1)}" +
-                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}" +
-                    "T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}" +
-                    ":${numberFormat.format(selectedDeadline?.minute)}:00.000")
+//        val deadline =
+//            String.format("${numberFormat.format(selectedDeadline?.date?.get(Calendar.YEAR))}" +
+//                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.MONTH)!! + 1)}" +
+//                    "-${numberFormat.format(selectedDeadline?.date?.get(Calendar.DAY_OF_MONTH))}" +
+//                    "T${numberFormat.format(selectedDeadline?.hour?.plus(if (selectedDeadline?.ampm == ampm.AM) 0 else 12))}" +
+//                    ":${numberFormat.format(selectedDeadline?.minute)}:00.000")
+        val deadline = String.format("2025-08-31T10:00:00.000")
         Log.d("RegistrationSchedule/deadline", deadline)
 
-        val scheduledStart =
-            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}" +
-                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH)!! + 1)}" +
-                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
-                    "T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedExecutionStartDate?.ampm == ampm.AM) 0 else 12))}" +
-                    ":${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
+//        val scheduledStart =
+//            String.format("${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.YEAR))}" +
+//                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.MONTH)!! + 1)}" +
+//                    "-${numberFormat.format(selectedExecutionStartDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
+//                    "T${numberFormat.format(selectedExecutionStartDate?.hour?.plus(if (selectedExecutionStartDate?.ampm == ampm.AM) 0 else 12))}" +
+//                    ":${numberFormat.format(selectedExecutionStartDate?.minute)}:00.000")
+        val scheduledStart = String.format("2025-08-24T10:00:00.000")
         Log.d("RegistrationSchedule/scheduledStart", scheduledStart)
 
 
-        val scheduledEnd =
-            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}" +
-                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH)!! + 1)}" +
-                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
-                    "T${numberFormat.format(selectedExecutionEndDate?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
-                    ":${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
+//        val scheduledEnd =
+//            String.format("${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.YEAR))}" +
+//                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.MONTH)!! + 1)}" +
+//                    "-${numberFormat.format(selectedExecutionEndDate?.date?.get(Calendar.DAY_OF_MONTH))}" +
+//                    "T${numberFormat.format(selectedExecutionEndDate?.hour?.plus(if (selectedExecutionEndDate?.ampm == ampm.AM) 0 else 12))}" +
+//                    ":${numberFormat.format(selectedExecutionEndDate?.minute)}:00.000")
+        val scheduledEnd = String.format("2025-08-30T22:00:00.000")
         Log.d("RegistrationSchedule/scheduledEnd", scheduledEnd)
 
-        val priority = selectedPriority
+//        val priority = selectedPriority
+        val priority = "HIGH"
         Log.d("RegistrationSchedule/priority", priority.toString())
 
         val description = binding.scheduleRegistrationInclude.scheduleRegistrationIncludeContent.scheduleRegistrationContentCommentEt.text.toString()
