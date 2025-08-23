@@ -232,12 +232,17 @@ class HomepageFragment: Fragment() {
 
             val token = String.format("Bearer ${TokenManager.getToken(requireContext())}")
 
+
+            var str = ""
             /* 내부 저장해서 보내기..*/
             for(data in list){
                 viewModel.getHidden(token, data)
+                str += "$data"
             }
             // 삭제 재확인 Dialog 띄우기
             val popupBinding = LayoutCheckpopupBinding.inflate(LayoutInflater.from(requireContext()))
+            popupBinding.taskName.text = str
+
             val dialog = Dialog(requireContext())
             dialog.setContentView(popupBinding.root)
             dialog.show()
@@ -247,10 +252,13 @@ class HomepageFragment: Fragment() {
                 adapter.hiddenItem(false)
             }
             popupBinding.deleteYes.setOnClickListener {
-                /* 숨기기 api연결 요청 */
-
+                for(data in list){
+                    viewModel.getHidden(token, data)
+                    allTask.removeAll {it.planId == data}
+                }
+                adapter.updateData(allTask)
+                adapter.hiddenItem(false)
                 dialog.hide()
-                adapter.hiddenItem(true)
             }
 
         }

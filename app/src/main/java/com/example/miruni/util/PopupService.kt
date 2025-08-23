@@ -12,8 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.TokenManager
@@ -34,21 +32,21 @@ class PopupService : Service() {
         val repository = HomepageRepository()
         val factory = HomepageViewModelFactory(repository)
 
+        // ViewModelStoreOwner 대신에 아래처럼 직접 관리
+        viewModel = ViewModelProvider(ViewModelStore(), factory)
+            .get(HomepageViewModel::class.java)
+
+        // 데이터 불러오기 (Fragment와 동일하게)
+        val token = String.format("Bearer ${TokenManager.getToken(this)}")
+        viewModel.loadHomepage(token)
+
         setNotification()
         if (Settings.canDrawOverlays(this)) {
-            // ViewModelStoreOwner 대신에 아래처럼 직접 관리
-            viewModel = ViewModelProvider(ViewModelStore(), factory)
-                .get(HomepageViewModel::class.java)
-
-            // 데이터 불러오기 (Fragment와 동일하게)
-            val token = String.format("Bearer ${TokenManager.getToken(this)}")
-            viewModel.loadHomepage(token)
-
             // LiveData 관찰 → observeForever 사용 (Service에는 LifecycleOwner가 없음)
             viewModel.homepagedatas.observeForever { data ->
-                showPopup(data.username)
                 Log.d("PopupService", "홈페이지 데이터 가져옴: $data")
                 // 여기서 popupView UI 업데이트 가능
+                showPopup(data.username)
             }
         } else {
             Log.e("PopupService", "SYSTEM_ALERT_WINDOW 권한이 없음. 팝업을 띄우지 않음.")
@@ -71,13 +69,11 @@ class PopupService : Service() {
     /**
      * 팝업창 호출
      */
-    private fun showPopup(username: String) {
+    private fun showPopup() {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
         popupView = inflater.inflate(R.layout.layout_popup, null)
-
-
 
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -95,7 +91,8 @@ class PopupService : Service() {
         params.gravity = Gravity.CENTER
 
         popupView.findViewById<TextView>(R.id.popup_title_tv).text =
-            String.format("안녕. ${username}! 나 미루니야!")
+            "안녕 $username! 나 미루니야!"
+
         val popupYes = popupView.findViewById<TextView>(R.id.popup_yes_tv)
         val popupNo = popupView.findViewById<TextView>(R.id.popup_no_tv)
 

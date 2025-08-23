@@ -130,7 +130,6 @@ class MainActivity : AppCompatActivity() {
                 spf.edit().putInt("taskId", executedId).apply()
 
                 binding.foregroundBack.root.visibility = View.GONE
-
             }
         }
 

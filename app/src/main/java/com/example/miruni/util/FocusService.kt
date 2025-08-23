@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -15,6 +16,7 @@ import android.util.Log
 import com.example.miruni.FullscreenActivity
 import com.example.miruni.MainActivity
 import com.example.miruni.R
+import com.example.miruni.ui.calendar.ScheduleExecutionFragment
 
 // Service: 백그라운드에서 장기 작업 실행가능
 class FocusService : Service() {
@@ -41,6 +43,11 @@ class FocusService : Service() {
         startForeground(1, buildNotification(executedId))
         monitorApp(executedId)
         return START_STICKY
+    }
+
+    fun stopServiceManually() {
+        stopForeground(true) // 알림 제거
+        stopSelf()           // 서비스 종료
     }
 
     private fun monitorApp(executedId: Int) {

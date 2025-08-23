@@ -101,7 +101,8 @@
         android:src="@drawable/peanut"
         app:layout_constraintStart_toEndOf="@id/schedule_execution_finish_peanut1_iv"
         app:layout_constraintEnd_toStartOf="@id/schedule_execution_finish_peanut3_iv"
-        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_peanut_top_line" />
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_peanut_top_line"
+        android:visibility="gone"/>
     <ImageView
         android:id="@+id/schedule_execution_finish_peanut3_iv"
         android:layout_width="0dp"
@@ -110,12 +111,13 @@
         android:src="@drawable/peanut"
         app:layout_constraintStart_toEndOf="@id/schedule_execution_finish_peanut2_iv"
         app:layout_constraintEnd_toEndOf="@id/schedule_execution_finish_title_tv"
-        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_peanut_top_line" />
+        app:layout_constraintTop_toTopOf="@id/schedule_execution_finish_peanut_top_line"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/schedule_execution_finish_peanut_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="땅콩을 3개 획득했어요!"
+        android:text="땅콩을 1개 획득했어요!"
         android:fontFamily="@font/dmsans_semibold"
         android:textSize="14sp"
         android:textColor="#BBBBBB"
