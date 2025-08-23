@@ -110,28 +110,33 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.89"/>
 
-    <LinearLayout
-        android:id="@+id/calendar_register_frm"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/calendar_register_tv_top_line"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_1ae019_square_13"
-        android:gravity="center"
-        android:layout_marginTop="15sp"
-        app:layout_constraintStart_toStartOf="@id/calendar_button_start_line"
-        app:layout_constraintEnd_toEndOf="@id/calendar_button_end_line"
-        app:layout_constraintTop_toBottomOf="@id/calendar_border_line">
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55"/>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/calendar_register_tv_bottom_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.63"/>
 
-<!--        Karla SemiBold-->
-        <TextView
-            android:id="@+id/calendar_register_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="일정 등록하기"
-            android:layout_marginHorizontal="86sp"
-            android:layout_marginVertical="18sp"
-            android:textSize="17sp"
-            android:textColor="@color/white"/>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/calendar_register_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="일정 등록하기"
+        android:fontFamily="@font/dmsans_semibold"
+        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:background="@color/main"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/calendar_register_tv_top_line"
+        app:layout_constraintBottom_toBottomOf="@id/calendar_register_tv_bottom_line"
+        app:layout_constraintStart_toStartOf="@id/calendar_button_start_line"
+        app:layout_constraintEnd_toEndOf="@id/calendar_button_end_line"/>
 
     <ImageView
         android:id="@+id/calendar_pin_iv"
@@ -140,7 +145,7 @@
         android:src="@drawable/calendar_pin_iv"
         android:layout_marginTop="31sp"
         android:layout_marginStart="18sp"
-        app:layout_constraintTop_toBottomOf="@id/calendar_register_frm"
+        app:layout_constraintTop_toBottomOf="@id/calendar_register_tv"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
