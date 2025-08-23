@@ -27,8 +27,8 @@
 
                 <ImageView
                     android:id="@+id/imageView71"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     app:srcCompat="@drawable/srorage_icon" />
 
@@ -37,7 +37,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:text="2025년 7월 리포트" />
+                    android:text="2025년 7월 리포트"
+                    android:textColor="#000000"
+                    android:textstyle="bold"
+                    android:textSize="23sp"/>
+
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,6 +63,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="60개"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView72"
                     app:layout_constraintStart_toEndOf="@+id/imageView72"
                     app:layout_constraintTop_toTopOf="@+id/imageView72" />
@@ -84,6 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="400분"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView75"
                     app:layout_constraintStart_toEndOf="@+id/imageView75"
                     app:layout_constraintTop_toTopOf="@+id/imageView75" />
@@ -93,6 +101,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="258시간"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView74"
                     app:layout_constraintStart_toEndOf="@+id/imageView74"
                     app:layout_constraintTop_toTopOf="@+id/imageView74" />
@@ -110,6 +120,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="49/60 (82%)"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView73"
                     app:layout_constraintStart_toEndOf="@+id/imageView73"
                     app:layout_constraintTop_toTopOf="@+id/imageView73" />
@@ -197,6 +209,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="전체 진행 요약"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/vertical1_1"
                     app:layout_constraintTop_toTopOf="@+id/horixon1_1" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -213,7 +227,8 @@
                     android:layout_height="wrap_content"
                     android:text="미루기 패턴 분석"
                     android:textStyle="bold"
-                    android:textSize="16sp" />
+                    android:textSize="20sp"
+                    android:textColor="#000000"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -312,6 +327,7 @@
                 android:layout_height="wrap_content"
                 android:text="감정 태그&amp;성취도 통계"
                 android:textStyle="bold"
+                android:textSize="20sp"
                 android:textColor="#000000"/>
 
             <LinearLayout
@@ -376,11 +392,183 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:padding="12dp"
+
                 android:background="#E8F5E9"
-                android:text="평균 성취도                                                                       82% / 100%"
+                android:text="  평균 성취도                                                                  82% / 100%"
                 android:textStyle="bold"
-                android:textColor="#388E3C"
+                android:textColor="#000000"
                 android:textSize="14sp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_ffffff_round16"
+                    android:padding="12dp"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="회고 키워드 &amp; 감정/변화 표현 분석"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="#000000"/>
+
+                    <!-- 키워드 태그들 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#E8F5E9"
+                            android:text="집중"
+                            android:padding="6dp"
+                            android:layout_marginEnd="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#E8F5E9"
+                            android:text="개선"
+                            android:padding="6dp"
+                            android:layout_marginEnd="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#E8F5E9"
+                            android:text="생각보다 쉬웠다"
+                            android:padding="6dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#E8F5E9"
+                            android:text="노력"
+                            android:padding="6dp"
+                            android:layout_marginEnd="4dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#E8F5E9"
+                            android:text="행복"
+                            android:padding="6dp"/>
+                    </LinearLayout>
+
+                    <!-- 감정 문장 -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#FFF3E0"
+                        android:text="“행복한 하루였다.”"
+                        android:padding="8dp"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#FFF3E0"
+                        android:text="“하루하루 작은 목표를 실천한 덕분에 한 달이 됐을 때 큰 성취감을 느꼈다”"
+                        android:padding="8dp"/>
+                </LinearLayout>
+
+                <!-- 오른쪽 박스 : 이전 달 대비 변화 지표 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_ffffff_round16"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이전 달 대비 변화 지표"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="#000000"
+                        android:layout_marginBottom="12dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="총 일정 수\n-10개"
+                            android:textColor="#000000"
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="완료 비율\n+15%"
+                            android:textColor="#000000"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="총 수행 시간\n-12시간"
+                            android:textColor="#000000"
+                            android:textSize="12sp"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="총 미룬 시간\n-200분"
+                            android:textColor="#000000"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="                      이번달은 저번달에 비해 완료율이 15% 상승했어요!"
+                        android:textColor="#000000"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
