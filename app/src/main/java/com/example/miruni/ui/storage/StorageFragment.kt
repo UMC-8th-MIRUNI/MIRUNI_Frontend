@@ -39,7 +39,7 @@ class StorageFragment: Fragment() {
 
         binding.reportInactive.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ReportOpenFragment())
+                .replace(R.id.main_frm, ReportOpenFragment())
                 .addToBackStack(null)
                 .commit()
         }
