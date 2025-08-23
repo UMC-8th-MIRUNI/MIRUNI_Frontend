@@ -21,7 +21,6 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.replace
 import com.example.miruni.MainActivity
 import com.example.miruni.R
@@ -84,6 +83,10 @@ class ScheduleExecutionFragment : Fragment() {
 
         if(arguments?.getInt("fullBack") == 100) {
             retoreTimer()
+            /*requireActivity().supportFragmentManager.beginTransaction()
+                .remove(this@ScheduleExecutionFragment)
+                .commit()*/
+//            requireActivity().supportFragmentManager.popBackStack()
             Log.d("접속 확인", "포그라운에서 다시 들어옴")
         }else {
             initExecution()
@@ -302,13 +305,15 @@ class ScheduleExecutionFragment : Fragment() {
         val screenHeight = displayMetrics.heightPixels
 
         val nowTime = Calendar.getInstance()
+        val initAmpm = if (nowTime.get(Calendar.HOUR_OF_DAY) > 11) "오후" else "오전"
 
         val dropdownView = LayoutPopupScheduleDelayBinding.inflate(layoutInflater)
         dropdownView.popupScheduleDelaySelectTv.text =
             String.format("${nowTime.get(Calendar.YEAR)}." +
                     "${nowTime.get(Calendar.MONTH) + 1}." +
                     "${nowTime.get(Calendar.DAY_OF_MONTH)}. " +
-                    "${nowTime.get(Calendar.HOUR)}:${nowTime.get(Calendar.MINUTE)}")
+                    "${nowTime.get(Calendar.HOUR)}:${nowTime.get(Calendar.MINUTE)} " +
+                    "$initAmpm")
 
         val stopPopup = PopupWindow(
             dropdownView.root,
@@ -330,7 +335,8 @@ class ScheduleExecutionFragment : Fragment() {
                     popupScheduleDelaySelectTv.text = String.format("${it.get(Calendar.YEAR)}." +
                             "${it.get(Calendar.MONTH) + 1}." +
                             "${it.get(Calendar.DAY_OF_MONTH)}. " +
-                            "${it.get(Calendar.HOUR)}:${it.get(Calendar.MINUTE)} ${selectedAmPm}")
+                            "${it.get(Calendar.HOUR)}:${it.get(Calendar.MINUTE)} " +
+                            "${selectedAmPm ?: initAmpm}")
                 }
             }
             popupScheduleDelayOkTv.setOnClickListener {
@@ -456,8 +462,8 @@ class ScheduleExecutionFragment : Fragment() {
                     textSize = 10f
                     setTypeface(
                         ResourcesCompat.getFont(context as MainActivity,
-                        R.font.poppins_regular
-                    ))
+                            R.font.poppins_regular
+                        ))
                     setBackgroundColor(if (isSelected) "#F1F5F9".toColorInt() else Color.TRANSPARENT)
                     setOnClickListener {
                         onClick(item)
@@ -562,7 +568,7 @@ class ScheduleExecutionFragment : Fragment() {
             val setMinute = endHourMinuteList[1].toLong() - startHourMinuteList[1].toLong()
 
             tempTime = (setHour * 3600000) + (setMinute * 60000) + 1000
-            }
+        }
         countDownTimer = object : CountDownTimer(tempTime, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 tempTime = millisUntilFinished

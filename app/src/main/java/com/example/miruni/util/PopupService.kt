@@ -12,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 import com.example.miruni.MainActivity
 import com.example.miruni.R
 import com.example.miruni.TokenManager
@@ -69,7 +71,7 @@ class PopupService : Service() {
     /**
      * 팝업창 호출
      */
-    private fun showPopup() {
+    private fun showPopup(username: String) {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
