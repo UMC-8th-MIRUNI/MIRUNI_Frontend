@@ -518,21 +518,47 @@
                         android:weightSum="2"
                         android:layout_marginBottom="8dp">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="총 일정 수\n-10개"
-                            android:textColor="#000000"
-                            android:textSize="12sp"/>
+                            android:orientation="vertical"
+                            android:layout_weight="1">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="총 일정 수"
+                                android:textSize="12sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-10개"
+                                android:textStyle="bold"
+                                android:textColor="#000000"
+                                android:textSize="18sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="완료 비율\n+15%"
-                            android:textColor="#000000"
-                            android:textSize="12sp"/>
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="완료 비율"
+                                android:textSize="12sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="+15%"
+                                android:textStyle="bold"
+                                android:textColor="#000000"
+                                android:textSize="18sp"/>
+                        </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -542,21 +568,47 @@
                         android:weightSum="2"
                         android:layout_marginBottom="8dp">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="총 수행 시간\n-12시간"
-                            android:textColor="#000000"
-                            android:textSize="12sp"/>
+                            android:orientation="vertical"
+                            android:layout_weight="1">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="총 수행 시간"
+                                android:textSize="12sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-12시간"
+                                android:textStyle="bold"
+                                android:textColor="#000000"
+                                android:textSize="18sp"/>
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="총 미룬 시간\n-200분"
-                            android:textColor="#000000"
-                            android:textSize="12sp"/>
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="총 미룬 시간"
+                                android:textSize="12sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-200분"
+                                android:textStyle="bold"
+                                android:textColor="#000000"
+                                android:textSize="18sp"/>
+                        </LinearLayout>
                     </LinearLayout>
 
                     <TextView
