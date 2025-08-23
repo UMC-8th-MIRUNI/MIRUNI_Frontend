@@ -54,4 +54,9 @@ interface AuthService {
         @Header("Authorization") token: String,
         @Body request: KakaoSignupRequest
     ): Response<KakaoSignupResponse>
+
+    @POST("/api/auth/logout")
+    suspend fun logout(
+        @Header("Authorization") token: String
+    ): Response<LogoutResponse>
 }
