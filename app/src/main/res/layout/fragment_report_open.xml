@@ -39,7 +39,7 @@
                     android:layout_marginStart="5dp"
                     android:text="2025년 7월 리포트"
                     android:textColor="#000000"
-                    android:textstyle="bold"
+                    android:textStyle="bold"
                     android:textSize="23sp"/>
 
             </LinearLayout>
