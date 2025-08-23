@@ -135,6 +135,7 @@ class ScheduleExecutionFragment : Fragment() {
 
         /* 도구 페이지에서 실행하면 taskId가 없음 */
         if(taskId == -1){
+            Log.d("FLOW/Execution", "taskId == -1")
             tempTime = arguments?.getLong("timer") ?: 0L
             tempTime *= 1000L
             startNoTaskIdTimer(tempTime)
