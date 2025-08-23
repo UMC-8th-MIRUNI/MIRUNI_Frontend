@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.app.Activity
 import android.app.AlarmManager
+import android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -25,6 +26,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import com.example.miruni.api.ApiService
@@ -106,29 +108,27 @@ class MainActivity : AppCompatActivity() {
         val fullBack = intent.getIntExtra("fullBack", -1)
         if(fullBack == 100){ // 다시 돌아왔을 때
             binding.foregroundBack.root.visibility = View.VISIBLE
-            val executedId = intent.getIntExtra("executedId", -1)
-            val endTime = intent.getLongExtra("endTime", 0L)
 
-            val tag = "ScheduleExecutionFragment"
-            var fragment = supportFragmentManager.findFragmentByTag(tag) as? ScheduleExecutionFragment
+            binding.foregroundBack.foregroundBackBtn.setOnClickListener {
 
-            if(fragment == null){
-                fragment = ScheduleExecutionFragment().apply {
+                val executedId = intent.getIntExtra("executedId", -1)
+                val endTime = intent.getLongExtra("endTime", 0L)
+
+                val spf = this.getSharedPreferences("executedTask", MODE_PRIVATE)
+                spf.edit().putInt("taskId", executedId).apply()
+
+
+
+                var fragment = ScheduleExecutionFragment().apply {
                     arguments = Bundle().apply {
                         putLong("endTime", endTime)
                         putInt("fullBack", fullBack)
                     }
+
                 }
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, fragment, tag)
+                    .replace(R.id.main_frm, fragment)
                     .commitAllowingStateLoss()
-            }else{
-                fragment.updateData(endTime, executedId)
-            }
-            binding.foregroundBack.foregroundBackBtn.setOnClickListener {
-                val spf = this.getSharedPreferences("executedTask", MODE_PRIVATE)
-                spf.edit().putInt("taskId", executedId).apply()
-
                 binding.foregroundBack.root.visibility = View.GONE
             }
         }

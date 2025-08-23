@@ -21,6 +21,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.graphics.toColorInt
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.replace
 import com.example.miruni.MainActivity
 import com.example.miruni.R
@@ -69,19 +70,6 @@ class ScheduleExecutionFragment : Fragment() {
     ): View? {
         binding = FragmentScheduleExecutionBinding.inflate(layoutInflater, container, false)
 
-        if(arguments?.getInt("fullBack") == 100) {
-            retoreTimer()
-            /*requireActivity().supportFragmentManager.beginTransaction()
-                .remove(this@ScheduleExecutionFragment)
-                .commit()*/
-//            requireActivity().supportFragmentManager.popBackStack()
-            Log.d("접속 확인", "포그라운에서 다시 들어옴")
-        }else {
-            initExecution()
-            Log.d("접속 확인", "그냥 들어옴")
-        }
-        initExecutionFinish()
-
         return binding.root
     }
 
@@ -93,6 +81,15 @@ class ScheduleExecutionFragment : Fragment() {
 
         db = ScheduleDatabase.getInstance(requireContext())!!
         blockCheck = arguments?.getBoolean("blockCheck") ?: true
+
+        if(arguments?.getInt("fullBack") == 100) {
+            retoreTimer()
+            Log.d("접속 확인", "포그라운에서 다시 들어옴")
+        }else {
+            initExecution()
+            Log.d("접속 확인", "그냥 들어옴")
+        }
+        initExecutionFinish()
     }
 
     fun updateData(endTime: Long, executedId: Int) {
@@ -139,6 +136,8 @@ class ScheduleExecutionFragment : Fragment() {
             tempTime *= 1000L
             startNoTaskIdTimer(tempTime)
         }else{
+            Log.d("ScheduleExecutionFragment", "taskId: ${taskId}")
+            Log.d("ScheduleExecutionFragment", "${scheduleDB!!.taskDao().getTask(taskId)}")
             executedTask = scheduleDB!!.taskDao().getTask(taskId)
 
             Log.d("확인", "task_id: ${executedTask.id} | task_scheduleid: ${executedTask.scheduleId}")

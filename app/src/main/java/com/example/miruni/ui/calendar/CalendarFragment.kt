@@ -323,8 +323,12 @@ class CalendarFragment : Fragment() {
                 }
                 Log.d("FLOW", "Done-TaskOnDateRVAdapter:spf")
 
+                val fragment = ScheduleExecutionFragment()
+                val bundle = Bundle()
+                    bundle.putBoolean("blockCheck", true)
+                fragment.arguments = bundle
                 (context as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, ScheduleExecutionFragment())
+                    .replace(R.id.main_frm, fragment)
                     .commitAllowingStateLoss()
                 Log.d("FLOW", "Done-ScreenChange")
                 controlTopBar(context as MainActivity, false)

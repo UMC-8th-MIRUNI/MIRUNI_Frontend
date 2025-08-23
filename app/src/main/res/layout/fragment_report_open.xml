@@ -20,25 +20,25 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView71"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                app:srcCompat="@drawable/srorage_icon" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView73"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="TextView" />
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/imageView71"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    app:srcCompat="@drawable/srorage_icon" />
+
+                <TextView
+                    android:id="@+id/textView73"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="2025년 7월 리포트" />
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:id="@+id/textView74"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="총 일정 수"
                     app:layout_constraintStart_toStartOf="@+id/vertical1_1"
                     app:layout_constraintTop_toTopOf="@+id/horixon1_2" />
 
@@ -58,7 +58,7 @@
                     android:id="@+id/textView75"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="60개"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView72"
                     app:layout_constraintStart_toEndOf="@+id/imageView72"
                     app:layout_constraintTop_toTopOf="@+id/imageView72" />
@@ -67,7 +67,7 @@
                     android:id="@+id/textView76"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="완료 비율"
                     app:layout_constraintStart_toStartOf="@+id/vertical1_2"
                     app:layout_constraintTop_toTopOf="@+id/horixon1_2" />
 
@@ -75,7 +75,7 @@
                     android:id="@+id/textView77"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="총 수행 시간"
                     app:layout_constraintStart_toStartOf="@+id/vertical1_1"
                     app:layout_constraintTop_toTopOf="@+id/horizon1_3" />
 
@@ -83,7 +83,7 @@
                     android:id="@+id/textView78"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="400분"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView75"
                     app:layout_constraintStart_toEndOf="@+id/imageView75"
                     app:layout_constraintTop_toTopOf="@+id/imageView75" />
@@ -92,7 +92,7 @@
                     android:id="@+id/textView79"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="258시간"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView74"
                     app:layout_constraintStart_toEndOf="@+id/imageView74"
                     app:layout_constraintTop_toTopOf="@+id/imageView74" />
@@ -101,7 +101,7 @@
                     android:id="@+id/textView81"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="총 미룬 시간"
                     app:layout_constraintStart_toStartOf="@+id/vertical1_2"
                     app:layout_constraintTop_toTopOf="@+id/horizon1_3" />
 
@@ -109,7 +109,7 @@
                     android:id="@+id/textView82"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="49/60 (82%)"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView73"
                     app:layout_constraintStart_toEndOf="@+id/imageView73"
                     app:layout_constraintTop_toTopOf="@+id/imageView73" />
@@ -190,17 +190,198 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.45" />
+                    app:layout_constraintGuide_begin="185dp" />
 
                 <TextView
                     android:id="@+id/textView83"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="전체 진행 요약"
                     app:layout_constraintStart_toStartOf="@+id/vertical1_1"
                     app:layout_constraintTop_toTopOf="@+id/horixon1_1" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="미루기 패턴 분석"
+                    android:textStyle="bold"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView81"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        app:srcCompat="@drawable/report_schedule2" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="가장 미룬 시간대" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="금요일 오후 6시 ~ 8시"
+                            android:textStyle="bold"
+                            android:textColor="#000000"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView82"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        app:srcCompat="@drawable/report_schedule2" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="가장 미룬 시간대" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="금요일 오후 6시 ~ 8시"
+                            android:textStyle="bold"
+                            android:textColor="#000000"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="반복적으로 미뤄진 일정 유형"/>
+
+                <ImageView
+                    android:id="@+id/imageView83"
+                    android:layout_width="300dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/report_progress" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="감정 태그&amp;성취도 통계"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="12dp">
+
+                <!-- 도넛 차트 (MPAndroidChart 라이브러리 PieChart) -->
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_weight="1" />
+
+                <!-- 범례 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="● 매우 기쁨"
+                        android:textColor="#4CAF50" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="● 기쁨"
+                        android:textColor="#9FA8DA" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="● 보통"
+                        android:textColor="#FFB74D" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:text="● 슬픔"
+                        android:textColor="#7986CB" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="● 분노"
+                        android:textColor="#FF7043" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 평균 성취도 박스 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:padding="12dp"
+                android:gravity="center"
+                android:background="#E8F5E9"
+                android:text="평균 성취도   82% / 100%"
+                android:textStyle="bold"
+                android:textColor="#388E3C"
+                android:textSize="14sp"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
