@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.miruni.databinding.FragmentCalendarBinding
@@ -75,6 +76,8 @@ class CalendarFragment : Fragment() {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
         scheduleDB = ScheduleDatabase.getInstance(requireContext())!!
         accessToken = String.format("Bearer ${TokenManager.getToken(requireContext())}")
+        val topBar = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.main_top_bar)
+        topBar.setBackgroundColor("#FFFFFF".toColorInt())
 
         /** 상단바 색상 변경 **/
         (activity as? MainActivity)?.setTopBarColor(R.color.white)

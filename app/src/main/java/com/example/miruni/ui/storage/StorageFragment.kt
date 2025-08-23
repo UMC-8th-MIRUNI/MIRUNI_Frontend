@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +45,9 @@ class StorageFragment: Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        val topBar = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.main_top_bar)
+        topBar.setBackgroundColor("#FFFFFF".toColorInt())
 
         return binding.root
     }

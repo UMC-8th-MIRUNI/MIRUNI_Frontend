@@ -9,6 +9,8 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
@@ -56,6 +58,9 @@ class HomepageFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomepageBinding.inflate(inflater, container, false)
+        val topBar = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.main_top_bar)
+        topBar.setBackgroundColor("#1EC718".toColorInt())
+
 
         accessToken = String.format("Bearer ${TokenManager.getToken(requireContext())}")
         return binding.root

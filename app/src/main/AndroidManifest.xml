@@ -40,7 +40,6 @@
             android:theme="@style/Theme.MIRUNI"></activity>
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
-        <activity android:name=".MyPageActivity" />
         <activity
             android:name=".ProcessingActivity"
             android:exported="true"
