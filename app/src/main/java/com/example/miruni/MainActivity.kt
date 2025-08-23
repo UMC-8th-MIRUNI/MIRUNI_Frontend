@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
@@ -457,6 +458,7 @@ class MainActivity : AppCompatActivity() {
                 transitionFragment(ToolFragment())
             }
             "calendar" -> {
+
                 transitionFragment(CalendarFragment())
             }
             "home" -> {
@@ -469,11 +471,11 @@ class MainActivity : AppCompatActivity() {
                 transitionFragment(StorageFragment())
             }
             "mypage" -> {
-//                supportFragmentManager.beginTransaction()
-//                    .replace(R.id.main_frm, MyPageFragment())
-//                    .commitAllowingStateLoss()
-                val intent = Intent(this, MyPageActivity::class.java)
-                startActivity(intent)
+                binding.mainIncludeMain.mainTopBar.setBackgroundColor("#E8FAE5".toColorInt())
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.main_frm, MypageFragment())
+                    .commitAllowingStateLoss()
             }
         }
     }

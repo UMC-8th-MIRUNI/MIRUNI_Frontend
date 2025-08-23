@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import com.example.miruni.MainActivity
 import com.example.miruni.R
@@ -18,6 +20,9 @@ class ToolFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        val topBar = (activity as MainActivity).findViewById<ConstraintLayout>(R.id.main_top_bar)
+        topBar.setBackgroundColor("#FFFFFF".toColorInt())
+
         return binding.root
     }
 
