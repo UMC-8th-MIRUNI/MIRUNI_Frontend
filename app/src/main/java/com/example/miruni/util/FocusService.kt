@@ -13,6 +13,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
+import androidx.fragment.app.FragmentManager
 import com.example.miruni.FullscreenActivity
 import com.example.miruni.MainActivity
 import com.example.miruni.R
@@ -88,11 +89,13 @@ class FocusService : Service() {
     private fun buildNotification(executedId: Int) : Notification{
 
         val intent = Intent(this, MainActivity::class.java)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.putExtra("executedId", executedId)
         intent.putExtra("endTime", endTime - System.currentTimeMillis())
         Log.d("FocusService", "MainActivity로 이동할 때: ${endTime}")
         intent.putExtra("fullBack", 100)
+
+
 
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 

@@ -1,5 +1,6 @@
 package com.example.miruni.ui.tool
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,7 +34,7 @@ class BlockGuideFragment: Fragment() {
         (activity?.findViewById<View>(R.id.main_nav))?.visibility = View.GONE
 
 
-        val aiPlanId = arguments?.getInt("aiPlanId") ?: -1
+        val aiPlanId = requireArguments().getInt("aiPlanId")
 
 
         /* 넘어가기 */
@@ -53,8 +54,8 @@ class BlockGuideFragment: Fragment() {
 
     }
     private fun moveFragment(fragment: Fragment, aiPlanId: Int, blockCheck: Boolean){
-        val spf = requireContext().getSharedPreferences("executedTask", AppCompatActivity.MODE_PRIVATE)
-        spf.edit().putInt("taskId", aiPlanId).apply()
+        val spf = requireContext().getSharedPreferences("executedTask", MODE_PRIVATE)
+        spf.edit().putInt("taskId", aiPlanId).commit()
 
         Log.d("BlockGuideFragment", "보내는 아이디: ${aiPlanId}")
         val bundle = Bundle()
@@ -62,7 +63,6 @@ class BlockGuideFragment: Fragment() {
         fragment.arguments = bundle
         requireActivity().supportFragmentManager.beginTransaction().apply {
             replace(R.id.main_frm, fragment)
-            addToBackStack(null)
             commit()
         }
     }
